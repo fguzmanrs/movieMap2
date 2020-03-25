@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Import Icons and Fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Montserrat+Subrayada&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a53d2090f6.js" crossorigin="anonymous"></script>
+  
+    <!-- Compiled and minified CSS -->
+    <link type="text/css" rel="stylesheet" href="assets/login.css" media="screen,projection" />
+
+
+  </head>
+
+<body>
+
+    <div class="main registerMain">
+        <p class="sign" align="center">Create a New Account</p>
+        <p id="alert" align="center"></p>
+        <form class="form1">
+            <input class="user" id="firstName" type="text" align="center" placeholder="First Name" autocapitalize="off"
+                autocorrect="off">
+            <input class="user" id="lastName" type="text" align="center" placeholder="Last Name" autocapitalize="off"
+                autocorrect="off">
+            <input class="user" id="username" type="text" align="center" placeholder="Username" autocapitalize="off"
+                autocorrect="off">
+            <div class="input-container">
+                <input type="password" class="pass browser-default" id="password" align="center" placeholder="Password">
+                <i class="material-icons visibility" style=color:grey>visibility_off</i>
+            </div>   
+          
+            <a class="submit waves-effect waves-light btn" align="center" id="signupBtn">Sign Up</a>
+            <p class="new-account" align="center"><a href="./index.html">Already a member? Log In</p>
+        </form>
+    </div>
+
+    <!-- Modal Structure -->
+    <!-- <div id="signup-error modal1" class="modal">
+        <div class="modal-content">
+            <h2>Oh No!</h2>
+            <p>Login error. Please enter your login information again.</p>
+        </div>
+        <div class="modal-footer">
+            <h2><a href="#!" class="modal-close waves-effect btn-flat">Ok</a>
+            </h2>
+        </div>
+    </div> -->
+
+    <!--JavaScript-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="scripts/signup.js"></script>
+
+</body>
+
+</html>
