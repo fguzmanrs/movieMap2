@@ -6,7 +6,7 @@ const reviewController = require("../controllers/reviewController");
 
 const router = express.Router();
 
-// Authentification Routers
+// Authentication Routers
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);

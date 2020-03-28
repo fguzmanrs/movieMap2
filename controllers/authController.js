@@ -5,6 +5,7 @@ const { promisify } = require("util");
 const db = require("../models");
 const catchAsync = require("../utill/catchAsync");
 const ErrorFactory = require("../utill/errorFactory");
+const { Email } = require("../utill/email");
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = userId => {
@@ -42,6 +43,10 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   // 5. Create a JWT token
   const token = createToken(result.dataValues.id);
+
+  // ! Send a welcome email
+  const url = `${req.protocol}://${req.get("host")}`;
+  await new Email(result, url).sendWelcome();
 
   // 6. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
   res
