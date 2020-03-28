@@ -10,14 +10,24 @@ module.exports = class Email {
   }
 
   newTransport() {
-    return nodemailer.createTransport({
-      host: "smtp.mailtrap.io",
-      port: 2525,
-      auth: {
-        user: "55d49066c9cda4",
-        pass: "52583d121b2b20"
-      }
-    });
+    if (process.env.NODE_ENV === "development") {
+      return nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: process.env.MAILTRAP_USER,
+          pass: process.env.MAILTRAP_PASS
+        }
+      });
+    } else if (process.env.NODE_ENV === "production") {
+      return nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: process.env.SENDGRID_USER,
+          pass: process.env.SENDGRID_PASS
+        }
+      });
+    }
   }
 
   async send(template, subject) {
