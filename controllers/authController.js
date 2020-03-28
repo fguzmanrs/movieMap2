@@ -5,7 +5,7 @@ const { promisify } = require("util");
 const db = require("../models");
 const catchAsync = require("../utill/catchAsync");
 const ErrorFactory = require("../utill/errorFactory");
-const { Email } = require("../utill/email");
+const Email = require("../utill/email");
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = userId => {
@@ -23,10 +23,10 @@ const createToken = userId => {
 //! SIGN UP
 exports.signup = catchAsync(async (req, res, next) => {
   // 1. Get user's input
-  const { firstName, lastName, username, password } = req.body;
+  const { firstName, lastName, username, password, email } = req.body;
 
   // 2. Validate for no input
-  if (!username || !password || !firstName || !lastName) {
+  if (!username || !password || !firstName || !lastName || !email) {
     return next(new ErrorFactory(400, "Please provide all required info."));
   }
 
@@ -38,7 +38,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     username,
     password: encryptedPwd,
     firstName,
-    lastName
+    lastName,
+    email
   });
 
   // 5. Create a JWT token

@@ -13,6 +13,16 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  db.user.findAll().then(function(result) {
+    if (result.affectedRows == 0) {
+      return res.status(404).end();
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 exports.getMyWatchList = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
 

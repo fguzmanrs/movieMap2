@@ -13,6 +13,7 @@ router.get("/logout", authController.logout);
 
 //! APIs
 // Get user info
+router.get("/", userController.getAllUsers);
 router.get("/:userId", userController.getUserInfo);
 
 // Create a reivew(grade: like(1), none(0), dislike(-1))
