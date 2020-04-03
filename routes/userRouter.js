@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require("path");
+// const path = require("path");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const reviewController = require("../controllers/reviewController");
@@ -15,6 +15,15 @@ router.get("/logout", authController.logout);
 // Get user info
 router.get("/", userController.getAllUsers);
 router.get("/:userId", userController.getUserInfo);
+
+// Update user info
+router.patch(
+  "/updateMe",
+  authController.protect,
+  userController.uploadUserPhoto,
+  userController.resizePhoto,
+  userController.updateMe
+);
 
 // Create a reivew(grade: like(1), none(0), dislike(-1))
 router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
