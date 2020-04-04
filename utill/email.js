@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
-const { welcomeTemplate } = require("./emailTemplate");
+const { welcomeTemplate } = require("./emailTemplate-welcome");
+const { forgotPwdTemplate } = require("./emailTemplate-forgot");
 
 module.exports = class Email {
   constructor(user, url) {
@@ -34,7 +35,9 @@ module.exports = class Email {
     let html;
 
     if (template === "welcome") {
-      html = welcomeTemplate;
+      html = welcomeTemplate(this.url);
+    } else if (template === "forgotPwd") {
+      html = forgotPwdTemplate(this.url);
     }
 
     const message = {

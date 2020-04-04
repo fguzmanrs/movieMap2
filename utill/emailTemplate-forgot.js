@@ -1,9 +1,10 @@
-exports.welcomeTemplate = `<!DOCTYPE html>
+exports.forgotPwdTemplate = url => {
+  return `<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Welcome to Movie Map</title>
+    <title>Forgot password?</title>
     <style>
       @media only screen and (max-width: 620px) {
         table[class="body"] h1 {
@@ -159,7 +160,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                 visibility: hidden;
                 width: 0;
               "
-              >Welcome to Movie Map!</span
+              >Forgot password email</span
             >
             <table
               class="main"
@@ -199,7 +200,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                       <td>
                         <img
                           style="width: 100%;"
-                          src="https://raw.githubusercontent.com/bluerainmango/imgs/master/email-img3.jpg"
+                          src="https://github.com/bluerainmango/imgs/blob/master/email-pwd4.png?raw=true"
                         />
                       </td>
                     </tr>
@@ -222,7 +223,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                             margin-bottom: 15px;
                           "
                         >
-                          Welcome to Movie Map!
+                          Reset your password
                         </p>
                         <p
                           style="
@@ -233,9 +234,10 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                             margin-bottom: 15px;
                           "
                         >
-                          As the newest member of our ever-growing worldwide
-                          tribe, you can finally enjoy all the movies you love
-                          in a single app.
+                          We received a reqeust to rset your password for your
+                          Movie Map account. We're here to help! Just click the
+                          button below and you'll be on your way. If you did not
+                          make this request, please ignore this email.
                         </p>
                         <table
                           border="0"
@@ -285,7 +287,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                                         "
                                       >
                                         <a
-                                          href="https://gentle-savannah-70403.herokuapp.com"
+                                          href=${url}
                                           target="_blank"
                                           style="
                                             display: inline-block;
@@ -303,7 +305,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                                             text-transform: capitalize;
                                             border-color: #3498db;
                                           "
-                                          >Get Started</a
+                                          >Reset your password</a
                                         >
                                       </td>
                                     </tr>
@@ -313,18 +315,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                             </tr>
                           </tbody>
                         </table>
-                        <p
-                          style="
-                            font-family: sans-serif;
-                            font-size: 14px;
-                            font-weight: normal;
-                            margin: 0;
-                            margin-bottom: 15px;
-                            font-weight: bolder;
-                          "
-                        >
-                          Learn more about the creators!
-                        </p>
+
                         <p
                           style="
                             font-family: sans-serif;
@@ -333,62 +324,7 @@ exports.welcomeTemplate = `<!DOCTYPE html>
                             margin: 0;
                           "
                         >
-                          Emily Yu
-                          <a
-                            target="_blank"
-                            href="https://emily-yu-portfolio.herokuapp.com/"
-                            >Portfolio</a
-                          >
-                        </p>
-                        <p
-                          style="
-                            font-family: sans-serif;
-                            font-size: 14px;
-                            font-weight: normal;
-                            margin: 0;
-                          "
-                        >
-                          Fabiola Guzman
-                          <a target="_blank" href="https://github.com/fguzmanrs"
-                            >Github</a
-                          >
-                        </p>
-                        <p
-                          style="
-                            font-family: sans-serif;
-                            font-size: 14px;
-                            font-weight: normal;
-                            margin: 0;
-                          "
-                        >
-                          Francisco Ortiz
-                          <a target="_blank" href="https://github.com/ffortizn"
-                            >Github</a
-                          >
-                        </p>
-                        <p
-                          style="
-                            font-family: sans-serif;
-                            font-size: 14px;
-                            font-weight: normal;
-                            margin: 0;
-                            margin-bottom: 15px;
-                          "
-                        >
-                          Hayden Cross
-                          <a target="_blank" href="https://github.com/HCross28"
-                            >Github</a
-                          >
-                        </p>
-                        <p
-                          style="
-                            font-family: sans-serif;
-                            font-size: 14px;
-                            font-weight: normal;
-                            margin: 0;
-                          "
-                        >
-                          Thank you for your interest!
+                          Cheers,
                         </p>
                         <p
                           style="
@@ -473,3 +409,4 @@ exports.welcomeTemplate = `<!DOCTYPE html>
   </body>
 </html>
 `;
+};

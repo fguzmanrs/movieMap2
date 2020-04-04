@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
+const crypto = require("crypto");
 
 const db = require("../models");
 const catchAsync = require("../utill/catchAsync");
@@ -20,7 +21,7 @@ const createToken = userId => {
   return token;
 };
 
-//! SIGN UP
+//! ROUTE: SIGN UP
 exports.signup = catchAsync(async (req, res, next) => {
   // 1. Get user's input
   const { firstName, lastName, username, password, email } = req.body;
@@ -66,7 +67,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     });
 });
 
-//! LOGIN
+//! ROUTE: LOGIN
 exports.login = catchAsync(async (req, res, next) => {
   // 1. Get login info from request
   const { username, password } = req.body;
@@ -109,7 +110,7 @@ exports.login = catchAsync(async (req, res, next) => {
     });
 });
 
-//! LOGOUT : Clear cookie having a JWT token
+//! ROUTE: LOGOUT - Clear cookie having a JWT token
 exports.logout = catchAsync(async (req, res, next) => {
   // Check if a user is logged out
   if (!req.cookies.jwt) {
@@ -160,3 +161,56 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+//! ROUTE: forgot password
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await db.user.findOne({ where: { email: req.body.email } });
+
+  if (!user) {
+    return next(
+      new ErrorFactory("No user founded with that email address.", 404)
+    );
+  }
+
+  //* Create reset token and add it to user doc
+  const randomToken = crypto.randomBytes(32).toString("hex");
+  const encrypedToken = crypto
+    .createHash("sha256")
+    .update(randomToken)
+    .digest("hex");
+
+  // Time limit: 15 min
+  const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
+
+  await db.user.update({
+    passwordResetToken: encrypedToken,
+    passwordResetTokenExpiresIn: tokenExpiresIn
+  });
+
+  try {
+    //* send email with API link having encryped code of user id
+    const resetPwdURL = `${req.protocol}://${req.get(
+      "host"
+    )}/api/users/resetPassword/${encrypedToken}`;
+    await new Email(user, resetPwdURL).sendResetPwd();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password Token is sent to email."
+    });
+  } catch (err) {
+    await db.user.update({
+      passwordResetToken: undefined,
+      passwordResetTokenExpiresIn: undefined
+    });
+
+    return next(
+      new ErrorFactory(
+        "Error occurred while sending an email. Try again later!",
+        500
+      )
+    );
+  }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {});
