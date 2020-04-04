@@ -2,7 +2,13 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import Navbar from './navbar/navbar.js';
 import Carousel from './carousel/carousel.js';
+import SignIn from './signIn/signIn.js';
+import SignUp from './signUp/signUp.js';
+// import Typography from '@material-ui/core/Typography';
+
+
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 // import react-router (use)
 
 function App( props ) {
@@ -10,20 +16,36 @@ function App( props ) {
     <div className="App App-body" >
       
       <BrowserRouter>
-        <Navbar /> 
+        <Navbar />
         <Switch>
+          <Route path="/home">
+            <Typography variant='h4'>My List</Typography>
+            <Carousel />
+
+            <Typography variant='h4'>Recommended because you searched ...</Typography>
+            <Carousel />
+
+            <Typography variant='h4'>Recommended because you watched ...</Typography>
+            <Carousel />
+
+            <Typography variant='h4'>Top Rated</Typography>
+            <Carousel />
+
+            <Typography variant='h4'>New Releases</Typography>
+            <Carousel />
+
+          </Route>
+          <Route path="/signIn">
+            <SignIn />
+          </Route>
+          <Route path="/signUp">
+            <SignUp />
+          </Route>
           <Route path="/about">
-            <div>About</div>
           </Route>
-          <Route path="/users">
+          <Route path="/profile">
           </Route>
-          <Route path="/">
-            <Carousel />
-            <Carousel />
-            <Carousel />
-            <Carousel />
-            <Carousel />
-          </Route>
+          
         </Switch>  
       </BrowserRouter>
       

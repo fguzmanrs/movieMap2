@@ -113,7 +113,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}><Link to="/profile">My Account</Link></MenuItem>
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
@@ -128,7 +128,7 @@ export default function PrimarySearchAppBar() {
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    >      
+    >
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -156,7 +156,7 @@ export default function PrimarySearchAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            MovieMap
+            <Link to="/home">Movie Map</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -173,8 +173,13 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-          
-          <IconButton
+            <Link to="/signIn">Sign In</Link>
+            
+            <Link to="/signUp">Sign Up</Link>
+            
+            <Link to="/about">About</Link>
+            
+            <IconButton
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
@@ -184,8 +189,6 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircle />
             </IconButton>
-          <Link to="/about">About</Link>
-            
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
