@@ -2,8 +2,11 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import Navbar from './navbar/navbar.js';
 import Carousel from './carousel/carousel.js';
+import FilmCard from './filmCard/filmCard.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
+import About from './about/about.js';
+import Profile from './profile/profile.js';
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 // import react-router (use)
@@ -32,6 +35,9 @@ function App( props ) {
             <Carousel />
 
           </Route>
+          <Route path="/filmCard">
+            <FilmCard />
+          </Route>
           <Route path="/signIn">
             <SignIn />
           </Route>
@@ -39,8 +45,10 @@ function App( props ) {
             <SignUp />
           </Route>
           <Route path="/about">
+            <About />
           </Route>
           <Route path="/profile">
+            <Profile />
           </Route>
           
         </Switch>  

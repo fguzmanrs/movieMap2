@@ -157,6 +157,7 @@ export default function PrimarySearchAppBar() {
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/home">Movie Map</Link>
+            <Link to="/filmCard">Film Details</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -173,6 +174,7 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+            
             <Link to="/signIn">Sign In</Link>
             
             <Link to="/signUp">Sign Up</Link>
