@@ -4,9 +4,6 @@ import Navbar from './navbar/navbar.js';
 import Carousel from './carousel/carousel.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
-// import Typography from '@material-ui/core/Typography';
-
-
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 // import react-router (use)
