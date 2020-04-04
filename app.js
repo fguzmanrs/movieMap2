@@ -9,7 +9,8 @@ const reviewRouter = require("./routes/reviewRouter");
 const discoveredRouter = require("./routes/discoveredRouter");
 
 const { globalErrorHandler } = require("./controllers/errorController");
-const ErrorFactory = require("./utill/errorFactory");
+const catchAsync = require("../util/catchAsync");
+const ErrorFactory = require("../util/errorFactory");
 
 const app = express();
 

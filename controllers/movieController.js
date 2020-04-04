@@ -1,10 +1,18 @@
-const axios = require("axios");
-const Sequelize = require("sequelize");
-var db = require("../models");
-const Op = Sequelize.Op;
+const catchAsync = require("../util/catchAsync");
+const ErrorFactory = require("../util/errorFactory");
 
-const catchAsync = require("../utill/catchAsync");
-const ErrorFactory = require("../utill/errorFactory");
+const axios = require("axios");
+
+// begin of: mongodb initialization
+const mongojs = require("mongojs");
+const databaseUrl = "moviemap";
+const collections = ["user", "movie", "review"];
+const db = mongojs(databaseUrl, collections);
+db.on("error", error => {
+  console.log("Database Error:", error);
+});
+// end of: mongodb initialization
+
 
 //! Get the recent movies(within 1 year)
 // required parameter: none

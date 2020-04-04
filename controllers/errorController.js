@@ -1,4 +1,4 @@
-const ErrorFactory = require("../utill/errorFactory");
+const ErrorFactory = require("../util/errorFactory");
 
 //! Global error handler : Catching all errors
 exports.globalErrorHandler = (err, req, res, next) => {
