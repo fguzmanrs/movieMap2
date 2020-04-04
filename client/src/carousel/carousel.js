@@ -31,17 +31,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/**
-  structured as follows:
+const tileData = [
+  {
+    img: 'https://unsplash.com/photos/NuFUbftUu_s',
+    title: 'random image',
+    author: 'random author',
+  },
+  {
+    img: 'https://unsplash.com/photos/NuFUbftUu_s',
+    title: 'random image',
+    author: 'random author',
+  },
+  {
+    img: 'https://unsplash.com/photos/NuFUbftUu_s',
+    title: 'random image',
+    author: 'random author',
+  },
+];
 
-  const tileData = [
-    {
-      img: image,
-      title: 'Image',
-      author: 'author',
-    },
-  ];
- */
 export default function SingleLineGridList() {
   const classes = useStyles();
 

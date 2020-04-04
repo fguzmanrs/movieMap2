@@ -11,7 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
-
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -173,8 +173,8 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-
-            <IconButton
+          
+          <IconButton
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
@@ -184,6 +184,8 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircle />
             </IconButton>
+          <Link to="/about">About</Link>
+            
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
