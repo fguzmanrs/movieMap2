@@ -5,6 +5,7 @@ const ErrorFactory = require("../utill/errorFactory");
 const catchAsync = require("../utill/catchAsync");
 var db = require("../models");
 
+//! Image uploader Multer setting
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -21,10 +22,10 @@ const multerFilter = (req, file, cb) => {
 // const upload = multer({ dest: "public/images/users" });
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
-//! Middleware getting an image file(key name: 'photo' in form-data) and save the file info to req.file
+//! Middleware: getting an image file(key name: 'photo' in form-data) and save the file info to req.file
 exports.uploadUserPhoto = upload.single("photo");
 
-//! Middleware resizing, converting, saving the photo to server's file system(public/~)
+//! Middleware: resizing, converting, saving the photo to server's file system(public/~)
 exports.resizePhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
@@ -42,6 +43,7 @@ exports.resizePhoto = catchAsync(async (req, res, next) => {
   next();
 });
 
+//! Route: update user's info
 exports.updateMe = catchAsync(async (req, res, next) => {
   console.log("📁", req.file);
   console.log("👤", req.body);
@@ -57,7 +59,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  //! Filter out not the fileds that not allowed to update
+  //? Filter out the fileds that not allowed to update
   //username, firstname, lastname
 
   //* Save file's name to req.body
@@ -84,6 +86,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Route: get user's detail info
 exports.getUserInfo = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
 
@@ -96,6 +99,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Route: get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   db.user.findAll().then(function(result) {
     if (result.affectedRows == 0) {
@@ -106,6 +110,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Route: get user's watchlist
 exports.getMyWatchList = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
 
@@ -118,6 +123,7 @@ exports.getMyWatchList = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Route: post user's watchlist
 exports.postToMyWatchlist = catchAsync(async (req, res, next) => {
   console.info("userController.postToMyWatchList...");
   const { userId, movieId } = req.params;
@@ -133,6 +139,7 @@ exports.postToMyWatchlist = catchAsync(async (req, res, next) => {
     });
 });
 
+//! Route: remove a movie from watchlist
 exports.removeFromMyWatchlist = catchAsync(async (req, res, next) => {
   const { userId, movieId } = req.params;
 
@@ -149,6 +156,7 @@ exports.removeFromMyWatchlist = catchAsync(async (req, res, next) => {
     });
 });
 
+//! Route: clear movies from watchlist
 exports.clearMyWatchlist = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
 
