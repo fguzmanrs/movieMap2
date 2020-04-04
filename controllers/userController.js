@@ -82,14 +82,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       photo: req.file.filename
     }
   });
-
-  // .then(result => {
-  //   res.status(200).json(result);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  //   return res.status(404).end();
-  // });
 });
 
 exports.getUserInfo = catchAsync(async (req, res, next) => {
