@@ -36,7 +36,7 @@ module.exports = class Email {
 
     if (template === "welcome") {
       html = welcomeTemplate(this.url);
-    } else if (template === "forgotPwd") {
+    } else if (template === "resetPwd") {
       html = forgotPwdTemplate(this.url);
     }
 
@@ -55,7 +55,7 @@ module.exports = class Email {
   }
 
   async sendResetPwd() {
-    await this.send("resetPwd", "Reset your password within 10 minutes");
+    await this.send("resetPwd", "Reset your password!");
   }
 };
 

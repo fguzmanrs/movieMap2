@@ -179,19 +179,26 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     .update(randomToken)
     .digest("hex");
 
-  // Time limit: 15 min
-  const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
+  console.log("🐯 randomToken/encrypedToken: ", randomToken, encrypedToken);
 
-  await db.user.update({
-    passwordResetToken: encrypedToken,
-    passwordResetTokenExpiresIn: tokenExpiresIn
-  });
+  // Time limit: 15 min
+  // const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
+
+  //! not saving expire date at this moment(maybe later)
+  await db.user.update(
+    {
+      passwordResetToken: encrypedToken
+      // passwordResetTokenExpiresIn: tokenExpiresIn
+    },
+    { where: { email: req.body.email } }
+  );
 
   try {
-    //* send email with API link having encryped code of user id
+    //* send email with API link having a token
     const resetPwdURL = `${req.protocol}://${req.get(
       "host"
-    )}/api/users/resetPassword/${encrypedToken}`;
+    )}/api/users/resetPassword/${randomToken}`;
+
     await new Email(user, resetPwdURL).sendResetPwd();
 
     res.status(200).json({
@@ -199,10 +206,13 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       message: "Password Token is sent to email."
     });
   } catch (err) {
-    await db.user.update({
-      passwordResetToken: undefined,
-      passwordResetTokenExpiresIn: undefined
-    });
+    await db.user.update(
+      {
+        passwordResetToken: undefined
+        // passwordResetTokenExpiresIn: undefined
+      },
+      { where: { email: req.body.email } }
+    );
 
     return next(
       new ErrorFactory(
@@ -213,4 +223,34 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.resetPassword = catchAsync(async (req, res, next) => {});
+//! ROUTE: reset password
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  //* Encrypt the reseted password
+  const encryptedDefaultPwd = await bcrypt.hash("1234", 12);
+
+  //* Find a user who has a same hashed(encrypted) token
+  const user = await db.user.update(
+    {
+      password: encryptedDefaultPwd,
+      passwordResetToken: "undefined"
+      // passwordResetTokenExpiresIn: undefined
+    },
+    {
+      where: { passwordResetToken: hashedToken }
+    }
+  );
+
+  if (!user) {
+    next(new ErrorFactory("Token is invalid.", 400));
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: "Successfully reseted password!"
+  });
+});

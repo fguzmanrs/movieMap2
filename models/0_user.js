@@ -8,7 +8,8 @@ module.exports = function(sequelize, Sequelize) {
       username: { type: Sequelize.STRING, allowNull: false, unique: true },
       email: { type: Sequelize.STRING, allowNull: false },
       password: { type: Sequelize.STRING, allowNull: false },
-      photo: { type: Sequelize.STRING, defaultValue: "default.png" }
+      photo: { type: Sequelize.STRING, defaultValue: "default.png" },
+      passwordResetToken: { type: Sequelize.STRING, allowNull: true }
     },
     {
       freezeTableName: true

@@ -338,7 +338,7 @@ exports.welcomeTemplate = url => {
                           <a
                             target="_blank"
                             href="https://emily-yu-portfolio.herokuapp.com/"
-                            >> Learn more</a
+                            >Learn more</a
                           >
                         </p>
                         <p
@@ -351,7 +351,7 @@ exports.welcomeTemplate = url => {
                         >
                           Fabiola Guzman
                           <a target="_blank" href="https://github.com/fguzmanrs"
-                            >> Learn more</a
+                            >Learn more</a
                           >
                         </p>
                         <p
@@ -364,7 +364,7 @@ exports.welcomeTemplate = url => {
                         >
                           Francisco Ortiz
                           <a target="_blank" href="https://github.com/ffortizn"
-                            >> Learn more</a
+                            >Learn more</a
                           >
                         </p>
                         <p
@@ -378,7 +378,7 @@ exports.welcomeTemplate = url => {
                         >
                           Hayden Cross
                           <a target="_blank" href="https://github.com/HCross28"
-                            >> Learn more</a
+                            >Learn more</a
                           >
                         </p>
                         <p

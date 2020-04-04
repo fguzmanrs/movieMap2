@@ -234,9 +234,31 @@ exports.forgotPwdTemplate = url => {
                             margin-bottom: 15px;
                           "
                         >
-                          We received a reqeust to rset your password for your
-                          Movie Map account. We're here to help! Just click the
-                          button below and you'll be on your way. If you did not
+                          We received a reqeust to reset your password for your
+                          Movie Map account. We're here to help! 
+                          </p>
+                          <p
+                            style="
+                              font-family: sans-serif;
+                              font-size: 14px;
+                              font-weight: normal;
+                              margin: 0;
+                              margin-bottom: 15px;
+                            "
+                          >
+                          Just click the
+                          button below and your password will be reseted to the temporary password(1234). For your security, please update your password after logging in with this temporary password. 
+                          </p>
+                          <p
+                            style="
+                              font-family: sans-serif;
+                              font-size: 14px;
+                              font-weight: normal;
+                              margin: 0;
+                              margin-bottom: 15px;
+                            "
+                          >
+                          If you did not
                           make this request, please ignore this email.
                         </p>
                         <table
