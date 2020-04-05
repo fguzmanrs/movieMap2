@@ -26,6 +26,11 @@ router.patch(
   userController.resizePhoto,
   userController.updateMe
 );
+router.patch(
+  "/updatePassword",
+  authController.protect,
+  authController.updatePassword
+);
 
 // Create a reivew(grade: like(1), none(0), dislike(-1))
 router.post("/review/:userId/:movieId/:grade", reviewController.postReview);

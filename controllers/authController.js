@@ -9,10 +9,10 @@ const ErrorFactory = require("../utill/errorFactory");
 const Email = require("../utill/email");
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
-const createToken = userId => {
+const createToken = (userId) => {
   const token = jwt.sign(
     {
-      userId
+      userId,
     },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
@@ -40,7 +40,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: encryptedPwd,
     firstName,
     lastName,
-    email
+    email,
   });
 
   // 5. Create a JWT token
@@ -54,7 +54,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   res
     .cookie("jwt", token, {
       maxAge: 3600000,
-      httpOnly: true
+      httpOnly: true,
     })
     .status(200)
     .json({
@@ -62,8 +62,8 @@ exports.signup = catchAsync(async (req, res, next) => {
       message: "New user has been successfully created!",
       token,
       data: {
-        username
-      }
+        username,
+      },
     });
 });
 
@@ -100,13 +100,13 @@ exports.login = catchAsync(async (req, res, next) => {
   res
     .cookie("jwt", token, {
       maxAge: 3600000,
-      httpOnly: true
+      httpOnly: true,
     })
     .status(200)
     .json({
       status: "success",
       message: "You are logged in successfully!",
-      token
+      token,
     });
 });
 
@@ -118,13 +118,10 @@ exports.logout = catchAsync(async (req, res, next) => {
   }
 
   // Clear cookie and token so the user can logout
-  res
-    .clearCookie("jwt")
-    .status(200)
-    .json({
-      status: "success",
-      message: "You are successfully loged out!"
-    });
+  res.clearCookie("jwt").status(200).json({
+    status: "success",
+    message: "You are successfully loged out!",
+  });
 });
 
 //! PROTECT Middleware
@@ -187,7 +184,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   //! not saving expire date at this moment(maybe later)
   await db.user.update(
     {
-      passwordResetToken: encrypedToken
+      passwordResetToken: encrypedToken,
       // passwordResetTokenExpiresIn: tokenExpiresIn
     },
     { where: { email: req.body.email } }
@@ -203,12 +200,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "Password Token is sent to email."
+      message: "Password Token is sent to email.",
     });
   } catch (err) {
     await db.user.update(
       {
-        passwordResetToken: undefined
+        passwordResetToken: undefined,
         // passwordResetTokenExpiresIn: undefined
       },
       { where: { email: req.body.email } }
@@ -237,11 +234,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   const user = await db.user.update(
     {
       password: encryptedDefaultPwd,
-      passwordResetToken: "undefined"
+      passwordResetToken: "undefined",
       // passwordResetTokenExpiresIn: undefined
     },
     {
-      where: { passwordResetToken: hashedToken }
+      where: { passwordResetToken: hashedToken },
     }
   );
 
@@ -251,6 +248,57 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: "Successfully reseted password!"
+    message: "Successfully reseted password!",
   });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const user = await db.user.findByPk(req.user.id);
+
+  console.log(
+    "🍓 tried to update pwd. user's info: ",
+    user.dataValues,
+    "🥝req.body:",
+    req.body
+  );
+
+  if (!user.dataValues) {
+    return next(
+      new ErrorFactory("You are not logged in. Login first please!", 400)
+    );
+  }
+
+  //* Check if entered pwd is correct
+  const pwdIsCorrect = await bcrypt.compare(
+    req.body.currentPassword,
+    user.password
+  );
+
+  if (!pwdIsCorrect) {
+    return next(
+      new ErrorFactory("Your current password is wrong. Type again!", 401)
+    );
+  }
+
+  //* Encrypt the new pwd and save it to DB
+  const encryptedPwd = await bcrypt.hash(req.body.newPassword, 12);
+  await db.user.update({ password: encryptedPwd }, { where: { id: user.id } });
+
+  //* Create new jwt token
+  const newToken = createToken(user.id);
+
+  res
+    .cookie("jwt", newToken, {
+      maxAge: 3600000,
+      httpOnly: true,
+    })
+    .status(200)
+    .json({
+      status: "success",
+      message: "Successfully updated password!",
+      newToken,
+      data: {
+        username: user.username,
+      },
+    });
 });
