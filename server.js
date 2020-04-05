@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 // Handling uncaught exception error
-process.on("uncaughtException", err => {
+process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 🚧  Shutting down...");
   console.log(err.name, err.message);
 
@@ -14,18 +14,23 @@ const db = require("./models");
 
 let server;
 
+// For Deploy later(mlab ver.)
+// mongoose.connect(
+//   process.env.MONGODB_URI || "mongodb://<user>:<password>@ds13424.mlab.com"
+// );
+
 // Syncing our sequelize models and then starting our Express app
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   console.info("Sequelize: sync()");
 
-  server = app.listen(PORT, function(err) {
+  server = app.listen(PORT, function (err) {
     if (err) throw err;
     console.info("App listening on PORT " + PORT);
   });
 });
 
 // Handling unhandled rejection(Promise errors)
-process.on("unhandledRejection", err => {
+process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION! 🚧  Shutting down...");
   console.log(err.name, err.message);
 

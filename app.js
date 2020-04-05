@@ -18,7 +18,11 @@ app.use(cors());
 app.options("*", cors());
 
 // Frontend folder location
-app.use(express.static(path.join(__dirname, "public")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+} else {
+  app.use(express.static(path.join(__dirname, "public")));
+}
 
 // Body parser
 app.use(express.json());
