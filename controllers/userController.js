@@ -17,6 +17,7 @@ db.on("error", error => {
 // begin of: mongodb createUser
 // TODO: apply encryption before saving password
 exports.createUser = catchAsync(async (req, res, next) => {
+  console.log("createUser::req.body: ", req.body);
   db.user.insert(req.body, (error, data) => {
     if (error) res.send(error);
     else res.send(data);
@@ -27,6 +28,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
 // CRUD: READ (findOne, find[All])
 // begin of: mongodb getUserById
 exports.getUserById = catchAsync(async (req, res, next) => {
+  console.log("getUserById::req.body: ", req.body);
   const { id } = req.params;
   db.user.findOne({_id: mongojs.ObjectId(req.params.id)}, (error, data) => {
       if (error) res.send(error);
@@ -37,6 +39,7 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 
 // begin of: mongodb getUserAll
 exports.getUserAll = catchAsync(async (req, res, next) => {
+  console.log("getUserAll::req.body: ", req.body);
   db.user.find({}, (error, data) => {
     if (error) res.send(error);
     else res.json(data);
@@ -46,6 +49,7 @@ exports.getUserAll = catchAsync(async (req, res, next) => {
 
 // CRUD: UPDATE
 exports.updateUserById = catchAsync(async (req, res, next) => {
+  console.log("updateUserById::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {
       $set: {
@@ -68,6 +72,7 @@ exports.updateUserById = catchAsync(async (req, res, next) => {
 
 // TODO: apply encryption before saving password
 exports.updateMyPassword = catchAsync(async (req, res, next) => {
+  console.log("updateMyPassword::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {password: req.body.password} }, // TODO: apply encryption before saving password
     (error, data) => {
@@ -77,6 +82,7 @@ exports.updateMyPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
+  console.log("updateMyFavoriteMovies::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {myFavoriteMovies: req.body.myFavoriteMovies} },
     (error, data) => {
@@ -86,6 +92,7 @@ exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
+  console.log("updateMyRecommendedMovies::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {myRecommendedMovies: req.body.myRecommendedMovies} },
     (error, data) => {
@@ -95,6 +102,7 @@ exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
+  console.log("updateMyTopRatedMovies::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {myTopRatedMovies: req.body.myTopRatedMovies} },
     (error, data) => {
@@ -104,6 +112,7 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
+  console.log("updateMyReviewedMovies::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {myReviewedMovies: req.body.myReviewedMovies} },
     (error, data) => {
@@ -113,6 +122,7 @@ exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyWatchList = catchAsync(async (req, res, next) => {
+  console.log("updateMyWatchList::req.body: ", req.body);
   db.user.update({_id: mongojs.ObjectId(req.params.id)},
     {$set: {myWatchList: req.body.myWatchList} },
     (error, data) => {
@@ -123,6 +133,7 @@ exports.updateMyWatchList = catchAsync(async (req, res, next) => {
 
 // CRUD: DELETE
 exports.deleteUserById = catchAsync(async (req, res, next) => {
+  console.log("deleteUserById::req.body: ", req.body);
   db.user.remove({_id: mongojs.ObjectID(req.params.id)}, (error, data) => {
       if (error) res.send(error);
       else res.send(data);
