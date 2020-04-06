@@ -5,14 +5,13 @@ const axios = require("axios");
 
 // begin of: mongodb initialization
 const mongojs = require("mongojs");
-const databaseUrl = "moviemap";
+const databaseUrl = "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/test?retryWrites=true&w=majority";
 const collections = ["user", "movie", "review"];
 const db = mongojs(databaseUrl, collections);
 db.on("error", error => {
-  console.log("Database Error:", error);
+  console.log("mongoDb:: error:", error);
 });
 // end of: mongodb initialization
-
 
 //! Get the recent movies(within 1 year)
 // required parameter: none
