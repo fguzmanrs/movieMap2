@@ -183,3 +183,17 @@ exports.getSimilarMovies = catchAsync(async (req, res, next) => {
     data: movies.data.results,
   });
 });
+
+exports.searchMoviesByTitle = catchAsync(async (req, res, next) => {
+  const { byTitle } = req.params;
+
+  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${byTitle}&page=1&include_adult=false`;
+
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results,
+  });
+});
