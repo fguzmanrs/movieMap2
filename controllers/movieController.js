@@ -184,10 +184,11 @@ exports.getSimilarMovies = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Search movies by title
 exports.searchMoviesByTitle = catchAsync(async (req, res, next) => {
-  const { byTitle } = req.params;
+  const { title } = req.params;
 
-  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${byTitle}&page=1&include_adult=false`;
+  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${title}&page=1&include_adult=false`;
 
   const movies = await axios(tmdbUrl);
 
@@ -195,5 +196,42 @@ exports.searchMoviesByTitle = catchAsync(async (req, res, next) => {
     status: "success",
     length: movies.data.results.length,
     data: movies.data.results,
+  });
+});
+
+//! Search movies by keyword
+exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
+  //* 1. Convert keyword to keyword id
+  const { keyword } = req.params;
+
+  const tmdbUrlForKeywords = `https://api.themoviedb.org/3/search/keyword?api_key=${process.env.TMDB_API_KEY}&query=${keyword}&page=1`;
+
+  const resultForKeywords = await axios(tmdbUrlForKeywords);
+
+  //* 2. Get exactly matched keyword or first keyword from array
+  const keywordsArr = resultForKeywords.data.results;
+
+  let matchedKeywordSet = keywordsArr.find((el) => el.name === keyword);
+
+  // If there is no keyword exactly matched, get just first keyword or send error
+  if (!matchedKeywordSet && keywordsArr[0]) {
+    matchedKeywordSet = keywordsArr[0];
+  } else if (!matchedKeywordSet && !keywordsArr[0]) {
+    return next(
+      new ErrorFactory(404, "Invalid keyword. Please enter the valid keyword.")
+    );
+  }
+
+  const keywordId = matchedKeywordSet.id;
+
+  //* 3. Search movies by keyword id
+  const tmdbUrlForDiscover = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=${keywordId}`;
+
+  const moviesByKeyword = await axios(tmdbUrlForDiscover);
+
+  res.status(200).json({
+    status: "success",
+    length: moviesByKeyword.data.results.length,
+    data: moviesByKeyword.data.results,
   });
 });

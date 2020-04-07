@@ -32,6 +32,9 @@ router.post("/", movieController.createMovie);
 router.get("/similar/:movieId", movieController.getSimilarMovies);
 
 //! 7. Search movies by title
-router.get("/search/:byTitle", movieController.searchMoviesByTitle);
+router.get("/search/title/:title", movieController.searchMoviesByTitle);
+
+//! 8. Search movies by keyword
+router.get("/search/keyword/:keyword", movieController.searchMoviesByKeyword);
 
 module.exports = router;
