@@ -22,7 +22,7 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     length: movies.data.results.length,
-    data: movies.data.results
+    data: movies.data.results,
   });
 });
 
@@ -40,13 +40,13 @@ exports.getMovieDetail = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: detail.data
+    data: detail.data,
   });
 });
 
 //! Get on demand service providers for specific movie(Netflix, Amazon prime etc)
 // required parameter: movie title
-exports.getProviders = catchAsync(async function(req, res, next) {
+exports.getProviders = catchAsync(async function (req, res, next) {
   const movieToSearch = req.params.tmdbId;
 
   const result = await axios({
@@ -57,13 +57,13 @@ exports.getProviders = catchAsync(async function(req, res, next) {
       "content-type": "application/octet-stream",
       "x-rapidapi-host":
         "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com",
-      "x-rapidapi-key": process.env.UTELLY_API_KEY
+      "x-rapidapi-key": process.env.UTELLY_API_KEY,
     },
     params: {
       country: "US",
       source_id: movieToSearch,
-      source: "tmdb"
-    }
+      source: "tmdb",
+    },
   });
 
   const providersArr = result.data.collection.locations;
@@ -87,7 +87,7 @@ exports.getProviders = catchAsync(async function(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    data: providersArr
+    data: providersArr,
   });
 });
 
@@ -105,7 +105,7 @@ exports.getRecommendation = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: movies.data
+    data: movies.data,
   });
 });
 
@@ -118,7 +118,7 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
-    data: createdMovie
+    data: createdMovie,
   });
 });
 
@@ -159,11 +159,27 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 exports.getMovieById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   //![Sequelize] Need to get user info from user table
-  db.watchlist.findOne({ where: { id: id } }).then(function(result) {
+  db.watchlist.findOne({ where: { id: id } }).then(function (result) {
     if (result.affectedRows == 0) {
       return res.status(404).end();
     } else {
       res.status(200).json(result);
     }
+  });
+});
+
+//! Get similar movies : for Because you liked " *** " / Because you watched " *** "
+// Get the most recently added watchlist movie or favorited movie first then request this API with that movie id
+exports.getSimilarMovies = catchAsync(async (req, res, next) => {
+  const { movieId } = req.params;
+
+  const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`;
+
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results,
   });
 });

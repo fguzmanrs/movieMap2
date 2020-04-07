@@ -28,4 +28,7 @@ router.get("/recommend/:genreId", movieController.getRecommendation);
 // 5. Create a movie(When user clicks one specific movie, add a movie to 'movie' table)
 router.post("/", movieController.createMovie);
 
+//! 6. Get similar movies
+router.get("/similar/:movieId", movieController.getSimilarMovies);
+
 module.exports = router;
