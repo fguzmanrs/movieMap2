@@ -6,7 +6,12 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 // import tileData from './tileData';
-// import image from 'path/to/image.jpg';
+import image1 from './images/RO.jpg';
+import image2 from './images/FD.jpg';
+import image4 from './images/SO84.jpg';
+import image5 from './images/TDVC.jpg';
+import image6 from './images/Spectre.jpg';
+import image7 from './images/NTTD.jpg';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: 'none',
   },
   gridList: {
     flexWrap: 'nowrap',
@@ -33,20 +38,50 @@ const useStyles = makeStyles((theme) => ({
 
 const tileData = [
   {
-    img: 'https://unsplash.com/photos/NuFUbftUu_s',
-    title: 'random image',
+    img: image6,
+    title: 'Spectre',
     author: 'random author',
   },
   {
-    img: 'https://unsplash.com/photos/NuFUbftUu_s',
-    title: 'random image',
+    img: image1,
+    title: 'Rogue One',
     author: 'random author',
   },
   {
-    img: 'https://unsplash.com/photos/NuFUbftUu_s',
-    title: 'random image',
+    img: image5,
+    title: 'The DaVinci Code',
     author: 'random author',
   },
+  {
+    img: image4,
+    title: 'Summer Of 84',
+    author: 'random author',
+  },
+  {
+    img: image7,
+    title: 'No Time To Die',
+    author: 'random author',
+  },
+  {
+    img: image2,
+    title: 'Finding Dory',
+    author: 'random author',
+  },
+  {
+    img: image5,
+    title: 'The DaVinci Code',
+    author: 'random author',
+  },
+  {
+    img: image4,
+    title: 'Summer Of 84',
+    author: 'random author',
+  },
+  {
+    img: image6,
+    title: 'Spectre',
+    author: 'random author',
+  }
 ];
 
 export default function SingleLineGridList() {
@@ -54,7 +89,7 @@ export default function SingleLineGridList() {
 
   return (
     <div className={classes.root}>
-      <GridList className={classes.gridList} cols={2.5}>
+      <GridList className={classes.gridList} cols={4.5}>
         {tileData.map((tile) => (
           <GridListTile key={tile.img}>
             <img src={tile.img} alt={tile.title} />

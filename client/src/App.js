@@ -6,7 +6,7 @@ import FilmCard from './filmCard/filmCard.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
 import About from './about/about.js';
-import Profile from './profile/profile.js';
+import Profile from './Profile/profile.js';
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 // import react-router (use)
@@ -19,18 +19,23 @@ function App( props ) {
         <Navbar />
         <Switch>
           <Route path="/home">
+            <br></br>
             <Typography variant='h4'>My List</Typography>
             <Carousel />
 
+            <br></br>
             <Typography variant='h4'>Recommended because you searched ...</Typography>
             <Carousel />
 
+            <br></br>
             <Typography variant='h4'>Recommended because you watched ...</Typography>
             <Carousel />
 
+            <br></br>
             <Typography variant='h4'>Top Rated</Typography>
             <Carousel />
 
+            <br></br>
             <Typography variant='h4'>New Releases</Typography>
             <Carousel />
 
