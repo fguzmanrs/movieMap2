@@ -3,7 +3,7 @@
 }
 
 .App-body {
-  background-color: rgb(10, 4, 34);
+  background-color: rgba(210, 204, 243, 0.815);
   min-height: 100vh;
   flex-direction: column;
   align-items: center;
