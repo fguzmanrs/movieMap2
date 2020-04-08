@@ -5,11 +5,19 @@ const axios = require("axios");
 
 // begin of: mongodb initialization
 const mongojs = require("mongojs");
-const databaseUrl = "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/test?retryWrites=true&w=majority";
+const databaseUrl = encodeURI("mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority");
 const collections = ["user", "movie", "review"];
 const db = mongojs(databaseUrl, collections);
 db.on("error", error => {
-  console.log("mongoDb:: error:", error);
+  console.log("mongoDb::movieController::error:", error);
+});
+db.on("connect",function() {
+  console.log("mongoDb::movieController::connected");
+  console.log("movieController::" + databaseUrl +"::"+ collections);
+});
+db.runCommand({ping: 1}, function (err, res) {
+  console.log("mongoDb::movieController::ping");
+	if(!err && res.ok) console.log("movieController::up&running");
 });
 // end of: mongodb initialization
 
@@ -264,7 +272,7 @@ exports.getMovieAll = catchAsync(async (req, res, next) => {
 
 // CRUD: UPDATE
 exports.updateMovieById = catchAsync(async (req, res, next) => {
-  console.log("updateUserById::req.body: ", req.body);
+  console.log("updateMovieById::req.body: ", req.body);
   db.movie.update({ _id: mongojs.ObjectId(req.params.id) },
     {
       $set: {
@@ -292,8 +300,7 @@ exports.deleteMovieById = catchAsync(async (req, res, next) => {
   db.movie.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
     if (error) res.send(error);
     else res.send(data);
-  }
-  );
+  });
 });
 
 // end of: CRUD with mongodb

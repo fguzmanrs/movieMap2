@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
-const db = require("../models");
+// const db = require("../models");
 const catchAsync = require("../util/catchAsync");
 const ErrorFactory = require("../util/errorFactory");
 
@@ -15,7 +15,6 @@ const createToken = userId => {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
-
   return token;
 };
 

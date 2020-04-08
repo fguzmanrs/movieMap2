@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
-const reviewController = require("../controllers/reviewController");
+// const reviewController = require("../controllers/reviewController");
 
 const router = express.Router();
 
@@ -11,17 +11,24 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 
-//! APIs
-// Get user info
-router.get("/:userId", userController.getUserInfo);
+// User APIs: CRUD
+// CREATE
+router.post("/user", userController.createUser);
 
-// Create a reivew(grade: like(1), none(0), dislike(-1))
-router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
+// READ
+router.get("/:userId", userController.getUserById);
+router.get("/users", userController.getUserAll);
 
-// CRUD for watchlist
-router.get("/watchlist/:userId", userController.getMyWatchList);
-router.post("/watchlist/:userId/:movieId", userController.postToMyWatchlist);
-router.put("/watchlist/:userId/:movieId", userController.removeFromMyWatchlist);
-router.delete("/watchlist/:userId/", userController.clearMyWatchlist);
+// UPDATE
+router.put("/:userId", userController.updateUserById);
+router.put("/:userId/password", userController.updateMyPassword);
+router.put("/:userId/favorite", userController.updateMyFavoriteMovies);
+router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
+router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
+router.put("/:userId/reviewed", userController.updateMyReviewedMovies);
+router.put("/:userId/watchlist", userController.updateMyWatchList);
+
+// DELETE
+router.delete("/:userId", userController.deleteUserById);
 
 module.exports = router;
