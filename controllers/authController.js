@@ -219,9 +219,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //! ROUTE: forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-  //-------------SQL Sequelize----------------
+  //?-------------SQL Sequelize----------------
   // const user = await db.user.findOne({ where: { email: req.body.email } });
-  //-------------SQL Sequelize----------------
+  //?-------------SQL Sequelize----------------
 
   //* Get user info
   // mongojs doens't return user's info after update?? So manually find one
@@ -242,7 +242,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       );
     }
 
-    //* Reset pwd
     //* Create reset token and add it to user doc
     const randomToken = crypto.randomBytes(32).toString("hex");
     const encrypedToken = crypto
@@ -268,7 +267,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     db.user.update(
       { email: req.body.email },
-      { $set: { password: encrypedToken } },
+      { $set: { passwordResetToken: encrypedToken } },
       async (error, data) => {
         if (error) {
           return next(
@@ -343,28 +342,54 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     .digest("hex");
 
   //* Encrypt the reseted password
-  const encryptedDefaultPwd = await bcrypt.hash("1234", 12);
-
-  //* Find a user who has a same hashed(encrypted) token
-  const user = await db.user.update(
-    {
-      password: encryptedDefaultPwd,
-      passwordResetToken: "undefined",
-      // passwordResetTokenExpiresIn: undefined
-    },
-    {
-      where: { passwordResetToken: hashedToken },
-    }
+  const encryptedDefaultPwd = await bcrypt.hash(
+    process.env.DEFAULT_PASSWORD,
+    12
   );
 
-  if (!user) {
-    next(new ErrorFactory("Token is invalid.", 400));
-  }
+  //* Find a user who has a same hashed(encrypted) token
+  //?-------------SQL Sequelize----------------
+  // const user = await db.user.update(
+  //   {
+  //     password: encryptedDefaultPwd,
+  //     passwordResetToken: "undefined",
+  //     // passwordResetTokenExpiresIn: undefined
+  //   },
+  //   {
+  //     where: { passwordResetToken: hashedToken },
+  //   }
+  // );
+  //?-------------SQL Sequelize----------------
 
-  res.status(200).json({
-    status: "success",
-    message: "Successfully reseted password!",
-  });
+  db.user.update(
+    { passwordResetToken: hashedToken },
+    {
+      $set: {
+        password: encryptedDefaultPwd,
+        passwordResetToken: "undefined",
+      },
+    },
+    async (error, data) => {
+      if (error) {
+        return next(
+          new ErrorFactory(
+            "500",
+            "Error occured during updating password to default password for RESETPASSWORD."
+          )
+        );
+      }
+
+      console.log("📌 data", data);
+      if (!data.nModified) {
+        return next(new ErrorFactory("Token is invalid.", 400));
+      }
+
+      res.status(200).json({
+        status: "success",
+        message: "Successfully reseted password!",
+      });
+    }
+  );
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
