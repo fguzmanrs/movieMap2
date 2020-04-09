@@ -115,9 +115,9 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3. Bring user data matching to the username from DB
-  //-------------mySQL----------------
+  //-------------SQL Sequelize----------------
   // const result = await db.user.findOne({ where: { username } });
-  //-------------mySQL----------------
+  //-------------SQL Sequelize----------------
 
   db.user.findOne({ username: username }, async (error, data) => {
     if (error) res.send(error);
@@ -184,83 +184,155 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log("✨ decoded JWT: ", decodedJwt); // format: { userId: 123, iat: 1582066423, exp: 1582070023 }
 
   // 3. Check if there is a user matching to that id from DB
-  const result = await db.user.findByPk(decodedJwt.userId);
+  //-------------SQL Sequelize----------------
+  // const result = await db.user.findByPk(decodedJwt.userId);
+  //-------------SQL Sequelize----------------
 
-  if (!result) {
-    return next(
-      new ErrorFactory(
-        401,
-        "The user belonging to this token doesn't exist any longer."
-      )
-    );
-  }
+  db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
+    // If error occured
+    if (error)
+      return next(
+        new ErrorFactory(
+          "500",
+          "Error occured during finding logged in user for PROTECT."
+        )
+      );
+    else {
+      // Got back the data but if there is no user
+      if (!data) {
+        return next(
+          new ErrorFactory(
+            401,
+            "The user belonging to this token doesn't exist any longer."
+          )
+        );
+      }
 
-  // 4. Save user info to request in order to use it in next controllers.
-  req.user = result.dataValues;
-  console.log("🤡 user: ", req.user);
+      // 4. Save user info to request in order to use it in next controllers.
+      req.user = data;
+      console.log("🤡 user: ", req.user);
 
-  next();
+      next();
+    }
+  });
 });
 
 //! ROUTE: forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-  const user = await db.user.findOne({ where: { email: req.body.email } });
+  //-------------SQL Sequelize----------------
+  // const user = await db.user.findOne({ where: { email: req.body.email } });
+  //-------------SQL Sequelize----------------
 
-  if (!user) {
-    return next(
-      new ErrorFactory("No user founded with that email address.", 404)
+  //* Get user info
+  // mongojs doens't return user's info after update?? So manually find one
+  db.user.findOne({ email: req.body.email }, async (error, user) => {
+    // If error occured
+    if (error) {
+      return next(
+        new ErrorFactory(
+          "500",
+          "Error occured during finding user for FORGOTPASSWORD."
+        )
+      );
+    }
+
+    if (!user) {
+      return next(
+        new ErrorFactory("No user founded with that email address.", 404)
+      );
+    }
+
+    //* Reset pwd
+    //* Create reset token and add it to user doc
+    const randomToken = crypto.randomBytes(32).toString("hex");
+    const encrypedToken = crypto
+      .createHash("sha256")
+      .update(randomToken)
+      .digest("hex");
+
+    console.log("🐯 randomToken/encrypedToken: ", randomToken, encrypedToken);
+
+    // Time limit: 15 min
+    // const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
+
+    //! not saving expire date at this moment(maybe later)
+    //?-------------SQL Sequelize----------------
+    // await db.user.update(
+    //   {
+    //     passwordResetToken: encrypedToken,
+    //     // passwordResetTokenExpiresIn: tokenExpiresIn
+    //   },
+    //   { where: { email: req.body.email } }
+    // );
+    //?-------------SQL Sequelize----------------
+
+    db.user.update(
+      { email: req.body.email },
+      { $set: { password: encrypedToken } },
+      async (error, data) => {
+        if (error) {
+          return next(
+            new ErrorFactory(
+              "500",
+              "Error occured during updating password for FORGOTPASSWORD."
+            )
+          );
+        }
+
+        try {
+          //* send email with API link having a token
+          const resetPwdURL = `${req.protocol}://${req.get(
+            "host"
+          )}/api/users/resetPassword/${randomToken}`;
+
+          console.log("🍍 user:", user);
+          await new Email(user, resetPwdURL).sendResetPwd();
+
+          res.status(200).json({
+            status: "success",
+            message: "Password Token is sent to email.",
+          });
+        } catch (err) {
+          //?-------------SQL Sequelize----------------
+          // await db.user.update(
+          //   {
+          //     passwordResetToken: undefined,
+          //     // passwordResetTokenExpiresIn: undefined
+          //   },
+          //   { where: { email: req.body.email } }
+          // );
+          //?-------------SQL Sequelize----------------
+
+          db.user.update(
+            { email: req.body.email },
+            { $set: { passwordResetToken: undefined } },
+            async (error, data) => {
+              if (error) {
+                return next(
+                  new ErrorFactory(
+                    "500",
+                    "Error occured during updating password to undefined for FORGOTPASSWORD."
+                  )
+                );
+              }
+
+              console.log(
+                "🦊 passwordResetToken is set to undefined. *data: ",
+                data
+              );
+            }
+          );
+
+          return next(
+            new ErrorFactory(
+              500,
+              "Error occurred while sending an email. Try again later!"
+            )
+          );
+        }
+      }
     );
-  }
-
-  //* Create reset token and add it to user doc
-  const randomToken = crypto.randomBytes(32).toString("hex");
-  const encrypedToken = crypto
-    .createHash("sha256")
-    .update(randomToken)
-    .digest("hex");
-
-  console.log("🐯 randomToken/encrypedToken: ", randomToken, encrypedToken);
-
-  // Time limit: 15 min
-  // const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
-
-  //! not saving expire date at this moment(maybe later)
-  await db.user.update(
-    {
-      passwordResetToken: encrypedToken,
-      // passwordResetTokenExpiresIn: tokenExpiresIn
-    },
-    { where: { email: req.body.email } }
-  );
-
-  try {
-    //* send email with API link having a token
-    const resetPwdURL = `${req.protocol}://${req.get(
-      "host"
-    )}/api/users/resetPassword/${randomToken}`;
-
-    await new Email(user, resetPwdURL).sendResetPwd();
-
-    res.status(200).json({
-      status: "success",
-      message: "Password Token is sent to email.",
-    });
-  } catch (err) {
-    await db.user.update(
-      {
-        passwordResetToken: undefined,
-        // passwordResetTokenExpiresIn: undefined
-      },
-      { where: { email: req.body.email } }
-    );
-
-    return next(
-      new ErrorFactory(
-        "Error occurred while sending an email. Try again later!",
-        500
-      )
-    );
-  }
+  });
 });
 
 //! ROUTE: reset password
