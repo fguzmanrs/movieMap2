@@ -11,13 +11,13 @@ const db = mongojs(databaseUrl, collections);
 db.on("error", error => {
   console.log("mongoDb::movieController::error:", error);
 });
-db.on("connect",function() {
+db.on("connect", function () {
   console.log("mongoDb::movieController::connected");
-  console.log("movieController::" + databaseUrl +"::"+ collections);
+  console.log("movieController::" + databaseUrl + "::" + collections);
 });
-db.runCommand({ping: 1}, function (err, res) {
+db.runCommand({ ping: 1 }, function (err, res) {
   console.log("mongoDb::movieController::ping");
-	if(!err && res.ok) console.log("movieController::up&running");
+  if (!err && res.ok) console.log("movieController::up&running");
 });
 // end of: mongodb initialization
 
@@ -67,27 +67,33 @@ exports.getRecentMoviesFromDb = catchAsync(async (req, res, next) => {
   const date = `0${currentDate.getDate()}`.slice(-2); // 2 digit
   const oneYearBefore = `${lastYear}-${month}-${date}`;
 
-  db.movie.find({ "releaseDate": { "$gte" : oneYearBefore} }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+  db.movie.find({ "releaseDate": { "$gte": oneYearBefore } }, (error, data) => {
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 
 exports.getMovieByKeywordFromDb = catchAsync(async (req, res, next) => {
   console.log("getMovieByKeywordFromDb::req.body: ", req.body);
 
-  db.movie.find({ "keywords": { "$regex" : req.body.keyword, "$options" : "i"} }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+  db.movie.find({ "keywords": { "$regex": req.body.keyword, "$options": "i" } }, (error, data) => {
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 
 exports.getMovieByGenreFromDb = catchAsync(async (req, res, next) => {
   console.log("getMovieByGenreFromDb::req.body: ", req.body);
 
-  db.movie.find({ "genre": { "$regex" : req.body.genre, "$options" : "i"} }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+  db.movie.find({ "genre": { "$regex": req.body.genre, "$options": "i" } }, (error, data) => {
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 
@@ -230,7 +236,9 @@ exports.createMovie = catchAsync(async (req, res, next) => {
   console.log("createMovie::req.body: ", req.body);
   db.movie.insert(req.body, (error, data) => {
     if (error) res.send(error);
-    else res.send(data);
+    // else res.json(data);
+    // if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
   // console.log("🍉 req.body: ", req.body);
   // const createdMovie = await db.movie.create(req.body);
@@ -257,16 +265,20 @@ exports.getMovieById = catchAsync(async (req, res, next) => {
   console.log("getMovieById::req.body: ", req.body);
   const { id } = req.params;
   db.movie.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+    // if (error) res.send(error);
+    // else res.send(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 
 exports.getMovieAll = catchAsync(async (req, res, next) => {
   console.log("getMovieAll::req.body: ", req.body);
   db.movie.find({}, (error, data) => {
-    if (error) res.send(error);
-    else res.json(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 
@@ -289,8 +301,10 @@ exports.updateMovieById = catchAsync(async (req, res, next) => {
       }
     },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -298,9 +312,10 @@ exports.updateMovieById = catchAsync(async (req, res, next) => {
 exports.deleteMovieById = catchAsync(async (req, res, next) => {
   console.log("deleteMovieById::req.body: ", req.body);
   db.movie.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
-
 // end of: CRUD with mongodb

@@ -9,14 +9,14 @@ const db = mongojs(databaseUrl, collections);
 db.on("error", error => {
   console.log("mongoDb::userController::error:", error);
 });
-db.on("connect",function() {
+db.on("connect", function () {
   console.log("mongoDb::userController::connected");
-  console.log("userController::" + databaseUrl +"::"+ collections);
+  console.log("userController::" + databaseUrl + "::" + collections);
   // db.user.insert({"username":"ffortizn","password":"1234567","email":"ffortizn@gmail.com","firstName":"Fernando","lastName":"Nicolas"});
 });
-db.runCommand({ping: 1}, function (err, res) {
+db.runCommand({ ping: 1 }, function (err, res) {
   console.log("mongoDb::userController::ping");
-	if(!err && res.ok) console.log("movieController::up&running");
+  if (!err && res.ok) console.log("movieController::up&running");
 });
 // end of: mongodb initialization
 
@@ -27,8 +27,10 @@ db.runCommand({ping: 1}, function (err, res) {
 exports.createUser = catchAsync(async (req, res, next) => {
   console.log("createUser::req.body: ", req.body);
   db.user.insert(req.body, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 // end of: mongodb createUser
@@ -39,8 +41,10 @@ exports.getUserById = catchAsync(async (req, res, next) => {
   console.log("getUserById::req.body: ", req.body);
   const { id } = req.params;
   db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 // end of: mongodb getUserInfo
@@ -49,8 +53,10 @@ exports.getUserById = catchAsync(async (req, res, next) => {
 exports.getUserAll = catchAsync(async (req, res, next) => {
   console.log("getUserAll::req.body: ", req.body);
   db.user.find({}, (error, data) => {
-    if (error) res.send(error);
-    else res.json(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   });
 });
 // end of: mongodb getUserAll
@@ -73,8 +79,10 @@ exports.updateUserById = catchAsync(async (req, res, next) => {
       }
     },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -84,8 +92,10 @@ exports.updateMyPassword = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { password: req.body.password } }, // TODO: apply encryption before saving password
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -94,8 +104,10 @@ exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { myFavoriteMovies: req.body.myFavoriteMovies } },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -104,8 +116,10 @@ exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { myRecommendedMovies: req.body.myRecommendedMovies } },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -114,8 +128,10 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { myTopRatedMovies: req.body.myTopRatedMovies } },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -124,8 +140,10 @@ exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { myReviewedMovies: req.body.myReviewedMovies } },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -134,8 +152,10 @@ exports.updateMyWatchList = catchAsync(async (req, res, next) => {
   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
     { $set: { myWatchList: req.body.myWatchList } },
     (error, data) => {
-      if (error) res.send(error);
-      else res.send(data);
+      // if (error) res.send(error);
+      // else res.json(data);
+      if (error) return res.status(404).end();
+      else res.status(200).json(data);
     });
 });
 
@@ -143,8 +163,10 @@ exports.updateMyWatchList = catchAsync(async (req, res, next) => {
 exports.deleteUserById = catchAsync(async (req, res, next) => {
   console.log("deleteUserById::req.body: ", req.body);
   db.user.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
-    if (error) res.send(error);
-    else res.send(data);
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) return res.status(404).end();
+    else res.status(200).json(data);
   }
   );
 });

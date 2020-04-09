@@ -15,7 +15,7 @@ db.on("connect", function () {
 });
 db.runCommand({ ping: 1 }, function (err, res) {
     console.log("mongoDb::reviewController::ping");
-    if(!err && res.ok) console.log("reviewController::up&running");
+    if (!err && res.ok) console.log("reviewController::up&running");
 })
 // end of: mongodb initialization
 
@@ -26,8 +26,10 @@ db.runCommand({ ping: 1 }, function (err, res) {
 exports.createReview = catchAsync(async (req, res, next) => {
     console.log("createReview::req.body: ", req.body);
     db.user.insert(req.body, (error, data) => {
-        if (error) res.send(error);
-        else res.send(data);
+        // if (error) res.send(error);
+        // else res.json(data);
+        if (error) return res.status(404).end();
+        else res.status(200).json(data);
     });
 });
 
@@ -36,8 +38,10 @@ exports.getReviewByMovieId = catchAsync(async (req, res, next) => {
     console.log("getReviewByMovieId::req.body: ", req.body);
     const { id } = req.params;
     db.user.findOne({ "movieId": mongojs.ObjectId(req.params.id) }, (error, data) => {
-        if (error) res.send(error);
-        else res.send(data);
+        // if (error) res.send(error);
+        // else res.json(data);
+        if (error) return res.status(404).end();
+        else res.status(200).json(data);
     });
 });
 
@@ -45,8 +49,10 @@ exports.getReviewByUserId = catchAsync(async (req, res, next) => {
     console.log("getReviewByUserId::req.body: ", req.body);
     const { id } = req.params;
     db.user.findOne({ "userId": mongojs.ObjectId(req.params.id) }, (error, data) => {
-        if (error) res.send(error);
-        else res.send(data);
+        // if (error) res.send(error);
+        // else res.json(data);
+        if (error) return res.status(404).end();
+        else res.status(200).json(data);
     });
 });
 
@@ -57,8 +63,10 @@ exports.updateReviewById = catchAsync(async (req, res, next) => {
     db.user.update({ _id: mongojs.ObjectId(req.params.id) },
         { $set: { "rate": req.body.rate, "comment": req.body.comment } },
         (error, data) => {
-            if (error) res.send(error);
-            else res.send(data);
+            // if (error) res.send(error);
+            // else res.json(data);
+            if (error) return res.status(404).end();
+            else res.status(200).json(data);
         });
 });
 
@@ -66,8 +74,9 @@ exports.updateReviewById = catchAsync(async (req, res, next) => {
 exports.deleteReviewById = catchAsync(async (req, res, next) => {
     console.log("deleteReviewById::req.body: ", req.body);
     db.user.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
-        if (error) res.send(error);
-        else res.send(data);
-    }
-    );
+        // if (error) res.send(error);
+        // else res.json(data);
+        if (error) return res.status(404).end();
+        else res.status(200).json(data);
+    });
 });
