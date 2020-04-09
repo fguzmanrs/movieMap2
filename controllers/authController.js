@@ -7,7 +7,7 @@ const catchAsync = require("../util/catchAsync");
 const ErrorFactory = require("../util/errorFactory");
 const Email = require("../util/email");
 
-//! begin of: mongodb initialization
+//! Begin of: mongodb initialization
 const mongojs = require("mongojs");
 const databaseUrl = encodeURI(
   "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority"
@@ -25,7 +25,7 @@ db.runCommand({ ping: 1 }, function (err, res) {
   console.log("mongoDb::userController::ping");
   if (!err && res.ok) console.log("movieController::up&running");
 });
-//! end of: mongodb initialization
+//! End of: mongodb initialization
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = (userId) => {
