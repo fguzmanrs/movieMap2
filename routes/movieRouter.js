@@ -39,7 +39,7 @@ router.get("/search/title/:title", movieController.searchMoviesByTitle);
 router.get("/search/keyword/:keyword", movieController.searchMoviesByKeyword);
 
 // CRUD: READ - mongo
-router.get("/movie/:genreId", movieController.getMovieById);
+router.get("/movie/:movieId", movieController.getMovieById);
 router.get("/movies", movieController.getMovieAll);
 
 // CRUD: UPDATE - mongo

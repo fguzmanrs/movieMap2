@@ -35,24 +35,23 @@ router.patch(
 // Create a reivew(grade: like(1), none(0), dislike(-1))
 // router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
 // User APIs: CRUD
-// CREATE
+// CRUD: CREATE
 // router.post("/user", userController.createUser);
 
-// READ
+// // CRUD: READ
 // router.get("/:userId", userController.getUserById);
 // router.get("/users", userController.getUserAll);
 
-// UPDATE
+// // CRUD: UPDATE
 // router.put("/:userId", userController.updateUserById);
 // router.put("/:userId/password", userController.updateMyPassword);
-
 // router.put("/:userId/favorite", userController.updateMyFavoriteMovies);
 // router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
 // router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
 // router.put("/:userId/reviewed", userController.updateMyReviewedMovies);
 // router.put("/:userId/watchlist", userController.updateMyWatchList);
 
-// DELETE
+// CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
 
 module.exports = router;
