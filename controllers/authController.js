@@ -52,6 +52,14 @@ exports.signup = catchAsync(async (req, res, next) => {
   // 3. Encrypt the password
   const encryptedPwd = await bcrypt.hash(password, 12);
 
+  const newUserToSave = {
+    username,
+    password: encryptedPwd,
+    email,
+    firstName,
+    lastName,
+  };
+
   //-------------mySQL----------------
   // 4. Store a new user into DB
   // const result = await db.user.create({
@@ -64,16 +72,18 @@ exports.signup = catchAsync(async (req, res, next) => {
   //-------------mySQL----------------
 
   //! MongoDB create
-  db.user.insert(req.body, async (error, data) => {
-    if (error) console.log(error);
-    else {
+  db.user.insert(newUserToSave, async (error, data) => {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
       // 5. Create a JWT token
       // const token = createToken(result.dataValues.id);
       const token = createToken(data.id);
 
       // ! Send a welcome email
       const url = `${req.protocol}://${req.get("host")}`;
-      await new Email(data, url).sendWelcome();
+      // await new Email(data, url).sendWelcome();
 
       // 6. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
       res
@@ -105,36 +115,42 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3. Bring user data matching to the username from DB
-  const result = await db.user.findOne({ where: { username } });
+  //-------------mySQL----------------
+  // const result = await db.user.findOne({ where: { username } });
+  //-------------mySQL----------------
 
-  // 4. Validation(b): Check if there is a matching user and user's input password is same as that of DB(return Boolean)
-  if (
-    !result ||
-    !(await bcrypt.compare(password, result.dataValues.password))
-  ) {
-    return next(
-      new ErrorFactory(
-        401,
-        "There is no such a user or you typed the password wrong!"
-      )
-    );
-  }
+  db.user.findOne({ username: username }, async (error, data) => {
+    if (error) res.send(error);
+    else {
+      console.log("🥑data", data);
 
-  // 5. Create JWT token with user's id
-  const token = createToken(result.dataValues.id);
+      // 4. Validation(b): Check if there is a matching user and user's input password is same as that of DB(return Boolean)
+      if (!(await bcrypt.compare(password, data.password))) {
+        return next(
+          new ErrorFactory(
+            401,
+            "There is no such a user or you typed the password wrong!"
+          )
+        );
+      }
 
-  // 6. Send a response
-  res
-    .cookie("jwt", token, {
-      maxAge: 3600000,
-      httpOnly: true,
-    })
-    .status(200)
-    .json({
-      status: "success",
-      message: "You are logged in successfully!",
-      token,
-    });
+      // 5. Create JWT token with user's id
+      const token = createToken(data.id);
+
+      // 6. Send a response
+      res
+        .cookie("jwt", token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .status(200)
+        .json({
+          status: "success",
+          message: "You are logged in successfully!",
+          token,
+        });
+    }
+  });
 });
 
 //! ROUTE: LOGOUT - Clear cookie having a JWT token
