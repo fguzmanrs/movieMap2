@@ -33,7 +33,7 @@ const multerFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     cb(
-      new ErrorFactory("This is not an image. Please upload only image", 400),
+      new ErrorFactory(400, "This is not an image. Please upload only image"),
       false
     );
   }
@@ -50,7 +50,7 @@ exports.resizePhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
   //* Create file's name and save it to req
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  req.file.filename = `user-${req.user._id}-${Date.now()}.jpeg`;
 
   const photo = await sharp(req.file.buffer)
     .resize(300, 300)
@@ -61,33 +61,21 @@ exports.resizePhoto = catchAsync(async (req, res, next) => {
   console.log("📸", photo);
 
   next();
-  // begin of: CRUD with mongodb
-  // CRUD: CREATE (insert)
-  // begin of: mongodb createUser
-  // TODO: apply encryption before saving password
-  // exports.createUser = catchAsync(async (req, res, next) => {
-  //   console.log("createUser::req.body: ", req.body);
-  //   db.user.insert(req.body, (error, data) => {
-  //     // if (error) res.send(error);
-  //     // else res.json(data);
-  //     if (error) return res.status(404).end();
-  //     else res.status(200).json(data);
-  //   });
 });
 
-//! Route: update user's info
+//! Route: update user's account info : NOT PASSWORD, EMAIL, USERNAME
 exports.updateMe = catchAsync(async (req, res, next) => {
   console.log("📁", req.file);
   console.log("👤", req.body);
   console.log("👩‍💻", req.user);
 
-  //* If use tried to update password, return error.
+  //* If a user tried to update password with this route, return error.
   if (req.body.password) {
     return next(
       new ErrorFactory(
+        400,
         "This is not for password update. Please use updatePassword API endpoint."
-      ),
-      400
+      )
     );
   }
 
@@ -98,32 +86,60 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.file) req.body.photo = req.file.filename;
 
   db.user.update(
-    { _id: mongojs.ObjectId(req.params.id) },
+    { _id: mongojs.ObjectId(req.user._id) },
     {
-      $set: {
-        email: req.body.lastName,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        settings: req.body.settings,
-        myFavoriteMovies: req.body.myFavoriteMovies,
-        myRecommendedMovies: req.body.myRecommendedMovies,
-        myTopRatedMovies: req.body.myTopRatedMovies,
-        myReviewedMovies: req.body.myReviewedMovies,
-        myWatchList: req.body.myWatchList,
-      },
+      $set: req.body,
     },
     (error, data) => {
-      if (error) res.send(error);
-      else {
-        res.status(200).json({
-          status: "success",
-          message: "Successfully updated account info!",
-          data: {
-            user: updatedUser,
-            photo: req.file.filename,
-          },
-        });
+      if (error) {
+        return next(
+          new ErrorFactory(
+            500,
+            "Error occurred during updating user's account info."
+          )
+        );
       }
+
+      if (!data.nModified) {
+        return next(
+          new ErrorFactory(
+            500,
+            "User doesn't exist or user's account info cannot be updated."
+          )
+        );
+      }
+
+      db.user.findOne(
+        { _id: mongojs.ObjectId(req.user._id) },
+        async (error, data) => {
+          if (error) {
+            return next(
+              new ErrorFactory(
+                500,
+                "Error occurred during getting updated user's account info."
+              )
+            );
+          }
+
+          const { username, firstName, lastName, email } = data;
+
+          const updatedUser = {
+            username,
+            firstName,
+            lastName,
+            email,
+          };
+
+          res.status(200).json({
+            status: "success",
+            message: "Successfully updated account info!",
+            data: {
+              user: updatedUser,
+              photo: req.file.filename,
+            },
+          });
+        }
+      );
     }
   );
 
