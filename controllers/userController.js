@@ -12,6 +12,7 @@ db.on("error", error => {
 db.on("connect",function() {
   console.log("mongoDb::userController::connected");
   console.log("userController::" + databaseUrl +"::"+ collections);
+  // db.user.insert({"username":"ffortizn","password":"1234567","email":"ffortizn@gmail.com","firstName":"Fernando","lastName":"Nicolas"});
 });
 db.runCommand({ping: 1}, function (err, res) {
   console.log("mongoDb::userController::ping");

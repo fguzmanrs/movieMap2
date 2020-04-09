@@ -12,14 +12,14 @@ router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 
 // User APIs: CRUD
-// CREATE
+// CRUD: CREATE
 router.post("/user", userController.createUser);
 
-// READ
+// CRUD: READ
 router.get("/:userId", userController.getUserById);
 router.get("/users", userController.getUserAll);
 
-// UPDATE
+// CRUD: UPDATE
 router.put("/:userId", userController.updateUserById);
 router.put("/:userId/password", userController.updateMyPassword);
 router.put("/:userId/favorite", userController.updateMyFavoriteMovies);
@@ -28,7 +28,7 @@ router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
 router.put("/:userId/reviewed", userController.updateMyReviewedMovies);
 router.put("/:userId/watchlist", userController.updateMyWatchList);
 
-// DELETE
+// CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
 
 module.exports = router;

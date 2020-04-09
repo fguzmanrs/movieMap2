@@ -15,15 +15,15 @@ router.post("/review/userid/:userId/movieId/:movieId/grade/:grade", reviewContro
 router.post("/review/:userId/:movieId/:grade", reviewController.createReview);
 
 // CRUD: READ
-router.get("/reviews/movie/:movieId", reviewController.getReviewByMovieId);
-router.get("/reviews/user/:userId", reviewController.getReviewByUserId);
-router.get("/my-reviews/:userId", reviewController.getReviewByUserId);
+router.get("/review/movie/:movieId", reviewController.getReviewByMovieId);
+router.get("/review/user/:userId", reviewController.getReviewByUserId);
+router.get("/my-review/:userId", reviewController.getReviewByUserId);
 
 // CRUD: UPDATE
-router.put("/reviews/:reviewId", reviewController.updateReviewById);
-router.put("/my-reviews/:reviewId", reviewController.updateReviewById);
+router.put("/review/:reviewId", reviewController.updateReviewById);
+router.put("/my-review/:reviewId", reviewController.updateReviewById);
 
 // CRUD: DELETE
-router.delete("/my-reviews/:reviewId", reviewController.deleteReviewById);
+router.delete("/my-review/:reviewId", reviewController.deleteReviewById);
 
 module.exports = router;

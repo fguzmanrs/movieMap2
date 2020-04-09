@@ -30,7 +30,7 @@ router.get("/recommend/:genreId", movieController.getRecommendation);
 router.post("/", movieController.createMovie);
 
 // CRUD: READ - mongo
-router.get("/movie/:genreId", movieController.getMovieById);
+router.get("/movie/:movieId", movieController.getMovieById);
 router.get("/movies", movieController.getMovieAll);
 
 // CRUD: UPDATE - mongo
