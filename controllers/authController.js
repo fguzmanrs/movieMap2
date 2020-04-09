@@ -41,17 +41,18 @@ const createToken = (userId) => {
 
 //! ROUTE: SIGN UP
 exports.signup = catchAsync(async (req, res, next) => {
-  // 1. Get user's input
+  //* 1. Get user's input
   const { firstName, lastName, username, password, email } = req.body;
 
-  // 2. Validate for no input
+  //* 2. Validate for no input
   if (!username || !password || !firstName || !lastName || !email) {
     return next(new ErrorFactory(400, "Please provide all required info."));
   }
 
-  // 3. Encrypt the password
+  //* 3. Encrypt the password
   const encryptedPwd = await bcrypt.hash(password, 12);
 
+  //* 4. Filter user's input and replace password with encrypted one
   const newUserToSave = {
     username,
     password: encryptedPwd,
@@ -60,8 +61,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     lastName,
   };
 
+  //* 5. Store a new user into DB
   //-------------mySQL----------------
-  // 4. Store a new user into DB
   // const result = await db.user.create({
   //   username,
   //   password: encryptedPwd,
@@ -70,22 +71,23 @@ exports.signup = catchAsync(async (req, res, next) => {
   //   email,
   // });
   //-------------mySQL----------------
-
-  //! MongoDB create
   db.user.insert(newUserToSave, async (error, data) => {
     if (error) {
-      console.log(error);
-      res.send(error);
+      return next(
+        new ErrorFactory(
+          500,
+          "Error occured during creating a user for SIGNUP."
+        )
+      );
     } else {
-      // 5. Create a JWT token
-      // const token = createToken(result.dataValues.id);
+      //* 6. Create a JWT token
       const token = createToken(data.id);
 
-      // ! Send a welcome email
+      //! 7. Send a welcome email
       const url = `${req.protocol}://${req.get("host")}`;
-      // await new Email(data, url).sendWelcome();
+      await new Email(data, url).sendWelcome();
 
-      // 6. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
+      //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
       res
         .cookie("jwt", token, {
           maxAge: 3600000,
@@ -106,26 +108,29 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 //! ROUTE: LOGIN
 exports.login = catchAsync(async (req, res, next) => {
-  // 1. Get login info from request
+  //* 1. Get login info from request
   const { username, password } = req.body;
 
-  // 2. Validation(a): Check if username and password exist
+  //* 2. Validation(a): Check if username and password exist
   if (!username || !password) {
     return next(new ErrorFactory(400, "Please provide email and password."));
   }
 
-  // 3. Bring user data matching to the username from DB
+  //* 3. Bring user data matching to the username from DB
   //-------------SQL Sequelize----------------
   // const result = await db.user.findOne({ where: { username } });
   //-------------SQL Sequelize----------------
-
   db.user.findOne({ username: username }, async (error, data) => {
-    if (error) res.send(error);
-    else {
-      console.log("🥑data", data);
-
-      // 4. Validation(b): Check if there is a matching user and user's input password is same as that of DB(return Boolean)
-      if (!(await bcrypt.compare(password, data.password))) {
+    if (error) {
+      return next(
+        new ErrorFactory(
+          500,
+          "Error occured during finding a user with that username for LOGIN."
+        )
+      );
+    } else {
+      //* 4. Validation(b): Check if there is a matching user and user's input password is same as that of DB(return Boolean)
+      if (!data || !(await bcrypt.compare(password, data.password))) {
         return next(
           new ErrorFactory(
             401,
@@ -134,10 +139,10 @@ exports.login = catchAsync(async (req, res, next) => {
         );
       }
 
-      // 5. Create JWT token with user's id
+      //* 5. Create JWT token with user's id
       const token = createToken(data.id);
 
-      // 6. Send a response
+      //* 6. Send a response
       res
         .cookie("jwt", token, {
           maxAge: 3600000,
@@ -170,7 +175,7 @@ exports.logout = catchAsync(async (req, res, next) => {
 //! PROTECT Middleware
 //Protects other middlewares coming after this middleware(Not allow to access to next middlewares if a request fails to be verified here for its authentication)
 exports.protect = catchAsync(async (req, res, next) => {
-  // 1. Check if a user is logged in(via JWT)
+  //* 1. Check if a user is logged in(via JWT)
   const token = req.cookies.jwt;
 
   if (!token) {
@@ -179,21 +184,20 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2. Verify the token and get user's id from it
+  //* 2. Verify the token and get user's id from it
   const decodedJwt = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   console.log("✨ decoded JWT: ", decodedJwt); // format: { userId: 123, iat: 1582066423, exp: 1582070023 }
 
-  // 3. Check if there is a user matching to that id from DB
+  //* 3. Check if there is a user matching to that id from DB
   //-------------SQL Sequelize----------------
   // const result = await db.user.findByPk(decodedJwt.userId);
   //-------------SQL Sequelize----------------
-
   db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
     // If error occured
     if (error)
       return next(
         new ErrorFactory(
-          "500",
+          500,
           "Error occured during finding logged in user for PROTECT."
         )
       );
@@ -208,9 +212,12 @@ exports.protect = catchAsync(async (req, res, next) => {
         );
       }
 
-      // 4. Save user info to request in order to use it in next controllers.
+      //* 4. Save user info to request in order to use it in next controllers.
       req.user = data;
-      console.log("🤡 user: ", req.user);
+      console.log(
+        "🤡 Passed PROTECT router and add the user info to req: ",
+        req.user
+      );
 
       next();
     }
@@ -219,42 +226,39 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //! ROUTE: forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  //* Get user info
   //?-------------SQL Sequelize----------------
   // const user = await db.user.findOne({ where: { email: req.body.email } });
   //?-------------SQL Sequelize----------------
-
-  //* Get user info
-  // mongojs doens't return user's info after update?? So manually find one
+  // Mongojs seems not to return automatically user's info after update. So manually find one in advance to use later for email sending
   db.user.findOne({ email: req.body.email }, async (error, user) => {
     // If error occured
     if (error) {
       return next(
         new ErrorFactory(
-          "500",
-          "Error occured during finding user for FORGOTPASSWORD."
+          500,
+          "Error occured during finding a user for FORGOTPASSWORD."
         )
       );
     }
 
     if (!user) {
       return next(
-        new ErrorFactory("No user founded with that email address.", 404)
+        new ErrorFactory(404, "No user founded with that email address.")
       );
     }
 
     //* Create reset token and add it to user doc
+    // reset token: used to verify the use via email later
     const randomToken = crypto.randomBytes(32).toString("hex");
     const encrypedToken = crypto
       .createHash("sha256")
       .update(randomToken)
       .digest("hex");
 
-    console.log("🐯 randomToken/encrypedToken: ", randomToken, encrypedToken);
+    // console.log("🐯 randomToken/encrypedToken: ", randomToken, encrypedToken);
 
-    // Time limit: 15 min
-    // const tokenExpiresIn = Date.now() + 20 * 60 * 1000;
-
-    //! not saving expire date at this moment(maybe later)
+    //* Save the token to the user's db
     //?-------------SQL Sequelize----------------
     // await db.user.update(
     //   {
@@ -264,7 +268,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     //   { where: { email: req.body.email } }
     // );
     //?-------------SQL Sequelize----------------
-
     db.user.update(
       { email: req.body.email },
       { $set: { passwordResetToken: encrypedToken } },
@@ -272,19 +275,19 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         if (error) {
           return next(
             new ErrorFactory(
-              "500",
+              500,
               "Error occured during updating password for FORGOTPASSWORD."
             )
           );
         }
 
         try {
-          //* send email with API link having a token
+          //* Send email with API link having the verification token
           const resetPwdURL = `${req.protocol}://${req.get(
             "host"
           )}/api/users/resetPassword/${randomToken}`;
 
-          console.log("🍍 user:", user);
+          // console.log("🍍 user:", user);
           await new Email(user, resetPwdURL).sendResetPwd();
 
           res.status(200).json({
@@ -292,6 +295,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
             message: "Password Token is sent to email.",
           });
         } catch (err) {
+          //* Delete the passwordResetToken if error occured to db
           //?-------------SQL Sequelize----------------
           // await db.user.update(
           //   {
@@ -301,7 +305,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
           //   { where: { email: req.body.email } }
           // );
           //?-------------SQL Sequelize----------------
-
           db.user.update(
             { email: req.body.email },
             { $set: { passwordResetToken: undefined } },
@@ -309,16 +312,16 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
               if (error) {
                 return next(
                   new ErrorFactory(
-                    "500",
+                    500,
                     "Error occured during updating password to undefined for FORGOTPASSWORD."
                   )
                 );
               }
 
-              console.log(
-                "🦊 passwordResetToken is set to undefined. *data: ",
-                data
-              );
+              // console.log(
+              //   "🦊 passwordResetToken is set to undefined. *data: ",
+              //   data
+              // );
             }
           );
 
@@ -360,14 +363,13 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   //   }
   // );
   //?-------------SQL Sequelize----------------
-
   db.user.update(
     { passwordResetToken: hashedToken },
     {
       $set: {
         password: encryptedDefaultPwd,
-        passwordResetToken: "undefined",
       },
+      $unset: { passwordResetToken: "" },
     },
     async (error, data) => {
       if (error) {
@@ -379,7 +381,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
         );
       }
 
-      console.log("📌 data", data);
+      // console.log("📌 data after updated pwd to default pwd", data);
+
+      // If there is no updated doc
       if (!data.nModified) {
         return next(new ErrorFactory("Token is invalid.", 400));
       }
@@ -392,6 +396,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   );
 });
 
+//! ROUTE: update password
 exports.updatePassword = catchAsync(async (req, res, next) => {
   const user = await db.user.findByPk(req.user.id);
 
