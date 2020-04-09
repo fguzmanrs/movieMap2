@@ -3,9 +3,9 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const crypto = require("crypto");
 
-const catchAsync = require("../utill/catchAsync");
-const ErrorFactory = require("../utill/errorFactory");
-const Email = require("../utill/email");
+const catchAsync = require("../util/catchAsync");
+const ErrorFactory = require("../util/errorFactory");
+const Email = require("../util/email");
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = (userId) => {

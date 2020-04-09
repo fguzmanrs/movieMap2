@@ -1,13 +1,13 @@
 require("dotenv").config();
 
 // begin of: mongodb initialization
-// const mongojs = require("mongojs");
-// const databaseUrl = "moviemap";
-// const collections = ["user", "movie", "review"];
-// const db = mongojs(databaseUrl, collections);
-// db.on("error", error => {
-//   console.log("Database Error:", error);
-// });
+const mongojs = require("mongojs");
+const databaseUrl = "moviemap";
+const collections = ["user", "movie", "review"];
+const db = mongojs(databaseUrl, collections);
+db.on("error", (error) => {
+  console.log("Database Error:", error);
+});
 // end of: mongodb initialization
 
 // Handling uncaught exception error
@@ -27,7 +27,6 @@ server = app.listen(PORT, function (err) {
   if (err) throw err;
   console.info("App listening on PORT " + PORT);
 });
-
 
 // Handling unhandled rejection(Promise errors)
 process.on("unhandledRejection", (err) => {
