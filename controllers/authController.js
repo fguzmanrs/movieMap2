@@ -81,7 +81,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       );
     } else {
       //* 6. Create a JWT token
-      const token = createToken(data.id);
+      const token = createToken(data._id);
 
       //! 7. Send a welcome email
       const url = `${req.protocol}://${req.get("host")}`;
@@ -139,8 +139,9 @@ exports.login = catchAsync(async (req, res, next) => {
         );
       }
 
+      console.log("😈 loggedin user: ", data);
       //* 5. Create JWT token with user's id
-      const token = createToken(data.id);
+      const token = createToken(data._id);
 
       //* 6. Send a response
       res
@@ -177,6 +178,7 @@ exports.logout = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   //* 1. Check if a user is logged in(via JWT)
   const token = req.cookies.jwt;
+  console.log("🍑token:", token, req.cookies);
 
   if (!token) {
     return next(
@@ -192,36 +194,39 @@ exports.protect = catchAsync(async (req, res, next) => {
   //-------------SQL Sequelize----------------
   // const result = await db.user.findByPk(decodedJwt.userId);
   //-------------SQL Sequelize----------------
-  db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
-    // If error occured
-    if (error)
-      return next(
-        new ErrorFactory(
-          500,
-          "Error occured during finding logged in user for PROTECT."
-        )
-      );
-    else {
-      // Got back the data but if there is no user
-      if (!data) {
+  db.user.findOne(
+    { _id: mongojs.ObjectId(decodedJwt.userId) },
+    (error, data) => {
+      // If error occured
+      if (error)
         return next(
           new ErrorFactory(
-            401,
-            "The user belonging to this token doesn't exist any longer."
+            500,
+            "Error occured during finding logged in user for PROTECT."
           )
         );
+      else {
+        // Got back the data but if there is no user
+        if (!data) {
+          return next(
+            new ErrorFactory(
+              401,
+              "The user belonging to this token doesn't exist any longer."
+            )
+          );
+        }
+
+        //* 4. Save user info to request in order to use it in next controllers.
+        req.user = data;
+        console.log(
+          "🤡 Passed PROTECT router and added the 'user' obj to req: ",
+          req.user
+        );
+
+        next();
       }
-
-      //* 4. Save user info to request in order to use it in next controllers.
-      req.user = data;
-      console.log(
-        "🤡 Passed PROTECT router and add the user info to req: ",
-        req.user
-      );
-
-      next();
     }
-  });
+  );
 });
 
 //! ROUTE: forgot password
@@ -398,52 +403,79 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 //! ROUTE: update password
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  const user = await db.user.findByPk(req.user.id);
+  //* 1. Find user
+  //?-------------SQL Sequelize----------------
+  // const user = await db.user.findByPk(req.user.id);
+  //?-------------SQL Sequelize----------------
+  db.user.findOne(
+    { _id: mongojs.ObjectId(req.user._id) },
+    async (error, user) => {
+      if (error) {
+        return next(
+          new ErrorFactory(
+            500,
+            "Error occured during finding a user with id for UPDATEPASSWORD."
+          )
+        );
+      } else {
+        // If there is no user found
+        if (!user) {
+          return next(new ErrorFactory(400, "Please login first please!"));
+        }
 
-  console.log(
-    "🍓 tried to update pwd. user's info: ",
-    user.dataValues,
-    "🥝req.body:",
-    req.body
+        //* 2. Check if the entered current pwd is correct
+        const pwdIsCorrect = await bcrypt.compare(
+          req.body.currentPassword,
+          user.password
+        );
+
+        if (!pwdIsCorrect) {
+          return next(
+            new ErrorFactory(401, "Your current password is wrong. Type again!")
+          );
+        }
+
+        //* 3. Encrypt the new pwd and save it to DB
+        const encryptedPwd = await bcrypt.hash(req.body.newPassword, 12);
+        //?-------------SQL Sequelize----------------
+        // await db.user.update(
+        //   { password: encryptedPwd },
+        //   { where: { id: user.id } }
+        // );
+        //?-------------SQL Sequelize----------------
+        db.user.update(
+          { _id: mongojs.ObjectId(req.user._id) },
+          { $set: { password: encryptedPwd } },
+          async (error, data) => {
+            if (error) {
+              return next(
+                new ErrorFactory(
+                  500,
+                  "Error occured during updating password for UPDATEPASSWORD."
+                )
+              );
+            }
+
+            //* 4. Send new jwt token via cookie and make the user newly logged in
+            const newToken = createToken(user._id);
+
+            res
+              .cookie("jwt", newToken, {
+                maxAge: 3600000,
+                httpOnly: true,
+              })
+              .status(200)
+              .json({
+                status: "success",
+                message: "Successfully updated password!",
+                newToken,
+                data: {
+                  username: req.user.username,
+                },
+              });
+          }
+        );
+      }
+    }
   );
-
-  if (!user.dataValues) {
-    return next(
-      new ErrorFactory("You are not logged in. Login first please!", 400)
-    );
-  }
-
-  //* Check if entered pwd is correct
-  const pwdIsCorrect = await bcrypt.compare(
-    req.body.currentPassword,
-    user.password
-  );
-
-  if (!pwdIsCorrect) {
-    return next(
-      new ErrorFactory("Your current password is wrong. Type again!", 401)
-    );
-  }
-
-  //* Encrypt the new pwd and save it to DB
-  const encryptedPwd = await bcrypt.hash(req.body.newPassword, 12);
-  await db.user.update({ password: encryptedPwd }, { where: { id: user.id } });
-
-  //* Create new jwt token
-  const newToken = createToken(user.id);
-
-  res
-    .cookie("jwt", newToken, {
-      maxAge: 3600000,
-      httpOnly: true,
-    })
-    .status(200)
-    .json({
-      status: "success",
-      message: "Successfully updated password!",
-      newToken,
-      data: {
-        username: user.username,
-      },
-    });
 });
