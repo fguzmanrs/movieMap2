@@ -7,6 +7,26 @@ const catchAsync = require("../util/catchAsync");
 const ErrorFactory = require("../util/errorFactory");
 const Email = require("../util/email");
 
+//! begin of: mongodb initialization
+const mongojs = require("mongojs");
+const databaseUrl = encodeURI(
+  "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority"
+);
+const collections = ["user", "movie", "review"];
+const db = mongojs(databaseUrl, collections);
+db.on("error", (error) => {
+  console.log("mongoDb::userController::error:", error);
+});
+db.on("connect", function () {
+  console.log("mongoDb::userController::connected");
+  console.log("userController::" + databaseUrl + "::" + collections);
+});
+db.runCommand({ ping: 1 }, function (err, res) {
+  console.log("mongoDb::userController::ping");
+  if (!err && res.ok) console.log("movieController::up&running");
+});
+//! end of: mongodb initialization
+
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = (userId) => {
   const token = jwt.sign(
@@ -32,37 +52,46 @@ exports.signup = catchAsync(async (req, res, next) => {
   // 3. Encrypt the password
   const encryptedPwd = await bcrypt.hash(password, 12);
 
+  //-------------mySQL----------------
   // 4. Store a new user into DB
-  const result = await db.user.create({
-    username,
-    password: encryptedPwd,
-    firstName,
-    lastName,
-    email,
+  // const result = await db.user.create({
+  //   username,
+  //   password: encryptedPwd,
+  //   firstName,
+  //   lastName,
+  //   email,
+  // });
+  //-------------mySQL----------------
+
+  //! MongoDB create
+  db.user.insert(req.body, async (error, data) => {
+    if (error) console.log(error);
+    else {
+      // 5. Create a JWT token
+      // const token = createToken(result.dataValues.id);
+      const token = createToken(data.id);
+
+      // ! Send a welcome email
+      const url = `${req.protocol}://${req.get("host")}`;
+      await new Email(data, url).sendWelcome();
+
+      // 6. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
+      res
+        .cookie("jwt", token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .status(200)
+        .json({
+          status: "success",
+          message: "New user has been successfully created!",
+          token,
+          data: {
+            username,
+          },
+        });
+    }
   });
-
-  // 5. Create a JWT token
-  const token = createToken(result.dataValues.id);
-
-  // ! Send a welcome email
-  const url = `${req.protocol}://${req.get("host")}`;
-  await new Email(result, url).sendWelcome();
-
-  // 6. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
-  res
-    .cookie("jwt", token, {
-      maxAge: 3600000,
-      httpOnly: true,
-    })
-    .status(200)
-    .json({
-      status: "success",
-      message: "New user has been successfully created!",
-      token,
-      data: {
-        username,
-      },
-    });
 });
 
 //! ROUTE: LOGIN

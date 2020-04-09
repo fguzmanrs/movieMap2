@@ -5,7 +5,7 @@ const { forgotPwdTemplate } = require("./emailTemplate-forgot");
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
-    this.name = user.name;
+    // this.name = user.firstName;
     this.url = url;
     this.from = "admin<admin@moviemap.com>";
   }
@@ -17,16 +17,16 @@ module.exports = class Email {
         port: 2525,
         auth: {
           user: process.env.MAILTRAP_USER,
-          pass: process.env.MAILTRAP_PASS
-        }
+          pass: process.env.MAILTRAP_PASS,
+        },
       });
     } else if (process.env.NODE_ENV === "production") {
       return nodemailer.createTransport({
         service: "SendGrid",
         auth: {
           user: process.env.SENDGRID_USER,
-          pass: process.env.SENDGRID_PASS
-        }
+          pass: process.env.SENDGRID_PASS,
+        },
       });
     }
   }
@@ -44,7 +44,7 @@ module.exports = class Email {
       from: this.from,
       to: this.to,
       subject,
-      html
+      html,
     };
 
     await this.newTransport().sendMail(message);
