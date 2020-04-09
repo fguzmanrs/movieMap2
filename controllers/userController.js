@@ -85,10 +85,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //* Save file's name to req.body
   if (req.file) req.body.photo = req.file.filename;
 
-  db.user.update(
-    { _id: mongojs.ObjectId(req.user._id) },
+  db.user.findAndModify(
     {
-      $set: req.body,
+      query: { _id: mongojs.ObjectId(req.user._id) },
+      update: {
+        $set: req.body,
+      },
+      new: true,
     },
     (error, data) => {
       if (error) {
@@ -100,46 +103,22 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         );
       }
 
-      if (!data.nModified) {
+      console.log("🍉data", data);
+
+      if (!data) {
         return next(
-          new ErrorFactory(
-            500,
-            "User doesn't exist or user's account info cannot be updated."
-          )
+          new ErrorFactory(500, "user's account info cannot be updated.")
         );
       }
 
-      db.user.findOne(
-        { _id: mongojs.ObjectId(req.user._id) },
-        async (error, data) => {
-          if (error) {
-            return next(
-              new ErrorFactory(
-                500,
-                "Error occurred during getting updated user's account info."
-              )
-            );
-          }
-
-          const { username, firstName, lastName, email } = data;
-
-          const updatedUser = {
-            username,
-            firstName,
-            lastName,
-            email,
-          };
-
-          res.status(200).json({
-            status: "success",
-            message: "Successfully updated account info!",
-            data: {
-              user: updatedUser,
-              photo: req.file.filename,
-            },
-          });
-        }
-      );
+      res.status(200).json({
+        status: "success",
+        message: "Successfully updated account info!",
+        data: {
+          user: data,
+          photo: req.file.filename,
+        },
+      });
     }
   );
 });
@@ -178,7 +157,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
 
 //! Route: get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  console.log("getUserAll::req.body: ", req.body);
+  // console.log("getUserAll::req.body: ", req.body);
   db.user.find({}, (error, data) => {
     if (error) {
       return next(
@@ -197,39 +176,51 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-//! Route: get user's watchlist
-exports.getMyWatchList = catchAsync(async (req, res, next) => {
-  const { userId } = req.params;
+//! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
+//! Not necessary. Can be achieved via getUserInfo API
+// exports.getMyWatchList = catchAsync(async (req, res, next) => {
+// })
 
+//! Route: myFavoriteMovies, myReviewedMovies, myWatchlist
+exports.addMyMovie = catchAsync(async (req, res, next) => {
+  // addTo =  one of [ favorite || review || watchlist ]
+  const { addTo, movieId } = req.params;
 
-//! Route: post user's watchlist
-// exports.postToMyWatchlist = catchAsync(async (req, res, next) => {
-//   console.info("userController.postToMyWatchList...");
-//   const { userId, movieId } = req.params;
-// CRUD: UPDATE
-// exports.updateUserById = catchAsync(async (req, res, next) => {
-//   console.log("updateUserById::req.body: ", req.body);
-//   db.user.update({ _id: mongojs.ObjectId(req.params.id) },
-//     {
-//       $set: {
-//         email: req.body.lastName,
-//         firstName: req.body.firstName,
-//         lastName: req.body.lastName,
-//         settings: req.body.settings,
-//         myFavoriteMovies: req.body.myFavoriteMovies,
-//         myRecommendedMovies: req.body.myRecommendedMovies,
-//         myTopRatedMovies: req.body.myTopRatedMovies,
-//         myReviewedMovies: req.body.myReviewedMovies,
-//         myWatchList: req.body.myWatchList
-//       }
-//     },
-//     (error, data) => {
-//       // if (error) res.send(error);
-//       // else res.json(data);
-//       if (error) return res.status(404).end();
-//       else res.status(200).json(data);
-//     });
-// });
+  const addToCategory =
+    addTo === "favorite"
+      ? "MyFavoriteMovies"
+      : addTo === "review"
+      ? "MyReviewedMovies"
+      : addTo === "watchlist"
+      ? "myWatchList"
+      : "";
+
+  db.user.findAndModify(
+    {
+      query: { _id: mongojs.ObjectId(req.user._id) },
+      update: {
+        $push: { [addToCategory]: movieId },
+      },
+      new: true,
+    },
+    (error, data) => {
+      if (error) {
+        return next(
+          new ErrorFactory(
+            500,
+            "Error occured during updating user's movies(myFavoriteMovies, myReviewedMovies, myWatchlist)"
+          )
+        );
+      }
+
+      res.status(200).json({
+        status: "success",
+        message: `Successfully added to ${addTo} movie!`,
+        data,
+      });
+    }
+  );
+});
 
 exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
   console.log("updateMyFavoriteMovies::req.body: ", req.body);
