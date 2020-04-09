@@ -6,10 +6,11 @@ const cors = require("cors");
 const movieRouter = require("./routes/movieRouter");
 const userRouter = require("./routes/userRouter");
 const reviewRouter = require("./routes/reviewRouter");
-const discoveredRouter = require("./routes/discoveredRouter");
+// const discoveredRouter = require("./routes/discoveredRouter");
 
 const { globalErrorHandler } = require("./controllers/errorController");
-const ErrorFactory = require("./utill/errorFactory");
+const catchAsync = require("./util/catchAsync");
+const ErrorFactory = require("./util/errorFactory");
 
 const app = express();
 
@@ -32,10 +33,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Router
-app.use("/api/movies", movieRouter);
+// app.use("/api/movies", movieRouter);
 app.use("/api/users", userRouter);
-app.use("/api/reviews", reviewRouter);
-app.use("/api/discovered", discoveredRouter);
+// app.use("/api/reviews", reviewRouter);
+// app.use("/api/discovered", discoveredRouter);
 
 // Error handling for invalid path access
 app.all("*", (req, res, next) => {

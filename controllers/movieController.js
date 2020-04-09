@@ -1,10 +1,25 @@
-const axios = require("axios");
-const Sequelize = require("sequelize");
-var db = require("../models");
-const Op = Sequelize.Op;
+const catchAsync = require("../util/catchAsync");
+const ErrorFactory = require("../util/errorFactory");
 
-const catchAsync = require("../utill/catchAsync");
-const ErrorFactory = require("../utill/errorFactory");
+const axios = require("axios");
+
+// begin of: mongodb initialization
+const mongojs = require("mongojs");
+const databaseUrl = encodeURI("mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority");
+const collections = ["user", "movie", "review"];
+const db = mongojs(databaseUrl, collections);
+db.on("error", error => {
+  console.log("mongoDb::movieController::error:", error);
+});
+db.on("connect",function() {
+  console.log("mongoDb::movieController::connected");
+  console.log("movieController::" + databaseUrl +"::"+ collections);
+});
+db.runCommand({ping: 1}, function (err, res) {
+  console.log("mongoDb::movieController::ping");
+	if(!err && res.ok) console.log("movieController::up&running");
+});
+// end of: mongodb initialization
 
 //! Get the recent movies(within 1 year)
 // required parameter: none
@@ -19,6 +34,7 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
 
   const movies = await axios(tmdbUrl);
 
+  // save database
   res.status(200).json({
     status: "success",
     length: movies.data.results.length,
@@ -26,9 +42,61 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getRecentMoviesFromApi = catchAsync(async (req, res, next) => {
+  const currentDate = new Date();
+  const lastYear = currentDate.getFullYear() - 1;
+  const month = `0${currentDate.getMonth() + 1}`.slice(-2); // 2 digit
+  const date = `0${currentDate.getDate()}`.slice(-2); // 2 digit
+  const oneYearBefore = `${lastYear}-${month}-${date}`;
+
+  const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=${oneYearBefore}`;
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results
+  });
+});
+
+exports.getRecentMoviesFromDb = catchAsync(async (req, res, next) => {
+  console.log("getRecentMoviesFromDb::req.body: ", req.body);
+  const currentDate = new Date();
+  const lastYear = currentDate.getFullYear() - 1;
+  const month = `0${currentDate.getMonth() + 1}`.slice(-2); // 2 digit
+  const date = `0${currentDate.getDate()}`.slice(-2); // 2 digit
+  const oneYearBefore = `${lastYear}-${month}-${date}`;
+
+  db.movie.find({ "releaseDate": { "$gte" : oneYearBefore} }, (error, data) => {
+    if (error) res.send(error);
+    else res.send(data);
+  });
+});
+
+exports.getMovieByKeywordFromDb = catchAsync(async (req, res, next) => {
+  console.log("getMovieByKeywordFromDb::req.body: ", req.body);
+
+  db.movie.find({ "keywords": { "$regex" : req.body.keyword, "$options" : "i"} }, (error, data) => {
+    if (error) res.send(error);
+    else res.send(data);
+  });
+});
+
+exports.getMovieByGenreFromDb = catchAsync(async (req, res, next) => {
+  console.log("getMovieByGenreFromDb::req.body: ", req.body);
+
+  db.movie.find({ "genre": { "$regex" : req.body.genre, "$options" : "i"} }, (error, data) => {
+    if (error) res.send(error);
+    else res.send(data);
+  });
+});
+
+
 //! Get movie info: detail + keyword
 // required parameter: TMDB id
-exports.getMovieDetail = catchAsync(async (req, res, next) => {
+exports.getMovieDetailFromApi = catchAsync(async (req, res, next) => {
+  console.log("getMovieFromApi::req.body: ", req.body);
+
   const tmdbId = req.params.tmdbId;
   const tmdbUrlDetail = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
   const tmdbUrlKeyword = `https://api.themoviedb.org/3/movie/${tmdbId}/keywords?api_key=${process.env.TMDB_API_KEY}`;
@@ -111,16 +179,16 @@ exports.getRecommendation = catchAsync(async (req, res, next) => {
 
 //! Post a movie to DB
 // required info via req.body: title, overview, genreId, popularity, posterPath, releaseDate, keywordId(stringified array), tmdbRate, tmdbId(stringified array)
-exports.createMovie = catchAsync(async (req, res, next) => {
-  console.log("🍉 req.body: ", req.body);
+// exports.createMovie = catchAsync(async (req, res, next) => {
+//   console.log("🍉 req.body: ", req.body);
 
-  const createdMovie = await db.movie.create(req.body);
+//   const createdMovie = await db.movie.create(req.body);
 
-  res.status(201).json({
-    status: "success",
-    data: createdMovie,
-  });
-});
+//   res.status(201).json({
+//     status: "success",
+//     data: createdMovie
+//   });
+// });
 
 // exports.getMovieByKeyword = catchAsync(async (req, res, next) => {
 //   const { keywordId } = req.params;
@@ -156,16 +224,43 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 //     });
 // });
 
-exports.getMovieById = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  //![Sequelize] Need to get user info from user table
-  db.watchlist.findOne({ where: { id: id } }).then(function (result) {
-    if (result.affectedRows == 0) {
-      return res.status(404).end();
-    } else {
-      res.status(200).json(result);
-    }
+
+// CREATE
+exports.createMovie = catchAsync(async (req, res, next) => {
+  console.log("createMovie::req.body: ", req.body);
+  db.movie.insert(req.body, (error, data) => {
+    if (error) res.send(error);
+    else res.send(data);
   });
+  // console.log("🍉 req.body: ", req.body);
+  // const createdMovie = await db.movie.create(req.body);
+  // res.status(201).json({
+  //   status: "success",
+  //   data: createdMovie
+  // });
+});
+
+// CRUD: READ (findOne, find[All])
+// exports.getMovieById = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
+//   //![Sequelize] Need to get user info from user table
+//   db.watchlist.findOne({ where: { id: id } }).then(function(result) {
+//     if (result.affectedRows == 0) {
+//       return res.status(404).end();
+//     } else {
+//       res.status(200).json(result);
+//     }
+//   });
+// });
+
+exports.getMovieById = catchAsync(async (req, res, next) => {
+  console.log("getMovieById::req.body: ", req.body);
+  const { id } = req.params;
+
+db.movie.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
+  if (error) res.send(error);
+  else res.send(data);
+});
 });
 
 //! Get similar movies : for Because you liked " *** " / Because you watched " *** "
@@ -235,3 +330,48 @@ exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
     data: moviesByKeyword.data.results,
   });
 });
+
+
+
+exports.getMovieAll = catchAsync(async (req, res, next) => {
+  console.log("getMovieAll::req.body: ", req.body);
+  db.movie.find({}, (error, data) => {
+    if (error) res.send(error);
+    else res.json(data);
+  });
+});
+
+// CRUD: UPDATE
+exports.updateMovieById = catchAsync(async (req, res, next) => {
+  console.log("updateMovieById::req.body: ", req.body);
+  db.movie.update({ _id: mongojs.ObjectId(req.params.id) },
+    {
+      $set: {
+        url: req.body.url,
+        title: req.body.title,
+        overview: req.body.overview,
+        genre: req.body.genre,
+        popularity: req.body.popularity,
+        posterPath: req.body.posterPath,
+        releaseDate: req.body.releaseDate,
+        keywords: req.body.keywords,
+        tmdbId: req.body.tmdbId,
+        tmdbRate: req.body.tmdbRate
+      }
+    },
+    (error, data) => {
+      if (error) res.send(error);
+      else res.send(data);
+    });
+});
+
+// CRUD: DELETE
+exports.deleteMovieById = catchAsync(async (req, res, next) => {
+  console.log("deleteMovieById::req.body: ", req.body);
+  db.movie.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
+    if (error) res.send(error);
+    else res.send(data);
+  });
+});
+
+// end of: CRUD with mongodb

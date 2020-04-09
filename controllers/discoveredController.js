@@ -1,4 +1,4 @@
-const catchAsync = require("../utill/catchAsync");
+const catchAsync = require("../util/catchAsync");
 var db = require("../models");
 
 // const Op = Sequelize.Op;
