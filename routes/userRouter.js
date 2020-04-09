@@ -33,7 +33,7 @@ router.patch(
 );
 
 // Create a reivew(grade: like(1), none(0), dislike(-1))
-router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
+// router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
 // User APIs: CRUD
 // CREATE
 // router.post("/user", userController.createUser);
@@ -43,13 +43,14 @@ router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
 // router.get("/users", userController.getUserAll);
 
 // UPDATE
-router.put("/:userId", userController.updateUserById);
-router.put("/:userId/password", userController.updateMyPassword);
-router.put("/:userId/favorite", userController.updateMyFavoriteMovies);
-router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
-router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
-router.put("/:userId/reviewed", userController.updateMyReviewedMovies);
-router.put("/:userId/watchlist", userController.updateMyWatchList);
+// router.put("/:userId", userController.updateUserById);
+// router.put("/:userId/password", userController.updateMyPassword);
+
+// router.put("/:userId/favorite", userController.updateMyFavoriteMovies);
+// router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
+// router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
+// router.put("/:userId/reviewed", userController.updateMyReviewedMovies);
+// router.put("/:userId/watchlist", userController.updateMyWatchList);
 
 // DELETE
 router.delete("/:userId", userController.deleteUserById);
