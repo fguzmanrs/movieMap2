@@ -14,7 +14,7 @@ router.post("/forgotPassword", authController.forgotPassword);
 router.get("/resetPassword/:token", authController.resetPassword);
 
 //! APIs
-// Get user info
+// Get all users and get one user
 router.get("/", userController.getAllUsers);
 router.get("/:userId", userController.getUserInfo);
 
@@ -26,6 +26,7 @@ router.patch(
   userController.resizePhoto,
   userController.updateMe
 );
+
 router.patch(
   "/updatePassword",
   authController.protect,

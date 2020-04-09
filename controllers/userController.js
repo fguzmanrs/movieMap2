@@ -142,99 +142,65 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       );
     }
   );
-
-  // const updatedUser = await db.user
-  //   .update(req.body, {
-  //     where: { id: req.user.id }
-  //     // returning: true,
-  //     // plain: true
-  //   })
-  //   .then(() => {
-  //     // Sequealize doesn't support returning the updated object for mySQL so call another api for it.
-  //     return db.user.findOne({ where: { id: req.user.id } });
-  //   });
-
-  // res.status(200).json({
-  //   status: "success",
-  //   message: "Successfully updated account info!",
-  //   data: {
-  //     user: updatedUser,
-  //     photo: req.file.filename
-  //   }
-  // });
 });
 
 //! Route: get user's detail info
 exports.getUserInfo = catchAsync(async (req, res, next) => {
-  const { userId } = req.params;
+  db.user.findOne(
+    { _id: mongojs.ObjectId(req.params.userId) },
+    (error, data) => {
+      if (error) {
+        return next(
+          new ErrorFactory(
+            500,
+            "Error occured during getting user info for GET USER INFO"
+          )
+        );
+      }
 
-  console.log("getUserById::req.body: ", req.body);
-  const { id } = req.params;
+      if (!data) {
+        return next(
+          new ErrorFactory(
+            400,
+            "There is no such a user in DB. Try again with a valid user id"
+          )
+        );
+      }
 
-  db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
-    // if (error) res.send(error);
-    // else res.json(data);
-    if (error) return res.status(404).end();
-    else res.status(200).json(data);
-  });
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get user's info!",
+        data,
+      });
+    }
+  );
 });
-
-// begin of: CRUD with mongodb
-// CRUD: CREATE (insert)
-// begin of: mongodb createUser
-// TODO: apply encryption before saving password
-// exports.createUser = catchAsync(async (req, res, next) => {
-//   console.log("createUser::req.body: ", req.body);
-//   db.user.insert(req.body, (error, data) => {
-//     if (error) res.send(error);
-//     else res.send(data);
-//   });
-// });
-// end of: mongodb createUser
 
 //! Route: get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  // db.user.findAll().then(function(result) {
-  //   if (result.affectedRows == 0) {
-  //     return res.status(404).end();
-  //   } else {
-  //     res.status(200).json(result);
-  //   }
-  // });
-
   console.log("getUserAll::req.body: ", req.body);
   db.user.find({}, (error, data) => {
-    // if (error) res.send(error);
-    // else res.json(data);
-    if (error) return res.status(404).end();
-    else res.status(200).json(data);
+    if (error) {
+      return next(
+        new ErrorFactory(
+          500,
+          "Error occured during getting all users info for GET ALL USERS"
+        )
+      );
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully get user's info!",
+      data,
+    });
   });
 });
 
 //! Route: get user's watchlist
-// exports.getMyWatchList = catchAsync(async (req, res, next) => {
-//   const { userId } = req.params;
-// CRUD: READ (findOne, find[All])
-// begin of: mongodb getUserById
-// exports.getUserById = catchAsync(async (req, res, next) => {
-//   console.log("getUserById::req.body: ", req.body);
-//   const { id } = req.params;
-//   db.user.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
-//     if (error) res.send(error);
-//     else res.send(data);
-//   });
-// });
-// end of: mongodb getUserInfo
+exports.getMyWatchList = catchAsync(async (req, res, next) => {
+  const { userId } = req.params;
 
-// begin of: mongodb getUserAll
-// exports.getUserAll = catchAsync(async (req, res, next) => {
-//   console.log("getUserAll::req.body: ", req.body);
-//   db.user.find({}, (error, data) => {
-//     if (error) res.send(error);
-//     else res.json(data);
-//   });
-// });
-// end of: mongodb getUserAll
 
 //! Route: post user's watchlist
 // exports.postToMyWatchlist = catchAsync(async (req, res, next) => {
@@ -264,21 +230,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 //       else res.status(200).json(data);
 //     });
 // });
-
-// TODO: apply encryption before saving password
-exports.updateMyPassword = catchAsync(async (req, res, next) => {
-  console.log("updateMyPassword::req.body: ", req.body);
-  db.user.update(
-    { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { password: req.body.password } }, // TODO: apply encryption before saving password
-    (error, data) => {
-      // if (error) res.send(error);
-      // else res.json(data);
-      if (error) return res.status(404).end();
-      else res.status(200).json(data);
-    }
-  );
-});
 
 exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
   console.log("updateMyFavoriteMovies::req.body: ", req.body);
