@@ -222,19 +222,19 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
   );
 });
 
-exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
-  console.log("updateMyFavoriteMovies::req.body: ", req.body);
-  db.user.update(
-    { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { myFavoriteMovies: req.body.myFavoriteMovies } },
-    (error, data) => {
-      // if (error) res.send(error);
-      // else res.json(data);
-      if (error) return res.status(404).end();
-      else res.status(200).json(data);
-    }
-  );
-});
+// exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
+//   console.log("updateMyFavoriteMovies::req.body: ", req.body);
+//   db.user.update(
+//     { _id: mongojs.ObjectId(req.params.id) },
+//     { $set: { myFavoriteMovies: req.body.myFavoriteMovies } },
+//     (error, data) => {
+//       // if (error) res.send(error);
+//       // else res.json(data);
+//       if (error) return res.status(404).end();
+//       else res.status(200).json(data);
+//     }
+//   );
+// });
 
 exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
   console.log("updateMyRecommendedMovies::req.body: ", req.body);
@@ -264,33 +264,33 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
   );
 });
 
-exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
-  console.log("updateMyReviewedMovies::req.body: ", req.body);
-  db.user.update(
-    { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { myReviewedMovies: req.body.myReviewedMovies } },
-    (error, data) => {
-      // if (error) res.send(error);
-      // else res.json(data);
-      if (error) return res.status(404).end();
-      else res.status(200).json(data);
-    }
-  );
-});
+// exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
+//   console.log("updateMyReviewedMovies::req.body: ", req.body);
+//   db.user.update(
+//     { _id: mongojs.ObjectId(req.params.id) },
+//     { $set: { myReviewedMovies: req.body.myReviewedMovies } },
+//     (error, data) => {
+//       // if (error) res.send(error);
+//       // else res.json(data);
+//       if (error) return res.status(404).end();
+//       else res.status(200).json(data);
+//     }
+//   );
+// });
 
-exports.updateMyWatchList = catchAsync(async (req, res, next) => {
-  console.log("updateMyWatchList::req.body: ", req.body);
-  db.user.update(
-    { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { myWatchList: req.body.myWatchList } },
-    (error, data) => {
-      // if (error) res.send(error);
-      // else res.json(data);
-      if (error) return res.status(404).end();
-      else res.status(200).json(data);
-    }
-  );
-});
+// exports.updateMyWatchList = catchAsync(async (req, res, next) => {
+//   console.log("updateMyWatchList::req.body: ", req.body);
+//   db.user.update(
+//     { _id: mongojs.ObjectId(req.params.id) },
+//     { $set: { myWatchList: req.body.myWatchList } },
+//     (error, data) => {
+//       // if (error) res.send(error);
+//       // else res.json(data);
+//       if (error) return res.status(404).end();
+//       else res.status(200).json(data);
+//     }
+//   );
+// });
 
 // CRUD: DELETE
 exports.deleteUserById = catchAsync(async (req, res, next) => {

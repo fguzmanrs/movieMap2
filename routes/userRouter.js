@@ -48,8 +48,16 @@ router.patch(
 //! All the put myFavoriteMovies, myReviewedMovies, myWatchlist APIs are integrated into addMyMovie api.
 //!-----------------------------------------------------------------------------
 
+//? need more info about below APIs
 // router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
 // router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
+//? need to discuss utilizing our movie collection
+
+//! Required APIs : Recommend personalized movies (using getSimilarMovies API's logic : plz refer movieController's getSimilarMovies API)
+// 1. Because you watched "<movie name>"... (recommend movies that are similar to user's watchlist movie that lately added to myWatchlist)
+// 2. Because you liked "<movie name>"... (recommend movies that are similar to user's favorite movie that lately added to myFavoriteMovies)
+// 3. You might like... (recommend movies that are similar to user's top rated movie of myReviewedMovies)
+// 4. Delete one movie from array of myFavoriteMovies, myReviewedMovies, myWatchlist
 
 // CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
