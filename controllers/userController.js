@@ -176,11 +176,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-//! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
-//! Not necessary. Can be achieved via getUserInfo API
-// exports.getMyWatchList = catchAsync(async (req, res, next) => {
-// })
-
 //! Route: myFavoriteMovies, myReviewedMovies, myWatchlist
 exports.addMyMovie = catchAsync(async (req, res, next) => {
   // addTo =  one of [ favorite || review || watchlist ]
@@ -221,6 +216,11 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
     }
   );
 });
+
+//! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
+//! Each movie doc has to be populated with movie info so frontend team can get actual data not just doc ids.
+// exports.getMyMovies = catchAsync(async (req, res, next) => {
+// })
 
 // exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
 //   console.log("updateMyFavoriteMovies::req.body: ", req.body);

@@ -58,6 +58,7 @@ router.patch(
 // 2. Because you liked "<movie name>"... (recommend movies that are similar to user's favorite movie that lately added to myFavoriteMovies)
 // 3. You might like... (recommend movies that are similar to user's top rated movie of myReviewedMovies)
 // 4. Delete one movie from array of myFavoriteMovies, myReviewedMovies, myWatchlist
+// 5. Get user's populated myFavoriteMovies || myReviewedMovies || myWatchlist
 
 // CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
