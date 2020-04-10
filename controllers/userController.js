@@ -298,33 +298,42 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 // TODO
 exports.forYouBecause = catchAsync(async (req, res, next) => {
   console.log("forYouBecause::req.params: ", req.params);
-  const { because, userId } = req.params;
+  const { reason, movieId } = req.params;
+  let tmdbUrl = "";
 
-  switch (because) {
+  switch (reason) {
     case 'youWatched':
-      // check user.watched array size and get one id at random
-      // recommend similar movies to watched
-      break;
     case 'youLiked':
-      // user.liked array size and get one id at random
-      // recommend similar movies to liked
+      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
       break;
     case 'youMightLike':
-      // user.watched array size and get one id at random
-      // recommend top rated / recent movies
+      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
       break;
     default:
-
+      console.log(`forYouBecause::error: reason = ['youWatched', 'youLiked', 'youMightLike']?`)
+      return res.status(404).end();
   }
 
-  // because = youMightLike
-  const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
   const movies = await axios(tmdbUrl);
-
   res.status(200).json({
     status: "success",
     length: movies.data.results.length,
     data: movies.data.results,
+  });
+});
+
+exports.removeMovieFromMyList = catchAsync(async (req, res, next) => {
+  console.log("removeMovieFromMyList::req.params: ", req.params);
+  const { movieId, myList, userId } = req.params;
+
+  db.user.update({ _id: mongojs.ObjectID(userId) }, { $pull: { [myList]: parseInt(movieId) } }, (error, data) => {
+    // if (error) res.send(error);
+    // else res.json(data);
+    if (error) {
+      console.log(`removeMovieFromListByUserId::error: myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']?`);
+      return res.status(404).end();
+    }
+    else res.status(200).json(data);
   });
 });
 
