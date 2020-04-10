@@ -80,34 +80,33 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   //? Filter out the fileds that not allowed to update
-  //username, firstname, lastname
+  const filteredBody = {};
+  for (key in req.body) {
+    if (key === "username" || key === "firstName" || key === "lastName") {
+      filteredBody[key] = req.body[key];
+    }
+  }
 
   //* Save file's name to req.body
-  if (req.file) req.body.photo = req.file.filename;
+  if (req.file) filteredBody.photo = req.file.filename;
 
   db.user.findAndModify(
     {
       query: { _id: mongojs.ObjectId(req.user._id) },
       update: {
-        $set: req.body,
+        $set: filteredBody,
       },
       new: true,
     },
     (error, data) => {
-      if (error) {
-        return next(
-          new ErrorFactory(
-            500,
-            "Error occurred during updating user's account info."
-          )
-        );
-      }
-
       console.log("🍉data", data);
 
       if (!data) {
         return next(
-          new ErrorFactory(500, "user's account info cannot be updated.")
+          new ErrorFactory(
+            404,
+            "Failed to update user's info. There is no such a user or content that you tried to update."
+          )
         );
       }
 
@@ -128,19 +127,10 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   db.user.findOne(
     { _id: mongojs.ObjectId(req.params.userId) },
     (error, data) => {
-      if (error) {
-        return next(
-          new ErrorFactory(
-            500,
-            "Error occured during getting user info for GET USER INFO"
-          )
-        );
-      }
-
       if (!data) {
         return next(
           new ErrorFactory(
-            400,
+            404,
             "There is no such a user in DB. Try again with a valid user id"
           )
         );
@@ -159,15 +149,6 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   // console.log("getUserAll::req.body: ", req.body);
   db.user.find({}, (error, data) => {
-    if (error) {
-      return next(
-        new ErrorFactory(
-          500,
-          "Error occured during getting all users info for GET ALL USERS"
-        )
-      );
-    }
-
     res.status(200).json({
       status: "success",
       message: "Successfully get user's info!",
@@ -190,6 +171,15 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
       ? "myWatchList"
       : "";
 
+  if (!addToCategory) {
+    return next(
+      new ErrorFactory(
+        400,
+        "Please enter a valid user's movie category name.(favorite or review or watchlist"
+      )
+    );
+  }
+
   db.user.findAndModify(
     {
       query: { _id: mongojs.ObjectId(req.user._id) },
@@ -199,15 +189,6 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
       new: true,
     },
     (error, data) => {
-      if (error) {
-        return next(
-          new ErrorFactory(
-            500,
-            "Error occured during updating user's movies(myFavoriteMovies, myReviewedMovies, myWatchlist)"
-          )
-        );
-      }
-
       res.status(200).json({
         status: "success",
         message: `Successfully added to ${addTo} movie!`,
