@@ -24,28 +24,35 @@ db.runCommand({ ping: 1 }, function (err, res) {
 //! ROUTE: Create a review
 //  Login required. Prevent a user to write multiple reviews for the same movie.
 exports.createReview = catchAsync(async (req, res, next) => {
-  db.review.findOne(
-    { username: req.body.username, tmdbId: req.body.tmdbId },
-    (error, data) => {
-      //* Validation: check if the user already wrote a review for the same movie
-      if (data) {
-        return next(
-          new ErrorFactory(
-            400,
-            "You already wrote a review for the same movie. Please update your review, not create a new one for the same movie."
-          )
-        );
-      }
-
-      db.review.insert(req.body, (error, data) => {
-        res.status(200).json({
-          status: "success",
-          message: "Successfully created a review!",
-          data,
-        });
-      });
+  db.review.findOne({ tmdbId: req.body.tmdbId }, (error, data) => {
+    //* Validation: check if the user already wrote a review for the same movie
+    if (data) {
+      return next(
+        new ErrorFactory(
+          400,
+          "You already wrote a review for the same movie. Please update your review, not create a new one for the same movie."
+        )
+      );
     }
-  );
+
+    // Filter user's input
+    const filteredBody = {
+      userId: req.user._id,
+      username: req.user.username,
+      tmdbId: req.body.tmdbId,
+      title: req.body.title,
+      rating: req.body.rating,
+      comment: req.body.comment,
+    };
+
+    db.review.insert(filteredBody, (error, data) => {
+      res.status(200).json({
+        status: "success",
+        message: "Successfully created a review!",
+        data,
+      });
+    });
+  });
 });
 
 //! ROUTE: Get all reviews
@@ -61,7 +68,6 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 
 //! ROUTE: Get reviews by movie
 exports.getReviewsByMovieId = catchAsync(async (req, res, next) => {
-  console.log(req.params);
   db.review.find({ tmdbId: Number(req.params.tmdbId) }, (error, data) => {
     res.status(200).json({
       status: "success",
