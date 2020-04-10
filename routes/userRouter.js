@@ -57,8 +57,15 @@ router.patch(
 // 1. Because you watched "<movie name>"... (recommend movies that are similar to user's watchlist movie that lately added to myWatchlist)
 // 2. Because you liked "<movie name>"... (recommend movies that are similar to user's favorite movie that lately added to myFavoriteMovies)
 // 3. You might like... (recommend movies that are similar to user's top rated movie of myReviewedMovies)
+// :reason = ['youWatched', 'youLiked', 'youMightLike']
+router.get("/foryou/because/:reason/movie/:movieId", userController.forYouBecause);
+
 // 4. Delete one movie from array of myFavoriteMovies, myReviewedMovies, myWatchlist
+// :myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']
+router.delete("/remove/movie/:movieId/from/:myList/:userId", userController.removeMovieFromMyList);
+
 // 5. Get user's populated myFavoriteMovies || myReviewedMovies || myWatchlist
+// TODO: 2020-04-10: Still working on it. -- Francisco Ortiz
 
 // CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
