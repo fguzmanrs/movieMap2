@@ -3,80 +3,143 @@ const ErrorFactory = require("../util/errorFactory");
 
 // begin of: mongodb initialization
 const mongojs = require("mongojs");
-const databaseUrl = encodeURI("mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority");
+const databaseUrl = encodeURI(
+  "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority"
+);
 const collections = ["user", "movie", "review"];
 const db = mongojs(databaseUrl, collections);
-db.on("error", error => {
-    console.log("mongoDb::reviewController::error:", error);
+db.on("error", (error) => {
+  console.log("mongoDb::reviewController::error:", error);
 });
 db.on("connect", function () {
-    console.log("mongoDb::reviewController::connected");
-    console.log("reviewController::" + databaseUrl + "::" + collections);
+  console.log("mongoDb::reviewController::connected");
+  console.log("reviewController::" + databaseUrl + "::" + collections);
 });
 db.runCommand({ ping: 1 }, function (err, res) {
-    console.log("mongoDb::reviewController::ping");
-    if (!err && res.ok) console.log("reviewController::up&running");
-})
+  console.log("mongoDb::reviewController::ping");
+  if (!err && res.ok) console.log("reviewController::up&running");
+});
 // end of: mongodb initialization
 
-// begin of: CRUD with mongodb
-// CRUD: CREATE (insert)
-// begin of: mongodb createUser
-// TODO: apply encryption before saving password
+//! ROUTE: Create a review
+//  Login required. Prevent a user to write multiple reviews for the same movie.
 exports.createReview = catchAsync(async (req, res, next) => {
-    console.log("createReview::req.body: ", req.body);
-    db.user.insert(req.body, (error, data) => {
-        // if (error) res.send(error);
-        // else res.json(data);
-        if (error) return res.status(404).end();
-        else res.status(200).json(data);
-    });
-});
+  db.review.findOne(
+    { username: req.body.username, tmdbId: req.body.tmdbId },
+    (error, data) => {
+      //* Validation: check if the user already wrote a review for the same movie
+      if (data) {
+        return next(
+          new ErrorFactory(
+            400,
+            "You already wrote a review for the same movie. Please update your review, not create a new one for the same movie."
+          )
+        );
+      }
 
-// CRUD: READ
-exports.getReviewByMovieId = catchAsync(async (req, res, next) => {
-    console.log("getReviewByMovieId::req.body: ", req.body);
-    const { id } = req.params;
-    db.user.findOne({ "movieId": mongojs.ObjectId(req.params.id) }, (error, data) => {
-        // if (error) res.send(error);
-        // else res.json(data);
-        if (error) return res.status(404).end();
-        else res.status(200).json(data);
-    });
-});
-
-exports.getReviewByUserId = catchAsync(async (req, res, next) => {
-    console.log("getReviewByUserId::req.body: ", req.body);
-    const { id } = req.params;
-    db.user.findOne({ "userId": mongojs.ObjectId(req.params.id) }, (error, data) => {
-        // if (error) res.send(error);
-        // else res.json(data);
-        if (error) return res.status(404).end();
-        else res.status(200).json(data);
-    });
-});
-
-
-// CRUD: UPDATE
-exports.updateReviewById = catchAsync(async (req, res, next) => {
-    console.log("updateReviewById::req.body: ", req.body);
-    db.user.update({ _id: mongojs.ObjectId(req.params.id) },
-        { $set: { "rate": req.body.rate, "comment": req.body.comment } },
-        (error, data) => {
-            // if (error) res.send(error);
-            // else res.json(data);
-            if (error) return res.status(404).end();
-            else res.status(200).json(data);
+      db.review.insert(req.body, (error, data) => {
+        res.status(200).json({
+          status: "success",
+          message: "Successfully created a review!",
+          data,
         });
+      });
+    }
+  );
 });
 
-// CRUD: DELETE
-exports.deleteReviewById = catchAsync(async (req, res, next) => {
-    console.log("deleteReviewById::req.body: ", req.body);
-    db.user.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
-        // if (error) res.send(error);
-        // else res.json(data);
-        if (error) return res.status(404).end();
-        else res.status(200).json(data);
+//! ROUTE: Get all reviews
+exports.getAllReviews = catchAsync(async (req, res, next) => {
+  db.review.find({}, (error, data) => {
+    res.status(200).json({
+      status: "success",
+      message: "Successfully got all reviews!",
+      data,
     });
+  });
+});
+
+//! ROUTE: Get reviews by movie
+exports.getReviewsByMovieId = catchAsync(async (req, res, next) => {
+  console.log(req.params);
+  db.review.find({ tmdbId: Number(req.params.tmdbId) }, (error, data) => {
+    res.status(200).json({
+      status: "success",
+      message: !data.length
+        ? "There is no review yet for this movie or there is no such a movie."
+        : `Successfully got reviews!`,
+      data,
+    });
+  });
+});
+
+//! ROUTE: Get reviews by user id
+exports.getReviewByUserId = catchAsync(async (req, res, next) => {
+  db.review.find({ userId: req.params.userId }, (error, data) => {
+    res.status(200).json({
+      status: "success",
+      message: !data.length
+        ? "There is no review yet for this movie or there is no such a user."
+        : `Successfully got reviews!`,
+      data,
+    });
+  });
+});
+
+//! ROUTE: Update a review
+exports.updateReviewById = catchAsync(async (req, res, next) => {
+  // Filter user's input
+  const filteredBody = {};
+  for (key in req.body) {
+    if (key === "rating" || key === "comment") {
+      filteredBody[key] = req.body[key];
+    }
+  }
+
+  db.review.findAndModify(
+    {
+      query: { _id: mongojs.ObjectId(req.params.reviewId) },
+      update: {
+        $set: filteredBody,
+      },
+      new: true,
+    },
+    (error, data) => {
+      if (!data) {
+        return next(
+          new ErrorFactory(
+            400,
+            "Failed to update the review. There is no such a review or content you tried to update."
+          )
+        );
+      }
+      res.status(200).json({
+        status: "success",
+        message: "Successfully updated the review!",
+        data,
+      });
+    }
+  );
+});
+
+//! ROUTE: Delete a review
+exports.deleteReviewById = catchAsync(async (req, res, next) => {
+  db.review.remove(
+    { _id: mongojs.ObjectID(req.params.reviewId) },
+    (error, data) => {
+      if (!data.n) {
+        return next(
+          new ErrorFactory(
+            400,
+            "Failed to delete the review. There is no such a review to delete."
+          )
+        );
+      }
+      res.status(200).json({
+        status: "success",
+        message: "Successfully deleted the review!",
+        data,
+      });
+    }
+  );
 });

@@ -35,7 +35,7 @@ app.use(cookieParser());
 // Router
 app.use("/api/movies", movieRouter);
 app.use("/api/users", userRouter);
-// app.use("/api/reviews", reviewRouter);
+app.use("/api/reviews", reviewRouter);
 // app.use("/api/discovered", discoveredRouter);
 
 // Error handling for invalid path access
