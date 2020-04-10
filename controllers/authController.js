@@ -49,42 +49,54 @@ exports.signup = catchAsync(async (req, res, next) => {
     return next(new ErrorFactory(400, "Please provide all required info."));
   }
 
-  //* 3. Encrypt the password
-  const encryptedPwd = await bcrypt.hash(password, 12);
+  // Unique username, email Validation
+  db.user.find({ $or: [{ username }, { email }] }, async (error, data) => {
+    if (data.length > 0) {
+      return next(
+        new ErrorFactory(
+          400,
+          "There is already existing username or email. Please try with an unique username and email."
+        )
+      );
+    }
 
-  //* 4. Filter user's input and replace password with encrypted one
-  const newUserToSave = {
-    username,
-    password: encryptedPwd,
-    email,
-    firstName,
-    lastName,
-  };
+    //* 3. Encrypt the password
+    const encryptedPwd = await bcrypt.hash(password, 12);
 
-  //* 5. Store a new user into DB
-  db.user.insert(newUserToSave, async (error, data) => {
-    //* 6. Create a JWT token
-    const token = createToken(data._id);
+    //* 4. Filter user's input and replace password with encrypted one
+    const newUserToSave = {
+      username,
+      password: encryptedPwd,
+      email,
+      firstName,
+      lastName,
+    };
 
-    //! 7. Send a welcome email
-    const url = `${req.protocol}://${req.get("host")}`;
-    await new Email(data, url).sendWelcome();
+    //* 5. Store a new user into DB
+    db.user.insert(newUserToSave, async (error, data) => {
+      //* 6. Create a JWT token
+      const token = createToken(data._id);
 
-    //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
-    res
-      .cookie("jwt", token, {
-        maxAge: 3600000,
-        httpOnly: true,
-      })
-      .status(200)
-      .json({
-        status: "success",
-        message: "New user has been successfully created!",
-        token,
-        data: {
-          username,
-        },
-      });
+      //! 7. Send a welcome email
+      const url = `${req.protocol}://${req.get("host")}`;
+      await new Email(data, url).sendWelcome();
+
+      //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
+      res
+        .cookie("jwt", token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .status(200)
+        .json({
+          status: "success",
+          message: "New user has been successfully created!",
+          token,
+          data: {
+            username,
+          },
+        });
+    });
   });
 });
 
