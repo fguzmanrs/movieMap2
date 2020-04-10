@@ -1,7 +1,7 @@
 const catchAsync = require("../util/catchAsync");
 const ErrorFactory = require("../util/errorFactory");
 
-// begin of: mongodb initialization
+// Begin of: mongodb initialization
 const mongojs = require("mongojs");
 const databaseUrl = encodeURI(
   "mongodb+srv://user_moviemap2:mIqinYfAq5BCCWu3@cluster0-kstvt.mongodb.net/moviemap2?retryWrites=true&w=majority"
@@ -19,7 +19,7 @@ db.runCommand({ ping: 1 }, function (err, res) {
   console.log("mongoDb::reviewController::ping");
   if (!err && res.ok) console.log("reviewController::up&running");
 });
-// end of: mongodb initialization
+// End of: mongodb initialization
 
 //! ROUTE: Create a review
 //  Login required. Prevent a user to write multiple reviews for the same movie.
