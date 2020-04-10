@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -17,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+  },
+  link: {
+    textDecoration: 'none',
   },
   search: {
     position: 'relative',
@@ -103,6 +102,7 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = 'primary-search-account-menu';
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -130,6 +130,12 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleProfileMenuOpen}>
+        <Link to="/signIn">Login / Sign Up</Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/about">About</Link>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -147,17 +153,8 @@ export default function PrimarySearchAppBar() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/home">Movie Map</Link>
-            <Link to="/filmCard">Film Details</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -174,13 +171,10 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            
-            <Link to="/signIn">Sign In</Link>
-            
-            <Link to="/signUp">Sign Up</Link>
-            
+
+            <Link to="/signIn">Login / Sign up</Link>
             <Link to="/about">About</Link>
-            
+
             <IconButton
               edge="end"
               aria-label="account of current user"

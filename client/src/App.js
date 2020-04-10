@@ -7,21 +7,27 @@ import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
 import About from './about/about.js';
 import Profile from './Profile/profile.js';
-import {  BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
+import Footer from './footer/footer.js';
 // import react-router (use)
 
-function App( props ) {
+function App(props) {
   return (
     <div className="App App-body" >
-      
+
       <BrowserRouter>
-        <Navbar />
+
         <Switch>
           <Route path="/home">
+            <Navbar />
+
             <br></br>
             <Typography variant='h4'>My List</Typography>
             <Carousel />
+
+            // TEMPORARY to visualize the space and ref formats
+            <FilmCard />
 
             <br></br>
             <Typography variant='h4'>Recommended because you searched ...</Typography>
@@ -50,17 +56,18 @@ function App( props ) {
             <SignUp />
           </Route>
           <Route path="/about">
+            <Navbar />
             <About />
           </Route>
           <Route path="/profile">
+            <Navbar />
             <Profile />
           </Route>
-          
-        </Switch>  
-      </BrowserRouter>
-      
 
-           
+        </Switch>
+      </BrowserRouter>
+      <Footer />
+
     </div>
   );
 }
