@@ -4,6 +4,8 @@ const sharp = require("sharp");
 const ErrorFactory = require("../util/errorFactory");
 const catchAsync = require("../util/catchAsync");
 
+const axios = require("axios");
+
 // begin of: mongodb initialization
 const mongojs = require("mongojs");
 const databaseUrl = encodeURI(
@@ -157,7 +159,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
 
 //! Route: get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  // console.log("getUserAll::req.body: ", req.body);
+  // console.log("getUserAll::req.params: ", req.params);
   db.user.find({}, (error, data) => {
     if (error) {
       return next(
@@ -185,10 +187,10 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
     addTo === "favorite"
       ? "MyFavoriteMovies"
       : addTo === "review"
-      ? "MyReviewedMovies"
-      : addTo === "watchlist"
-      ? "myWatchList"
-      : "";
+        ? "MyReviewedMovies"
+        : addTo === "watchlist"
+          ? "myWatchList"
+          : "";
 
   db.user.findAndModify(
     {
@@ -223,10 +225,10 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
 // })
 
 // exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
-//   console.log("updateMyFavoriteMovies::req.body: ", req.body);
+//   console.log("updateMyFavoriteMovies::req.params: ", req.params);
 //   db.user.update(
 //     { _id: mongojs.ObjectId(req.params.id) },
-//     { $set: { myFavoriteMovies: req.body.myFavoriteMovies } },
+//     { $set: { myFavoriteMovies: req.params.myFavoriteMovies } },
 //     (error, data) => {
 //       // if (error) res.send(error);
 //       // else res.json(data);
@@ -237,10 +239,10 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
 // });
 
 exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
-  console.log("updateMyRecommendedMovies::req.body: ", req.body);
+  console.log("updateMyRecommendedMovies::req.params: ", req.params);
   db.user.update(
     { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { myRecommendedMovies: req.body.myRecommendedMovies } },
+    { $set: { myRecommendedMovies: req.params.myRecommendedMovies } },
     (error, data) => {
       // if (error) res.send(error);
       // else res.json(data);
@@ -251,10 +253,10 @@ exports.updateMyRecommendedMovies = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
-  console.log("updateMyTopRatedMovies::req.body: ", req.body);
+  console.log("updateMyTopRatedMovies::req.params: ", req.params);
   db.user.update(
     { _id: mongojs.ObjectId(req.params.id) },
-    { $set: { myTopRatedMovies: req.body.myTopRatedMovies } },
+    { $set: { myTopRatedMovies: req.params.myTopRatedMovies } },
     (error, data) => {
       // if (error) res.send(error);
       // else res.json(data);
@@ -265,10 +267,10 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 });
 
 // exports.updateMyReviewedMovies = catchAsync(async (req, res, next) => {
-//   console.log("updateMyReviewedMovies::req.body: ", req.body);
+//   console.log("updateMyReviewedMovies::req.params: ", req.params);
 //   db.user.update(
 //     { _id: mongojs.ObjectId(req.params.id) },
-//     { $set: { myReviewedMovies: req.body.myReviewedMovies } },
+//     { $set: { myReviewedMovies: req.params.myReviewedMovies } },
 //     (error, data) => {
 //       // if (error) res.send(error);
 //       // else res.json(data);
@@ -279,10 +281,10 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 // });
 
 // exports.updateMyWatchList = catchAsync(async (req, res, next) => {
-//   console.log("updateMyWatchList::req.body: ", req.body);
+//   console.log("updateMyWatchList::req.params: ", req.params);
 //   db.user.update(
 //     { _id: mongojs.ObjectId(req.params.id) },
-//     { $set: { myWatchList: req.body.myWatchList } },
+//     { $set: { myWatchList: req.params.myWatchList } },
 //     (error, data) => {
 //       // if (error) res.send(error);
 //       // else res.json(data);
@@ -292,9 +294,43 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 //   );
 // });
 
+
+// TODO
+exports.forYouBecause = catchAsync(async (req, res, next) => {
+  console.log("forYouBecause::req.params: ", req.params);
+  const { because, userId } = req.params;
+
+  switch (because) {
+    case 'youWatched':
+      // check user.watched array size and get one id at random
+      // recommend similar movies to watched
+      break;
+    case 'youLiked':
+      // user.liked array size and get one id at random
+      // recommend similar movies to liked
+      break;
+    case 'youMightLike':
+      // user.watched array size and get one id at random
+      // recommend top rated / recent movies
+      break;
+    default:
+
+  }
+
+  // because = youMightLike
+  const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results,
+  });
+});
+
 // CRUD: DELETE
 exports.deleteUserById = catchAsync(async (req, res, next) => {
-  console.log("deleteUserById::req.body: ", req.body);
+  console.log("deleteUserById::req.params: ", req.params);
   db.user.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
     // if (error) res.send(error);
     // else res.json(data);

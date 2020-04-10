@@ -62,7 +62,7 @@ exports.getRecentMoviesFromApi = catchAsync(async (req, res, next) => {
 });
 
 exports.getRecentMoviesFromDb = catchAsync(async (req, res, next) => {
-  console.log("getRecentMoviesFromDb::req.body: ", req.body);
+  console.log("getRecentMoviesFromDb::req.params: ", req.params);
   const currentDate = new Date();
   const lastYear = currentDate.getFullYear() - 1;
   const month = `0${currentDate.getMonth() + 1}`.slice(-2); // 2 digit
@@ -78,10 +78,10 @@ exports.getRecentMoviesFromDb = catchAsync(async (req, res, next) => {
 });
 
 exports.getMovieByKeywordFromDb = catchAsync(async (req, res, next) => {
-  console.log("getMovieByKeywordFromDb::req.body: ", req.body);
+  console.log("getMovieByKeywordFromDb::req.params: ", req.params);
 
   db.movie.find(
-    { keywords: { $regex: req.body.keyword, $options: "i" } },
+    { keywords: { $regex: req.params.keyword, $options: "i" } },
     (error, data) => {
       // if (error) res.send(error);
       // else res.json(data);
@@ -92,10 +92,10 @@ exports.getMovieByKeywordFromDb = catchAsync(async (req, res, next) => {
 });
 
 exports.getMovieByGenreFromDb = catchAsync(async (req, res, next) => {
-  console.log("getMovieByGenreFromDb::req.body: ", req.body);
+  console.log("getMovieByGenreFromDb::req.params: ", req.params);
 
   db.movie.find(
-    { genre: { $regex: req.body.genre, $options: "i" } },
+    { genre: { $regex: req.params.genre, $options: "i" } },
     (error, data) => {
       // if (error) res.send(error);
       // else res.json(data);
@@ -108,7 +108,7 @@ exports.getMovieByGenreFromDb = catchAsync(async (req, res, next) => {
 //! Get movie info: detail + keyword
 // required parameter: TMDB id
 exports.getMovieDetailFromApi = catchAsync(async (req, res, next) => {
-  console.log("getMovieFromApi::req.body: ", req.body);
+  console.log("getMovieFromApi::req.params: ", req.params);
 
   const tmdbId = req.params.tmdbId;
   const tmdbUrlDetail = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
@@ -239,8 +239,8 @@ exports.getRecommendation = catchAsync(async (req, res, next) => {
 
 // CREATE
 exports.createMovie = catchAsync(async (req, res, next) => {
-  console.log("createMovie::req.body: ", req.body);
-  db.movie.insert(req.body, (error, data) => {
+  console.log("createMovie::req.params: ", req.params);
+  db.movie.insert(req.params, (error, data) => {
     if (error) res.send(error);
     // else res.json(data);
     // if (error) return res.status(404).end();
@@ -268,7 +268,7 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 // });
 
 exports.getMovieById = catchAsync(async (req, res, next) => {
-  console.log("getMovieById::req.body: ", req.body);
+  console.log("getMovieById::req.params: ", req.params);
   const { id } = req.params;
 
   db.movie.findOne({ _id: mongojs.ObjectId(req.params.id) }, (error, data) => {
@@ -352,7 +352,7 @@ exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
 });
 
 exports.getMovieAll = catchAsync(async (req, res, next) => {
-  console.log("getMovieAll::req.body: ", req.body);
+  console.log("getMovieAll::req.params: ", req.params);
   db.movie.find({}, (error, data) => {
     // if (error) res.send(error);
     // else res.json(data);
@@ -363,21 +363,21 @@ exports.getMovieAll = catchAsync(async (req, res, next) => {
 
 // CRUD: UPDATE
 exports.updateMovieById = catchAsync(async (req, res, next) => {
-  console.log("updateMovieById::req.body: ", req.body);
+  console.log("updateMovieById::req.params: ", req.params);
   db.movie.update(
     { _id: mongojs.ObjectId(req.params.id) },
     {
       $set: {
-        url: req.body.url,
-        title: req.body.title,
-        overview: req.body.overview,
-        genre: req.body.genre,
-        popularity: req.body.popularity,
-        posterPath: req.body.posterPath,
-        releaseDate: req.body.releaseDate,
-        keywords: req.body.keywords,
-        tmdbId: req.body.tmdbId,
-        tmdbRate: req.body.tmdbRate,
+        url: req.params.url,
+        title: req.params.title,
+        overview: req.params.overview,
+        genre: req.params.genre,
+        popularity: req.params.popularity,
+        posterPath: req.params.posterPath,
+        releaseDate: req.params.releaseDate,
+        keywords: req.params.keywords,
+        tmdbId: req.params.tmdbId,
+        tmdbRate: req.params.tmdbRate,
       },
     },
     (error, data) => {
@@ -391,7 +391,7 @@ exports.updateMovieById = catchAsync(async (req, res, next) => {
 
 // CRUD: DELETE
 exports.deleteMovieById = catchAsync(async (req, res, next) => {
-  console.log("deleteMovieById::req.body: ", req.body);
+  console.log("deleteMovieById::req.params: ", req.params);
   db.movie.remove({ _id: mongojs.ObjectID(req.params.id) }, (error, data) => {
     // if (error) res.send(error);
     // else res.json(data);
