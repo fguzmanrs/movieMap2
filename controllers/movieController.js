@@ -67,6 +67,7 @@ exports.getMovieDetail = catchAsync(async (req, res, next) => {
 // call api (function(movieId))
 // build json response
 // send response
+//
 
 // exports.populateMyList = catchAsync(async (req, res, next) => {
 
