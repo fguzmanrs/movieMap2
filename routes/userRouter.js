@@ -63,6 +63,7 @@ router.delete(
 
 // 5. Get user's populated myFavoriteMovies || myReviewedMovies || myWatchlist
 // TODO: 2020-04-10: Still working on it. -- Francisco Ortiz
+router.get("/populate/:myList",movieController.populateMyList);
 
 // CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
