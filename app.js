@@ -6,10 +6,11 @@ const cors = require("cors");
 const movieRouter = require("./routes/movieRouter");
 const userRouter = require("./routes/userRouter");
 const reviewRouter = require("./routes/reviewRouter");
-const discoveredRouter = require("./routes/discoveredRouter");
+// const discoveredRouter = require("./routes/discoveredRouter");
 
 const { globalErrorHandler } = require("./controllers/errorController");
-const ErrorFactory = require("./utill/errorFactory");
+const catchAsync = require("./util/catchAsync");
+const ErrorFactory = require("./util/errorFactory");
 
 const app = express();
 
@@ -18,7 +19,11 @@ app.use(cors());
 app.options("*", cors());
 
 // Frontend folder location
-app.use(express.static(path.join(__dirname, "public")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+} else {
+  app.use(express.static(path.join(__dirname, "public")));
+}
 
 // Body parser
 app.use(express.json());
@@ -31,7 +36,10 @@ app.use(cookieParser());
 app.use("/api/movies", movieRouter);
 app.use("/api/users", userRouter);
 app.use("/api/reviews", reviewRouter);
-app.use("/api/discovered", discoveredRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+});
 
 // Error handling for invalid path access
 app.all("*", (req, res, next) => {
