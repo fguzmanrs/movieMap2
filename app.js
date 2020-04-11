@@ -38,7 +38,7 @@ app.use("/api/users", userRouter);
 app.use("/api/reviews", reviewRouter);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 // Error handling for invalid path access
