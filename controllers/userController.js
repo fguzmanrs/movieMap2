@@ -107,7 +107,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         return next(
           new ErrorFactory(
             404,
-            "Failed to update user's info. There is no such a user or content that you tried to update."
+            "Failed to update user's info. There is no such a user or content field that you tried to update."
           )
         );
       }
@@ -159,45 +159,66 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+const myListChecker = function (myList, next) {
+  const MyListFullName =
+    myList === "favorite"
+      ? "MyFavoriteMovies"
+      : myList === "review"
+      ? "MyReviewedMovies"
+      : myList === "watchlist"
+      ? "myWatchList"
+      : "";
+
+  if (!MyListFullName) {
+    return next(
+      new ErrorFactory(
+        400,
+        "Please enter a valid user's movie category name.(favorite or review or watchlist)"
+      )
+    );
+  }
+  return MyListFullName;
+};
+
 //! Route: myFavoriteMovies, myReviewedMovies, myWatchlist
 exports.addMyMovie = catchAsync(async (req, res, next) => {
   // addTo =  one of [ favorite || review || watchlist ]
   const { addTo, movieId } = req.params;
 
-  const addToCategory =
-    addTo === "favorite"
-      ? "MyFavoriteMovies"
-      : addTo === "review"
-        ? "MyReviewedMovies"
-        : addTo === "watchlist"
-          ? "myWatchList"
-          : "";
+  //* Validate my list name
+  const addToMyList = myListChecker(addTo, next);
+  if (!addToMyList) return;
 
-  if (!addToCategory) {
-    return next(
-      new ErrorFactory(
-        400,
-        "Please enter a valid user's movie category name.(favorite or review or watchlist"
-      )
-    );
-  }
-
-  db.user.findAndModify(
-    {
-      query: { _id: mongojs.ObjectId(req.user._id) },
-      update: {
-        $push: { [addToCategory]: movieId },
-      },
-      new: true,
-    },
-    (error, data) => {
-      res.status(200).json({
-        status: "success",
-        message: `Successfully added to ${addTo} movie!`,
-        data,
-      });
+  //* Validate duplicated movieId(tmdbId)
+  db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
+    if (data[addToMyList].includes(parseInt(movieId))) {
+      return next(
+        new ErrorFactory(
+          400,
+          `You already added the same movie to your ${addTo} movies`
+        )
+      );
     }
-  );
+
+    //* Save a movie to the list
+    db.user.findAndModify(
+      {
+        query: { _id: mongojs.ObjectId(req.user._id) },
+        update: {
+          $push: { [addToMyList]: parseInt(movieId) },
+        },
+        new: true,
+      },
+      (error, data) => {
+        console.log(addToMyList);
+        res.status(200).json({
+          status: "success",
+          message: `Successfully added to my ${addTo} movies!`,
+          data,
+        });
+      }
+    );
+  });
 });
 
 //! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
@@ -275,23 +296,25 @@ exports.updateMyTopRatedMovies = catchAsync(async (req, res, next) => {
 //   );
 // });
 
-
 // TODO
+//! ROUTE: Recomend movies to specific user
 exports.forYouBecause = catchAsync(async (req, res, next) => {
   console.log("forYouBecause::req.params: ", req.params);
   const { reason, movieId } = req.params;
   let tmdbUrl = "";
 
   switch (reason) {
-    case 'youWatched':
-    case 'youLiked':
-      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    case "youWatched":
+    case "youLiked":
+      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`;
       break;
-    case 'youMightLike':
-      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`
+    case "youMightLike":
+      tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`;
       break;
     default:
-      console.log(`forYouBecause::error: reason = ['youWatched', 'youLiked', 'youMightLike']?`)
+      console.log(
+        `forYouBecause::error: reason = ['youWatched', 'youLiked', 'youMightLike']?`
+      );
       return res.status(404).end();
   }
 
@@ -303,19 +326,66 @@ exports.forYouBecause = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Route: Remove a movie from user's ['myWatchList', 'myFavoriteMovies', 'myReviewedMovies']
 exports.removeMovieFromMyList = catchAsync(async (req, res, next) => {
   console.log("removeMovieFromMyList::req.params: ", req.params);
-  const { movieId, myList, userId } = req.params;
+  const { movieId, myList } = req.params;
 
-  db.user.update({ _id: mongojs.ObjectID(userId) }, { $pull: { [myList]: parseInt(movieId) } }, (error, data) => {
-    // if (error) res.send(error);
-    // else res.json(data);
-    if (error) {
-      console.log(`removeMovieFromListByUserId::error: myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']?`);
-      return res.status(404).end();
+  //* Validate my list name
+  const myListFullName = myListChecker(myList, next);
+  if (!myListFullName) return;
+
+  //* Validate duplicated movieId(tmdbId)
+  db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
+    if (!data[myListFullName].includes(parseInt(movieId))) {
+      return next(
+        new ErrorFactory(
+          400,
+          `That movie id doesn't exist in your your ${myList} movies`
+        )
+      );
     }
-    else res.status(200).json(data);
+
+    //* Save a move id to my movie list and return the updated doc
+    db.user.findAndModify(
+      {
+        query: { _id: mongojs.ObjectId(req.user._id) },
+        update: {
+          $pull: { [myListFullName]: parseInt(movieId) },
+        },
+        new: true,
+      },
+      (error, data) => {
+        console.log("🍒", data);
+        if (!data) {
+          return next(
+            new ErrorFactory(
+              404,
+              `Failed to delete a movie from user's ${myList} movie list. There is no such a user or content field that you tried to delete.`
+            )
+          );
+        }
+
+        res.status(200).json({
+          status: "success",
+          message: `Successfully deleted a movie from my ${myList} movie!`,
+          data,
+        });
+      }
+    );
   });
+
+  // db.user.update(
+  //   { _id: mongojs.ObjectID(userId) },
+  //   { $pull: { [myList]: parseInt(movieId) } },
+  //   (error, data) => {
+  //     // if (error) {
+  //     //   console.log(`removeMovieFromListByUserId::error: myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']?`);
+  //     // }
+
+  //     res.status(200).json(data);
+  //   }
+  // );
 });
 
 // CRUD: DELETE

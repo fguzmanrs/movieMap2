@@ -44,6 +44,124 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
   });
 });
 
+//! Get movie info: detail + keyword
+// required parameter: TMDB id
+exports.getMovieDetail = catchAsync(async (req, res, next) => {
+  const tmdbId = req.params.tmdbId;
+  const tmdbUrlDetail = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+  const tmdbUrlKeyword = `https://api.themoviedb.org/3/movie/${tmdbId}/keywords?api_key=${process.env.TMDB_API_KEY}`;
+
+  const detail = await axios(tmdbUrlDetail);
+  const keyword = await axios(tmdbUrlKeyword);
+
+  detail.data.keywords = keyword.data.keywords;
+
+  res.status(200).json({
+    status: "success",
+    data: detail.data,
+  });
+});
+
+//! Get on demand service providers for specific movie(Netflix, Amazon prime etc)
+// required parameter: movie id
+exports.getProviders = catchAsync(async function (req, res, next) {
+  const movieToSearch = req.params.tmdbId;
+
+  const result = await axios({
+    method: "GET",
+    url:
+      "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup",
+    headers: {
+      "content-type": "application/octet-stream",
+      "x-rapidapi-host":
+        "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com",
+      "x-rapidapi-key": process.env.UTELLY_API_KEY,
+    },
+    params: {
+      country: "US",
+      source_id: movieToSearch,
+      source: "tmdb",
+    },
+  });
+
+  const providersArr = result.data.collection.locations;
+  console.log("🍈 provider results: ", providersArr);
+
+  res.status(200).json({
+    status: "success",
+    data: providersArr,
+  });
+});
+
+//! Get similar movies : for Because you liked " *** " / Because you watched " *** " / You might like
+// Get the most recently added watchlist movie or favorited movie or top rated movie from my reviwed movie first then request this API with that movie id
+exports.getSimilarMovies = catchAsync(async (req, res, next) => {
+  const { movieId } = req.params;
+
+  const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`;
+
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results,
+  });
+});
+
+//! Search movies by title
+exports.searchMoviesByTitle = catchAsync(async (req, res, next) => {
+  const { title } = req.params;
+
+  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${title}&page=1&include_adult=false`;
+
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    length: movies.data.results.length,
+    data: movies.data.results,
+  });
+});
+
+//! Search movies by keyword
+exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
+  //* 1. Convert keyword to keyword id
+  const { keyword } = req.params;
+
+  const tmdbUrlForKeywords = `https://api.themoviedb.org/3/search/keyword?api_key=${process.env.TMDB_API_KEY}&query=${keyword}&page=1`;
+
+  const resultForKeywords = await axios(tmdbUrlForKeywords);
+
+  //* 2. Get exactly matched keyword or first keyword from array
+  const keywordsArr = resultForKeywords.data.results;
+
+  let matchedKeywordSet = keywordsArr.find((el) => el.name === keyword);
+
+  // If there is no keyword exactly matched, get just first keyword or send error
+  if (!matchedKeywordSet && keywordsArr[0]) {
+    matchedKeywordSet = keywordsArr[0];
+  } else if (!matchedKeywordSet && !keywordsArr[0]) {
+    return next(
+      new ErrorFactory(404, "Invalid keyword. Please enter the valid keyword.")
+    );
+  }
+
+  const keywordId = matchedKeywordSet.id;
+
+  //* 3. Search movies by keyword id
+  const tmdbUrlForDiscover = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=${keywordId}`;
+
+  const moviesByKeyword = await axios(tmdbUrlForDiscover);
+
+  res.status(200).json({
+    status: "success",
+    length: moviesByKeyword.data.results.length,
+    data: moviesByKeyword.data.results,
+  });
+});
+
+//! Below codes : Utilizing our own movie DB(wishlist)
 // exports.getRecentMoviesFromApi = catchAsync(async (req, res, next) => {
 //   const currentDate = new Date();
 //   const lastYear = currentDate.getFullYear() - 1;
@@ -105,7 +223,7 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
 //   );
 // });
 
-//! Get movie info: detail + keyword
+// Get movie info: detail + keyword
 // required parameter: TMDB id
 // exports.getMovieDetailFromApi = catchAsync(async (req, res, next) => {
 //   console.log("getMovieFromApi::req.params: ", req.params);
@@ -125,72 +243,7 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
 //   });
 // });
 
-// exports.getMovieDetailFromApi = catchAsync(async (req, res, next) => {
-//   console.log("getMovieFromApi::req.body: ", req.body);
-
-//   const tmdbId = req.params.tmdbId;
-//   const tmdbUrlDetail = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
-//   const tmdbUrlKeyword = `https://api.themoviedb.org/3/movie/${tmdbId}/keywords?api_key=${process.env.TMDB_API_KEY}`;
-
-//   const detail = await axios(tmdbUrlDetail);
-//   const keyword = await axios(tmdbUrlKeyword);
-
-//   detail.data.keywords = keyword.data.keywords;
-
-//   res.status(200).json({
-//     status: "success",
-//     data: detail.data,
-//   });
-// });
-
-//! Get on demand service providers for specific movie(Netflix, Amazon prime etc)
-// required parameter: movie title
-exports.getProviders = catchAsync(async function (req, res, next) {
-  const movieToSearch = req.params.tmdbId;
-
-  const result = await axios({
-    method: "GET",
-    url:
-      "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup",
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host":
-        "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com",
-      "x-rapidapi-key": process.env.UTELLY_API_KEY,
-    },
-    params: {
-      country: "US",
-      source_id: movieToSearch,
-      source: "tmdb",
-    },
-  });
-
-  const providersArr = result.data.collection.locations;
-  console.log("🍈 provider results: ", providersArr);
-
-  // Filter the movies having the exact same name with the search term
-  // (* Utelly DB provides a partial search so all similar name's movies are searched.)
-  // const filteredMovie = movies.data.results.filter(
-  //   el => el.name.toLowerCase() === movieToSearch.toLowerCase()
-  // );
-
-  // Error handling : If there is no data user are searching, create custom error
-  // if (result.data.collection.locations.length === 0) {
-  //   return next(
-  //     new ErrorFactory(
-  //       404,
-  //       "There is no such a data you requested. Please provide with the correct info."
-  //     )
-  //   );
-  // }
-
-  res.status(200).json({
-    status: "success",
-    data: providersArr,
-  });
-});
-
-//! Recommend movies based on a genre id, keyword id
+// Recommend movies based on a genre id, keyword id
 // required parameter: TMDB genre id, keyword id
 // Reduced to TMDB genre id (by dropdown menu)
 // exports.getRecommendation = catchAsync(async (req, res, next) => {
@@ -208,7 +261,7 @@ exports.getProviders = catchAsync(async function (req, res, next) {
 //   });
 // });
 
-//! Post a movie to DB
+// Post a movie to DB
 // required info via req.body: title, overview, genreId, popularity, posterPath, releaseDate, keywordId(stringified array), tmdbRate, tmdbId(stringified array)
 // exports.createMovie = catchAsync(async (req, res, next) => {
 //   console.log("🍉 req.body: ", req.body);
@@ -294,74 +347,6 @@ exports.getProviders = catchAsync(async function (req, res, next) {
 //     else res.send(data);
 //   });
 // });
-
-//! Get similar movies : for Because you liked " *** " / Because you watched " *** "
-// Get the most recently added watchlist movie or favorited movie first then request this API with that movie id
-exports.getSimilarMovies = catchAsync(async (req, res, next) => {
-  const { movieId } = req.params;
-
-  const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1`;
-
-  const movies = await axios(tmdbUrl);
-
-  res.status(200).json({
-    status: "success",
-    length: movies.data.results.length,
-    data: movies.data.results,
-  });
-});
-
-//! Search movies by title
-exports.searchMoviesByTitle = catchAsync(async (req, res, next) => {
-  const { title } = req.params;
-
-  const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${title}&page=1&include_adult=false`;
-
-  const movies = await axios(tmdbUrl);
-
-  res.status(200).json({
-    status: "success",
-    length: movies.data.results.length,
-    data: movies.data.results,
-  });
-});
-
-//! Search movies by keyword
-exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
-  //* 1. Convert keyword to keyword id
-  const { keyword } = req.params;
-
-  const tmdbUrlForKeywords = `https://api.themoviedb.org/3/search/keyword?api_key=${process.env.TMDB_API_KEY}&query=${keyword}&page=1`;
-
-  const resultForKeywords = await axios(tmdbUrlForKeywords);
-
-  //* 2. Get exactly matched keyword or first keyword from array
-  const keywordsArr = resultForKeywords.data.results;
-
-  let matchedKeywordSet = keywordsArr.find((el) => el.name === keyword);
-
-  // If there is no keyword exactly matched, get just first keyword or send error
-  if (!matchedKeywordSet && keywordsArr[0]) {
-    matchedKeywordSet = keywordsArr[0];
-  } else if (!matchedKeywordSet && !keywordsArr[0]) {
-    return next(
-      new ErrorFactory(404, "Invalid keyword. Please enter the valid keyword.")
-    );
-  }
-
-  const keywordId = matchedKeywordSet.id;
-
-  //* 3. Search movies by keyword id
-  const tmdbUrlForDiscover = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=${keywordId}`;
-
-  const moviesByKeyword = await axios(tmdbUrlForDiscover);
-
-  res.status(200).json({
-    status: "success",
-    length: moviesByKeyword.data.results.length,
-    data: moviesByKeyword.data.results,
-  });
-});
 
 // exports.getMovieAll = catchAsync(async (req, res, next) => {
 //   console.log("getMovieAll::req.params: ", req.params);

@@ -1,15 +1,5 @@
 require("dotenv").config();
 
-// begin of: mongodb initialization
-// const mongojs = require("mongojs");
-// const databaseUrl = "moviemap";
-// const collections = ["user", "movie", "review"];
-// const db = mongojs(databaseUrl, collections);
-// db.on("error", (error) => {
-//   console.log("Database Error:", error);
-// });
-// end of: mongodb initialization
-
 // Handling uncaught exception error
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 🚧  Shutting down...");

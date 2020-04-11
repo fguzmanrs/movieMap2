@@ -41,33 +41,33 @@ router.patch(
   userController.addMyMovie
 );
 
-// Create a reivew(grade: like(1), none(0), dislike(-1))
-// router.post("/review/:userId/:movieId/:grade", reviewController.postReview);
-
-//!-----------------------------------------------------------------------------
-//! All the put myFavoriteMovies, myReviewedMovies, myWatchlist APIs are integrated into addMyMovie api.
-//!-----------------------------------------------------------------------------
-
-//? need more info about below APIs
-// router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
-// router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
-//? need to discuss utilizing our movie collection
-
-//! Required APIs : Recommend personalized movies (using getSimilarMovies API's logic : plz refer movieController's getSimilarMovies API)
+//! Required APIs : Recommend personalized movies
 // 1. Because you watched "<movie name>"... (recommend movies that are similar to user's watchlist movie that lately added to myWatchlist)
 // 2. Because you liked "<movie name>"... (recommend movies that are similar to user's favorite movie that lately added to myFavoriteMovies)
 // 3. You might like... (recommend movies that are similar to user's top rated movie of myReviewedMovies)
 // :reason = ['youWatched', 'youLiked', 'youMightLike']
-router.get("/foryou/because/:reason/movie/:movieId", userController.forYouBecause);
+router.get(
+  "/foryou/because/:reason/movie/:movieId",
+  authController.protect,
+  userController.forYouBecause
+);
 
 // 4. Delete one movie from array of myFavoriteMovies, myReviewedMovies, myWatchlist
-// :myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']
-router.delete("/remove/movie/:movieId/from/:myList/:userId", userController.removeMovieFromMyList);
+//// :myList = ['myWatchList', 'myFavoriteMovies', 'myRecommendedMovies', 'myTopRatedMovies', 'myReviewedMovies']
+// :myList = ['myWatchList', 'myFavoriteMovies', 'myReviewedMovies']
+router.delete(
+  "/:movieId/from/:myList",
+  authController.protect,
+  userController.removeMovieFromMyList
+);
 
 // 5. Get user's populated myFavoriteMovies || myReviewedMovies || myWatchlist
 // TODO: 2020-04-10: Still working on it. -- Francisco Ortiz
 
 // CRUD: DELETE
 router.delete("/:userId", userController.deleteUserById);
+
+// router.put("/:userId/recommended", userController.updateMyRecommendedMovies);
+// router.put("/:userId/toprated", userController.updateMyTopRatedMovies);
 
 module.exports = router;
