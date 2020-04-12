@@ -33,10 +33,10 @@ const myListChecker = function (myList, next) {
     myList === "favorite"
       ? "MyFavoriteMovies"
       : myList === "review"
-      ? "MyReviewedMovies"
-      : myList === "watchlist"
-      ? "myWatchList"
-      : "";
+        ? "MyReviewedMovies"
+        : myList === "watchlist"
+          ? "myWatchList"
+          : "";
 
   if (!MyListFullName) {
     return next(
@@ -405,3 +405,109 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
 //     }
 //   );
 // });
+
+// async function getMovieByIdFromApi(movieId) {
+//   const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+//   const data = await axios(tmdbUrl)
+//     .then(function (res) {
+//       return res.data;
+//     }).catch(function (error) {
+//       console.log(error);
+//     });
+// }
+
+// myFavoriteMovies.forEach(async movieId => {
+//   tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+//   await axios(tmdbUrl).then(function (res) {
+//     myFavoriteMoviesData.push(res.data);
+//   });
+// });
+
+let myFavoriteMoviesData = [];
+async function getMovieByIdFromApi(movieId) {
+  return new Promise((resolve, reject) => {
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`)
+      .then(response => {
+        myFavoriteMoviesData.push(response.data);
+        return resolve(response.data);
+      })
+      .catch(error => {
+        return reject(error.message);
+      })
+  });
+}
+
+exports.populateMyList = catchAsync(async (req, res, next) => {
+  // console.log("removeMovieFromMyList::req.params: ", req.params);
+  //? user's info is already saved in req.user by passing through authController's Protect middleware
+  //? all errors that are not handled here will be catched in global error handler through catchAsync
+  // let  tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+  
+  let myFavoriteMovies = [];
+  let myReviewedMovies = [];
+  let myWatchList = [];
+
+  // let myFavoriteMoviesData = [];
+  let myReviewedMoviesData = [];
+  let myWatchListData = [];
+
+  //var tmdbUrl = "";
+
+  let newData = "";
+
+  //* Validate duplicated movieId(tmdbId)
+  // db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
+  // db.user.findOne({ _id: 0x5e8d61f243281f316867b420 }, (error, data) => {
+  db.user.findOne({ "username": "ffortizn" }, async (error, data) => {
+
+    // check each user's list
+    myFavoriteMovies = data.myFavoriteMovies;
+    // myReviewedMovies = data.myReviewedMovies;
+    // myWatchList = data.myWatchList;
+
+    let output = "";
+
+    // for each item in array
+    // call api (function(movieId))
+    // myFavoriteMovies.forEach(movieId => {
+    // });
+
+    // promise or callback
+    // const start = async () => {
+    //   // for (let num of [1, 2, 3, 4, 5]) {
+     async function x(){
+      myFavoriteMovies.forEach(async movieId => {
+        await getMovieByIdFromApi(movieId)
+        // .then((movie) => {
+          console.log(`=============\n id: ${movieId}: ${movie}`);
+          //myFavoriteMoviesData.push(movie);
+        // });
+
+
+      });
+    }
+    await x();
+      console.log(myFavoriteMoviesData);
+    // }
+
+    // myFavoriteMovies.forEach(async movieId => {
+    //   tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+    //   await axios(tmdbUrl).then(function (res) {
+    //     myFavoriteMoviesData.push(res.data);
+    //   });
+    // });
+
+    res.status(200).json({
+      status: "success",
+      message: "Success: list data",
+      data: "Lots of data",
+      myFavoriteMovies: myFavoriteMoviesData
+      // myReviewedMovies: myReviewedMoviesData,
+      // myWatchList: myWatchListData
+    });
+  });
+});
+
+
+
+
