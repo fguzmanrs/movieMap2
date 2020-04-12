@@ -222,12 +222,6 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
   });
 });
 
-//! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
-//! Each movie doc has to be populated with movie info so frontend team can get actual data not just doc ids.
-// exports.getMyMovies = catchAsync(async (req, res, next) => {
-// })
-
-// TODO
 //! ROUTE: Recomend movies to specific user
 exports.forYouBecause = catchAsync(async (req, res, next) => {
   console.log("forYouBecause::req.params: ", req.params);
@@ -336,6 +330,61 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
   );
 });
 
+//! ROUTE: populate my lists(myFavoriteMovies, myReviewedMovies, myWatchlist)
+// total 3 movie lists in each user's doc
+// Purpose: make each list [movie id, movie id, movie id...] to [{movie data}, {movie data}...]
+exports.populateMyList = catchAsync(async (req, res, next) => {
+  //* 1. Get a user's info first
+  db.user.findOne(
+    { _id: mongojs.ObjectId(req.user._id) },
+    async (error, user) => {
+      const { myFavoriteMovies, myReviewedMovies, myWatchList } = user;
+
+      // console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
+
+      //* 2. Populate each movie list and add it to user's doc(user)
+      await populateAndAddToDoc(myWatchList, user, "myWatchList");
+      await populateAndAddToDoc(myFavoriteMovies, user, "myFavoriteMovies");
+      await populateAndAddToDoc(myReviewedMovies, user, "myReviewedMovies");
+
+      res.status(200).json({
+        status: "success",
+        message:
+          "Successfully got a user's info including all movie list data populated.",
+        data: user,
+      });
+    }
+  );
+});
+
+//! Helper for population
+async function populateAndAddToDoc(array, data, listName) {
+  //* 1. Convert id arry to url array.
+  // [movie id , ...] => [url , ...]
+  const urlArr = array.map(
+    (id) =>
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  );
+
+  //* 2. Conver url array to Axios promises array
+  // [url , ...] => [promise , ...]
+  const axiosArr = urlArr.map(async (url) => await axios.get(url));
+
+  //* 3. Await promises
+  // [ {promise result} , ... ]
+  let result = await Promise.all(axiosArr);
+
+  // console.log("🥥", axiosArr);
+  // console.log("🌽", result[0].data, result[1].data);
+
+  //* 4. Extract only movie data from each returned promise result and attach it to each user's my list
+  const dataArr = result.map((el) => el.data);
+  data[listName] = dataArr;
+
+  return data[listName];
+}
+
+//! Unused APIs.
 // exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
 //   console.log("updateMyFavoriteMovies::req.params: ", req.params);
 //   db.user.update(
@@ -422,166 +471,3 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
 //     myFavoriteMoviesData.push(res.data);
 //   });
 // });
-
-let myFavoriteMoviesData = [];
-async function getMovieByIdFromApi(movieId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
-      )
-      .then((response) => {
-        myFavoriteMoviesData.push(response.data);
-        return resolve(response.data);
-      })
-      .catch((error) => {
-        return reject(error.message);
-      });
-  });
-}
-
-exports.populateMyList = catchAsync(async (req, res, next) => {
-  // console.log("removeMovieFromMyList::req.params: ", req.params);
-  //? user's info is already saved in req.user by passing through authController's Protect middleware
-  //? all errors that are not handled here will be catched in global error handler through catchAsync
-  // let  tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
-
-  let myFavoriteMovies = [];
-  let myReviewedMovies = [];
-  let myWatchList = [];
-
-  // let myFavoriteMoviesData = [];
-  let myReviewedMoviesData = [];
-  let myWatchListData = [];
-
-  //var tmdbUrl = "";
-
-  let newData = "";
-
-  //* Validate duplicated movieId(tmdbId)
-  // db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
-  // db.user.findOne({ _id: 0x5e8d61f243281f316867b420 }, (error, data) => {
-  db.user.findOne({ username: "bluerainmango" }, async (error, data) => {
-    // check each user's list
-    myFavoriteMovies = data.myFavoriteMovies;
-    myReviewedMovies = data.myReviewedMovies;
-    myWatchList = data.myWatchList;
-
-    console.log("🥝", myFavoriteMovies, myReviewedMovies, myWatchList);
-    let output = "";
-
-    // const movie = await axios.get(
-    //   `https://api.themoviedb.org/3/movie/8067?api_key=7d301e256d9f70e2193e6d1089e4d61d&language=en-US`
-    // );
-
-    // console.log("🍍", movie.data);
-
-    // // const populatedArr = await populateEachField(myFavoriteMovies);
-    // let [faroties, reviews, watchlist] = await Promise.all([
-    //   populateEachField(myFavoriteMovies),
-    //   // populateEachField(myReviewedMovies),
-    //   // populateEachField(myWatchList),
-    // ]);
-
-    await populateEachField(myWatchList, data, "myWatchList");
-    await populateEachField(myFavoriteMovies, data, "myFavoriteMovies");
-    await populateEachField(myReviewedMovies, data, "myReviewedMovies");
-
-    res.status(200).json({
-      status: "success",
-      message: "Success: list data",
-      data,
-    });
-
-    // for each item in array
-    // call api (function(movieId))
-    // myFavoriteMovies.forEach(movieId => {
-    // });
-
-    // promise or callback
-    // const start = async () => {
-    //   // for (let num of [1, 2, 3, 4, 5]) {
-    // async function x() {
-    //   myFavoriteMovies.forEach(async (movieId) => {
-    //     await getMovieByIdFromApi(movieId);
-    //     // .then((movie) => {
-    //     console.log(`=============\n id: ${movieId}: ${movie}`);
-    //     //myFavoriteMoviesData.push(movie);
-    //     // });
-    //   });
-    // }
-    // await x();
-    // console.log(myFavoriteMoviesData);
-    // // }
-
-    // myFavoriteMovies.forEach(async movieId => {
-    //   tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
-    //   await axios(tmdbUrl).then(function (res) {
-    //     myFavoriteMoviesData.push(res.data);
-    //   });
-    // });
-
-    // res.status(200).json({
-    //   status: "success",
-    //   message: "Success: list data",
-    //   // data: "Lots of data",
-    //   // myFavoriteMovies: myFavoriteMoviesData,
-    //   // myReviewedMovies: myReviewedMoviesData,
-    //   // myWatchList: myWatchListData
-    //   // data: {
-    //   //   faroties,
-    //   //   reviews,
-    //   //   watchlist,
-    //   // },
-    //   data: movie,
-    // });
-  });
-});
-
-async function populateEachField(array, data, listName) {
-  // ["ddd","dd"]
-  const urlArr = array.map(
-    (id) =>
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
-  );
-
-  //[promise, axios()...]
-  const axiosArr = urlArr.map(async (url) => await axios.get(url));
-  let result = await Promise.all(axiosArr);
-
-  console.log("🥥", axiosArr);
-  // console.log("🌽", result[0].data, result[1].data);
-
-  // dataArr = [{movie data}, {movie data}...]
-  //! Extract only movie data from each returned axios result
-  if (result.length > 2) {
-    const dataArr = result.map((el) => el.data);
-
-    //! Save it to this doc(data)'s prop
-    data[listName] = dataArr;
-    return dataArr;
-  } else if (result.length === 1) {
-    console.log("🍓solo", data[listName]);
-    data[listName] = result[0].data;
-    return result.data;
-  }
-
-  // try {
-  //   const newArr = await array.map(async (id) => {
-  //     console.log(id);
-
-  //     const movie = await axios.get(
-  //       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
-  //     );
-
-  //     // console.log("🍍", movie.data);
-  //     return movie.data;
-  //   });
-
-  //   console.log("🌶", newArr);
-
-  //   return await newArr;
-  // } catch (err) {
-  //   console.log("🍇", err);
-  // }
-}
