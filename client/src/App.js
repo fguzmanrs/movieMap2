@@ -42,6 +42,7 @@ function App(props) {
             <Carousel />
 
           </Route>
+         
           <Route path="/signIn">
             <SignIn />
           </Route>
