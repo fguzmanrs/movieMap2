@@ -1,64 +1,58 @@
 import React from 'react';
 import './App.css';
 import Navbar from './navbar/navbar.js';
-import Carousel from './carousel/carousel.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
 import About from './about/about.js';
 import Profile from './Profile/profile.js';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
 import Footer from './footer/footer.js';
-// import react-router (use)
+// import { Route } from 'react-router-dom';
 
 function App(props) {
   return (
     <div className="App App-body" >
 
+      {/* // State : getting user info: null or signin = (userinfo)       */}
+      {/* // categoryRegistered = ['My List', 'Because you searched ...', 'Because you watched ... ', 'New Releases', 'Top Rated']; */}
+      {/* // categoryVisitor = ['New Releases', 'Top Rated']; */}
+
+      {/* //State : signIN and signUp footer: null */}
+
       <BrowserRouter>
 
+        <Route path={user ? "/home" : "signin"} component={} />
+        <Navbar />
+
         <Switch>
+          
+          // User signed in 
           <Route path="/home">
-            <Navbar />
-
-            <br></br>
-            <Typography variant='h4'>My List</Typography>
-            <Carousel />
-
-            <br></br>
-            <Typography variant='h4'>Recommended because you searched ...</Typography>
-            <Carousel />
-
-            <br></br>
-            <Typography variant='h4'>Recommended because you watched ...</Typography>
-            <Carousel />
-
-            <br></br>
-            <Typography variant='h4'>Top Rated</Typography>
-            <Carousel />
-
-            <br></br>
-            <Typography variant='h4'>New Releases</Typography>
-            <Carousel />
-
+            {js code map }
+            {/* {category.map{el => <Carousel title={el}} */}
+            <Footer />
           </Route>
-         
+
+          <Route path="/about">
+            <About />
+            <Footer />
+          </Route>
+
+          <Route path="/profile">
+            <Profile />
+            <Footer />
+          </Route>
+
           <Route path="/signIn">
             <SignIn />
           </Route>
+
           <Route path="/signUp">
             <SignUp />
           </Route>
-          <Route path="/about">
-            <Navbar />
-            <About />
-          </Route>
-          <Route path="/profile">
-            <Navbar />
-            <Profile />
-          </Route>
 
         </Switch>
+
       </BrowserRouter>
       <Footer />
 
