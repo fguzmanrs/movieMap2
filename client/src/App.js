@@ -1,48 +1,54 @@
-import React from 'react';
-import './App.css';
-import Navbar from './navbar/navbar.js';
-import Carousel from './carousel/carousel.js';
-import SignIn from './signIn/signIn.js';
-import SignUp from './signUp/signUp.js';
-import About from './about/about.js';
-import Profile from './Profile/profile.js';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import Footer from './footer/footer.js';
+import React, { useEffect, createContext } from "react";
+import "./App.css";
+import Navbar from "./navbar/navbar.js";
+import Carousel from "./carousel/carousel.js";
+import SignIn from "./signIn/signIn.js";
+import SignUp from "./signUp/signUp.js";
+import About from "./about/about.js";
+import Profile from "./Profile/profile.js";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Typography } from "@material-ui/core";
+import Footer from "./footer/footer.js";
 // import react-router (use)
 
 function App(props) {
+  useEffect(() => {}, []);
+
+  const CurrentUserContext = createContext(undefined);
+
   return (
-    <div className="App App-body" >
-
+    <div className="App App-body">
       <BrowserRouter>
-
+        <Navbar />
         <Switch>
           <Route path="/home">
             <Navbar />
 
             <br></br>
-            <Typography variant='h4'>My List</Typography>
+            <Typography variant="h4">My List</Typography>
             <Carousel />
 
             <br></br>
-            <Typography variant='h4'>Recommended because you searched ...</Typography>
+            <Typography variant="h4">
+              Recommended because you searched ...
+            </Typography>
             <Carousel />
 
             <br></br>
-            <Typography variant='h4'>Recommended because you watched ...</Typography>
+            <Typography variant="h4">
+              Recommended because you watched ...
+            </Typography>
             <Carousel />
 
             <br></br>
-            <Typography variant='h4'>Top Rated</Typography>
+            <Typography variant="h4">Top Rated</Typography>
             <Carousel />
 
             <br></br>
-            <Typography variant='h4'>New Releases</Typography>
+            <Typography variant="h4">New Releases</Typography>
             <Carousel />
-
           </Route>
-         
+
           <Route path="/signIn">
             <SignIn />
           </Route>
@@ -57,11 +63,9 @@ function App(props) {
             <Navbar />
             <Profile />
           </Route>
-
         </Switch>
       </BrowserRouter>
       <Footer />
-
     </div>
   );
 }
