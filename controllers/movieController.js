@@ -62,17 +62,6 @@ exports.getMovieDetail = catchAsync(async (req, res, next) => {
   });
 });
 
-// check each user.array
-// for each item in array
-// call api (function(movieId))
-// build json response
-// send response
-//
-
-// exports.populateMyList = catchAsync(async (req, res, next) => {
-
-// });
-
 //! Get on demand service providers for specific movie(Netflix, Amazon prime etc)
 // required parameter: movie id
 exports.getProviders = catchAsync(async function (req, res, next) {
