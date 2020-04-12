@@ -31,9 +31,9 @@ db.runCommand({ ping: 1 }, function (err, res) {
 const myListChecker = function (myList, next) {
   const MyListFullName =
     myList === "favorite"
-      ? "MyFavoriteMovies"
+      ? "myFavoriteMovies"
       : myList === "review"
-      ? "MyReviewedMovies"
+      ? "myReviewedMovies"
       : myList === "watchlist"
       ? "myWatchList"
       : "";
@@ -192,6 +192,7 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
 
   //* Validate duplicated movieId(tmdbId)
   db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
+    console.log("🍈user data: ", data);
     if (data[addToMyList].includes(parseInt(movieId))) {
       return next(
         new ErrorFactory(
@@ -222,12 +223,6 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
   });
 });
 
-//! Route : get user's myFavoriteMovies || myReviewedMovies || myWatchlist
-//! Each movie doc has to be populated with movie info so frontend team can get actual data not just doc ids.
-// exports.getMyMovies = catchAsync(async (req, res, next) => {
-// })
-
-// TODO
 //! ROUTE: Recomend movies to specific user
 exports.forYouBecause = catchAsync(async (req, res, next) => {
   console.log("forYouBecause::req.params: ", req.params);
@@ -336,6 +331,61 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
   );
 });
 
+//! ROUTE: populate my lists(myFavoriteMovies, myReviewedMovies, myWatchlist)
+// total 3 movie lists in each user's doc
+// Purpose: make each list [movie id, movie id, movie id...] to [{movie data}, {movie data}...]
+exports.populateMyList = catchAsync(async (req, res, next) => {
+  //* 1. Get a user's info first
+  db.user.findOne(
+    { _id: mongojs.ObjectId(req.user._id) },
+    async (error, user) => {
+      const { myFavoriteMovies, myReviewedMovies, myWatchList } = user;
+
+      // console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
+
+      //* 2. Populate each movie list and add it to user's doc(user)
+      await populateAndAddToDoc(myWatchList, user, "myWatchList");
+      await populateAndAddToDoc(myFavoriteMovies, user, "myFavoriteMovies");
+      await populateAndAddToDoc(myReviewedMovies, user, "myReviewedMovies");
+
+      res.status(200).json({
+        status: "success",
+        message:
+          "Successfully got a user's info including all movie list data populated.",
+        data: user,
+      });
+    }
+  );
+});
+
+//! Helper for population
+async function populateAndAddToDoc(array, data, listName) {
+  //* 1. Convert id arry to url array.
+  // [movie id , ...] => [url , ...]
+  const urlArr = array.map(
+    (id) =>
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  );
+
+  //* 2. Conver url array to Axios promises array
+  // [url , ...] => [promise , ...]
+  const axiosArr = urlArr.map(async (url) => await axios.get(url));
+
+  //* 3. Await promises
+  // [ {promise result} , ... ]
+  let result = await Promise.all(axiosArr);
+
+  // console.log("🥥", axiosArr);
+  // console.log("🌽", result[0].data, result[1].data);
+
+  //* 4. Extract only movie data from each returned promise result and attach it to each user's my list
+  const dataArr = result.map((el) => el.data);
+  data[listName] = dataArr;
+
+  return data[listName];
+}
+
+//! Unused APIs.
 // exports.updateMyFavoriteMovies = catchAsync(async (req, res, next) => {
 //   console.log("updateMyFavoriteMovies::req.params: ", req.params);
 //   db.user.update(
@@ -404,4 +454,21 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
 //       else res.status(200).json(data);
 //     }
 //   );
+// });
+
+// async function getMovieByIdFromApi(movieId) {
+//   const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+//   const data = await axios(tmdbUrl)
+//     .then(function (res) {
+//       return res.data;
+//     }).catch(function (error) {
+//       console.log(error);
+//     });
+// }
+
+// myFavoriteMovies.forEach(async movieId => {
+//   tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
+//   await axios(tmdbUrl).then(function (res) {
+//     myFavoriteMoviesData.push(res.data);
+//   });
 // });
