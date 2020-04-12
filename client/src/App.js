@@ -7,6 +7,7 @@ import About from './about/about.js';
 import Profile from './Profile/profile.js';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Footer from './footer/footer.js';
+import Layout from './layout/layout.js';
 // import { Route } from 'react-router-dom';
 
 function App(props) {
@@ -21,40 +22,51 @@ function App(props) {
 
       <BrowserRouter>
 
-        <Route path={user ? "/home" : "signin"} component={} />
-        <Navbar />
+        {/* <Route path={user ? "/home" : "signin"} component={} /> */}
 
         <Switch>
-          
+          {/* <Navbar />
           // User signed in 
           <Route path="/home">
+            
             {/* {js code map } */}
-            {/* {category.map{el => <Carousel title={el}} */}
-            <Footer />
+          {/* {category.map{el => <Carousel title={el}} */}
+          {/* <Footer />
+          </Route> */}
+          <Route path='/home'>
+            <Layout>
+              {/* <Carousel /> */}
+            </Layout>
+
           </Route>
 
           <Route path="/about">
-            <About />
-            <Footer />
+            <Layout>
+              <About />
+            </Layout>
           </Route>
 
           <Route path="/profile">
-            <Profile />
-            <Footer />
+            <Layout>
+              <About />
+            </Layout>
           </Route>
 
           <Route path="/signIn">
-            <SignIn />
+            <Layout noHeader>
+              <SignIn />
+            </Layout>
           </Route>
 
           <Route path="/signUp">
-            <SignUp />
+            <Layout noHeader>
+              <SignUp />
+            </Layout>
           </Route>
 
         </Switch>
 
       </BrowserRouter>
-      <Footer />
 
     </div>
   );
