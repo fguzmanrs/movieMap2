@@ -127,6 +127,9 @@ exports.login = catchAsync(async (req, res, next) => {
     //* 5. Create JWT token with user's id
     const token = createToken(data._id);
 
+    // Send a user's info without password
+    data.password = undefined;
+
     //* 6. Send a response
     res
       .cookie("jwt", token, {
@@ -138,6 +141,7 @@ exports.login = catchAsync(async (req, res, next) => {
         status: "success",
         message: "You are logged in successfully!",
         token,
+        data,
       });
   });
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, createContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import "./App.css";
 import Navbar from "./navbar/navbar.js";
 import Carousel from "./carousel/carousel.js";
@@ -11,58 +11,59 @@ import { Typography } from "@material-ui/core";
 import Footer from "./footer/footer.js";
 // import react-router (use)
 
-function App(props) {
-  useEffect(() => {}, []);
+import CurrentUserContext from "./context/current-user.context/current-user.context";
 
-  const CurrentUserContext = createContext(undefined);
+function App(props) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      const fetchFunc = async () => {
+        const res = await fetch(`/api/users/populateMyMovieLists`);
+        const resJson = await res.json();
+        setUser(resJson[0]);
+      };
+
+      fetchFunc();
+    }
+  }, [user]);
+
+  const currentUser = useContext(CurrentUserContext);
+  console.log("🍅", currentUser);
+
+  currentUser.setUser = (newUser) => {};
 
   return (
     <div className="App App-body">
+      {console.log("🥭", user)}
       <BrowserRouter>
-        <Navbar />
+        <Navbar currentUser={currentUser} />
         <Switch>
-          <Route path="/home">
-            <Navbar />
-
-            <br></br>
+          <Route path="/home" currentUser={currentUser}>
+            {/* 
             <Typography variant="h4">My List</Typography>
             <Carousel />
 
-            <br></br>
             <Typography variant="h4">
               Recommended because you searched ...
             </Typography>
             <Carousel />
 
-            <br></br>
             <Typography variant="h4">
               Recommended because you watched ...
             </Typography>
             <Carousel />
 
-            <br></br>
             <Typography variant="h4">Top Rated</Typography>
             <Carousel />
 
-            <br></br>
             <Typography variant="h4">New Releases</Typography>
-            <Carousel />
+            <Carousel /> */}
           </Route>
-
-          <Route path="/signIn">
-            <SignIn />
-          </Route>
-          <Route path="/signUp">
-            <SignUp />
-          </Route>
-          <Route path="/about">
-            <Navbar />
-            <About />
-          </Route>
-          <Route path="/profile">
-            <Navbar />
-            <Profile />
-          </Route>
+          <Route path="/signIn" component={SignIn} />
+          <Route path="/signUp" component={SignUp} />
+          <Route path="/about" component={About} />
+          <Route path="/profile" component={Profile} />
         </Switch>
       </BrowserRouter>
       <Footer />

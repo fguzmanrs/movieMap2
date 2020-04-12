@@ -19,11 +19,13 @@ app.use(cors());
 app.options("*", cors());
 
 // Frontend folder location
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-} else {
-  app.use(express.static(path.join(__dirname, "public")));
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+// } else {
+//   app.use(express.static(path.join(__dirname, "public")));
+// }
+//! For test API call from frontend with react
+app.use(express.static("client/build"));
 
 // Body parser
 app.use(express.json());
