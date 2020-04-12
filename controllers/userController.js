@@ -31,9 +31,9 @@ db.runCommand({ ping: 1 }, function (err, res) {
 const myListChecker = function (myList, next) {
   const MyListFullName =
     myList === "favorite"
-      ? "MyFavoriteMovies"
+      ? "myFavoriteMovies"
       : myList === "review"
-      ? "MyReviewedMovies"
+      ? "myReviewedMovies"
       : myList === "watchlist"
       ? "myWatchList"
       : "";
@@ -192,6 +192,7 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
 
   //* Validate duplicated movieId(tmdbId)
   db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
+    console.log("🍈user data: ", data);
     if (data[addToMyList].includes(parseInt(movieId))) {
       return next(
         new ErrorFactory(
