@@ -28,7 +28,7 @@ function App(props) {
           
           // User signed in 
           <Route path="/home">
-            {js code map }
+            {/* {js code map } */}
             {/* {category.map{el => <Carousel title={el}} */}
             <Footer />
           </Route>
