@@ -341,7 +341,7 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
     async (error, user) => {
       const { myFavoriteMovies, myReviewedMovies, myWatchList } = user;
 
-      // console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
+      console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
 
       //* 2. Populate each movie list and add it to user's doc(user)
       await populateAndAddToDoc(myWatchList, user, "myWatchList");
@@ -367,22 +367,26 @@ async function populateAndAddToDoc(array, data, listName) {
       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
   );
 
-  //* 2. Conver url array to Axios promises array
-  // [url , ...] => [promise , ...]
-  const axiosArr = urlArr.map(async (url) => await axios.get(url));
+  try {
+    //* 2. Conver url array to Axios promises array
+    // [url , ...] => [promise , ...]
+    const axiosArr = urlArr.map(async (url) => await axios.get(url));
 
-  //* 3. Await promises
-  // [ {promise result} , ... ]
-  let result = await Promise.all(axiosArr);
+    //* 3. Await promises
+    // [ {promise result} , ... ]
+    let result = await Promise.all(axiosArr);
 
-  // console.log("🥥", axiosArr);
-  // console.log("🌽", result[0].data, result[1].data);
+    // console.log("🥥", axiosArr);
+    // console.log("🌽", result[0].data, result[1].data);
 
-  //* 4. Extract only movie data from each returned promise result and attach it to each user's my list
-  const dataArr = result.map((el) => el.data);
-  data[listName] = dataArr;
+    //* 4. Extract only movie data from each returned promise result and attach it to each user's my list
+    const dataArr = result.map((el) => el.data);
+    data[listName] = dataArr;
 
-  return data[listName];
+    return data[listName];
+  } catch (err) {
+    console.log("🐷error: ", err);
+  }
 }
 
 //! Unused APIs.

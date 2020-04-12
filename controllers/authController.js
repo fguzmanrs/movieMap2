@@ -133,8 +133,11 @@ exports.login = catchAsync(async (req, res, next) => {
     //* 6. Send a response
     res
       .cookie("jwt", token, {
+        enabled: true,
+        name: "moviemap-jwt",
         maxAge: 3600000,
-        httpOnly: true,
+        httpOnly: false,
+        secure: false,
       })
       .status(200)
       .json({

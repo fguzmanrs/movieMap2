@@ -15,9 +15,23 @@ const ErrorFactory = require("./util/errorFactory");
 const app = express();
 
 // Attach Access-Control-Allow-Origin to every req header
-app.use(cors());
+const corsOptions = {
+  // credentials: true,
+  // origin: "http://localhost:3001",
+};
+
+app.use(cors(corsOptions));
 app.options("*", cors());
 
+app.use(function (req, res, next) {
+  res.header("Content-Type", "application/json;charset=UTF-8");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 // Frontend folder location
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static("client/build"));

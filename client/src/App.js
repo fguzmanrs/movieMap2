@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import axios from "axios";
 import "./App.css";
 import Navbar from "./navbar/navbar.js";
 import Carousel from "./carousel/carousel.js";
@@ -14,32 +15,54 @@ import Footer from "./footer/footer.js";
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 
 function App(props) {
-  const [user, setUser] = useState(null);
+  let { currentUser, isLogin, setCurrentUser } = useContext(CurrentUserContext);
+
+  const [user, setUser] = useState(currentUser);
+  const [myFavoriteMovies, setMyFavoriteMovies] = useState(undefined);
+
+  setCurrentUser = (newUser) => {
+    setUser(newUser);
+  };
 
   useEffect(() => {
     if (user) {
       const fetchFunc = async () => {
-        const res = await fetch(`/api/users/populateMyMovieLists`);
-        const resJson = await res.json();
-        setUser(resJson[0]);
+        console.log("🐔");
+        try {
+          const instance = axios.create({
+            // baseURL: `${URL}:${PORT}`,
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          });
+          const res = await instance.get(
+            // `http://localhost:3000/api/users/populateMyMovieLists`
+            `http://localhost:3000/api/users/foryou/because/favorite/movie/${user.myFavoriteMovies[0]}`
+          );
+
+          console.log("🐼 pop data", res.data);
+
+          setMyFavoriteMovies(res.data.data);
+        } catch (err) {
+          console.log("🚨", err.response.data.message);
+        }
       };
 
       fetchFunc();
     }
   }, [user]);
 
-  const currentUser = useContext(CurrentUserContext);
-  console.log("🍅", currentUser);
-
-  currentUser.setUser = (newUser) => {};
+  console.log("🍅", setCurrentUser);
 
   return (
     <div className="App App-body">
-      {console.log("🥭", user)}
+      {console.log("🥭", user, myFavoriteMovies)}
       <BrowserRouter>
         <Navbar currentUser={currentUser} />
         <Switch>
-          <Route path="/home" currentUser={currentUser}>
+          <Route exact path="/" currentUser={currentUser}>
             {/* 
             <Typography variant="h4">My List</Typography>
             <Carousel />
@@ -60,7 +83,13 @@ function App(props) {
             <Typography variant="h4">New Releases</Typography>
             <Carousel /> */}
           </Route>
-          <Route path="/signIn" component={SignIn} />
+          <Route
+            path="/signIn"
+            render={(props) => (
+              <SignIn {...props} setCurrentUser={setCurrentUser} />
+            )}
+          />
+          {/* <Route path="/signIn" component={SignIn} /> */}
           <Route path="/signUp" component={SignUp} />
           <Route path="/about" component={About} />
           <Route path="/profile" component={Profile} />

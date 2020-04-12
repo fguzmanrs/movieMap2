@@ -35,9 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
 
+  const { setCurrentUser } = props;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -58,10 +59,12 @@ export default function SignIn() {
       });
 
       console.log("🥒", res);
-      setUser(res.data.data);
+      const userData = res.data.data;
+      setUser(userData);
+      setCurrentUser(userData);
       setUsername("");
       setPassword("");
-      window.location.href = "/";
+      props.history.push("/");
     } catch (err) {
       console.log("🚨", err.response.data.message);
     }
@@ -70,6 +73,7 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="xs">
       {console.log("🥬", user)}
+      {console.log("🐻", props, setCurrentUser)}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -110,6 +114,7 @@ export default function SignIn() {
           {/* <Link href="/home"> */}
           <Button
             type="submit"
+            // onClick={() => {props.history.push("/") }}
             fullWidth
             variant="contained"
             color="primary"
