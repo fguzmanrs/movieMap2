@@ -33,10 +33,10 @@ const myListChecker = function (myList, next) {
     myList === "favorite"
       ? "MyFavoriteMovies"
       : myList === "review"
-        ? "MyReviewedMovies"
-        : myList === "watchlist"
-          ? "myWatchList"
-          : "";
+      ? "MyReviewedMovies"
+      : myList === "watchlist"
+      ? "myWatchList"
+      : "";
 
   if (!MyListFullName) {
     return next(
@@ -426,14 +426,17 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
 let myFavoriteMoviesData = [];
 async function getMovieByIdFromApi(movieId) {
   return new Promise((resolve, reject) => {
-    axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`)
-      .then(response => {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+      )
+      .then((response) => {
         myFavoriteMoviesData.push(response.data);
         return resolve(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         return reject(error.message);
-      })
+      });
   });
 }
 
@@ -442,7 +445,7 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
   //? user's info is already saved in req.user by passing through authController's Protect middleware
   //? all errors that are not handled here will be catched in global error handler through catchAsync
   // let  tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
-  
+
   let myFavoriteMovies = [];
   let myReviewedMovies = [];
   let myWatchList = [];
@@ -458,14 +461,37 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
   //* Validate duplicated movieId(tmdbId)
   // db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
   // db.user.findOne({ _id: 0x5e8d61f243281f316867b420 }, (error, data) => {
-  db.user.findOne({ "username": "ffortizn" }, async (error, data) => {
-
+  db.user.findOne({ username: "bluerainmango" }, async (error, data) => {
     // check each user's list
     myFavoriteMovies = data.myFavoriteMovies;
-    // myReviewedMovies = data.myReviewedMovies;
-    // myWatchList = data.myWatchList;
+    myReviewedMovies = data.myReviewedMovies;
+    myWatchList = data.myWatchList;
 
+    console.log("🥝", myFavoriteMovies, myReviewedMovies, myWatchList);
     let output = "";
+
+    // const movie = await axios.get(
+    //   `https://api.themoviedb.org/3/movie/8067?api_key=7d301e256d9f70e2193e6d1089e4d61d&language=en-US`
+    // );
+
+    // console.log("🍍", movie.data);
+
+    // // const populatedArr = await populateEachField(myFavoriteMovies);
+    // let [faroties, reviews, watchlist] = await Promise.all([
+    //   populateEachField(myFavoriteMovies),
+    //   // populateEachField(myReviewedMovies),
+    //   // populateEachField(myWatchList),
+    // ]);
+
+    await populateEachField(myWatchList, data, "myWatchList");
+    await populateEachField(myFavoriteMovies, data, "myFavoriteMovies");
+    await populateEachField(myReviewedMovies, data, "myReviewedMovies");
+
+    res.status(200).json({
+      status: "success",
+      message: "Success: list data",
+      data,
+    });
 
     // for each item in array
     // call api (function(movieId))
@@ -475,20 +501,18 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
     // promise or callback
     // const start = async () => {
     //   // for (let num of [1, 2, 3, 4, 5]) {
-     async function x(){
-      myFavoriteMovies.forEach(async movieId => {
-        await getMovieByIdFromApi(movieId)
-        // .then((movie) => {
-          console.log(`=============\n id: ${movieId}: ${movie}`);
-          //myFavoriteMoviesData.push(movie);
-        // });
-
-
-      });
-    }
-    await x();
-      console.log(myFavoriteMoviesData);
+    // async function x() {
+    //   myFavoriteMovies.forEach(async (movieId) => {
+    //     await getMovieByIdFromApi(movieId);
+    //     // .then((movie) => {
+    //     console.log(`=============\n id: ${movieId}: ${movie}`);
+    //     //myFavoriteMoviesData.push(movie);
+    //     // });
+    //   });
     // }
+    // await x();
+    // console.log(myFavoriteMoviesData);
+    // // }
 
     // myFavoriteMovies.forEach(async movieId => {
     //   tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
@@ -497,17 +521,67 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
     //   });
     // });
 
-    res.status(200).json({
-      status: "success",
-      message: "Success: list data",
-      data: "Lots of data",
-      myFavoriteMovies: myFavoriteMoviesData
-      // myReviewedMovies: myReviewedMoviesData,
-      // myWatchList: myWatchListData
-    });
+    // res.status(200).json({
+    //   status: "success",
+    //   message: "Success: list data",
+    //   // data: "Lots of data",
+    //   // myFavoriteMovies: myFavoriteMoviesData,
+    //   // myReviewedMovies: myReviewedMoviesData,
+    //   // myWatchList: myWatchListData
+    //   // data: {
+    //   //   faroties,
+    //   //   reviews,
+    //   //   watchlist,
+    //   // },
+    //   data: movie,
+    // });
   });
 });
 
+async function populateEachField(array, data, listName) {
+  // ["ddd","dd"]
+  const urlArr = array.map(
+    (id) =>
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  );
 
+  //[promise, axios()...]
+  const axiosArr = urlArr.map(async (url) => await axios.get(url));
+  let result = await Promise.all(axiosArr);
 
+  console.log("🥥", axiosArr);
+  // console.log("🌽", result[0].data, result[1].data);
 
+  // dataArr = [{movie data}, {movie data}...]
+  //! Extract only movie data from each returned axios result
+  if (result.length > 2) {
+    const dataArr = result.map((el) => el.data);
+
+    //! Save it to this doc(data)'s prop
+    data[listName] = dataArr;
+    return dataArr;
+  } else if (result.length === 1) {
+    console.log("🍓solo", data[listName]);
+    data[listName] = result[0].data;
+    return result.data;
+  }
+
+  // try {
+  //   const newArr = await array.map(async (id) => {
+  //     console.log(id);
+
+  //     const movie = await axios.get(
+  //       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  //     );
+
+  //     // console.log("🍍", movie.data);
+  //     return movie.data;
+  //   });
+
+  //   console.log("🌶", newArr);
+
+  //   return await newArr;
+  // } catch (err) {
+  //   console.log("🍇", err);
+  // }
+}
