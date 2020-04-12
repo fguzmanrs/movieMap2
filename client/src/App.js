@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import './App.css';
 import Navbar from './navbar/navbar.js';
 import Carousel from './carousel/carousel.js';
-import FilmCard from './filmCard/filmCard.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
 import About from './about/about.js';
@@ -26,9 +25,6 @@ function App(props) {
             <Typography variant='h4'>My List</Typography>
             <Carousel />
 
-            // TEMPORARY to visualize the space and ref formats
-            <FilmCard />
-
             <br></br>
             <Typography variant='h4'>Recommended because you searched ...</Typography>
             <Carousel />
@@ -45,9 +41,6 @@ function App(props) {
             <Typography variant='h4'>New Releases</Typography>
             <Carousel />
 
-          </Route>
-          <Route path="/filmCard">
-            <FilmCard />
           </Route>
           <Route path="/signIn">
             <SignIn />
