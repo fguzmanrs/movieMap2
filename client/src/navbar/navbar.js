@@ -102,6 +102,7 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = 'primary-search-account-menu';
+  const loggedIn = false;
 
   const renderMenu = (
     <Menu
@@ -135,17 +136,19 @@ export default function PrimarySearchAppBar() {
       <MenuItem>
         <Link to="/about">About</Link>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      {loggedIn && (
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -156,7 +159,7 @@ export default function PrimarySearchAppBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/home">Movie Map</Link>
           </Typography>
-          <div className={classes.search}>
+          {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -168,7 +171,7 @@ export default function PrimarySearchAppBar() {
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
@@ -199,8 +202,12 @@ export default function PrimarySearchAppBar() {
           </div>
         </Toolbar>
       </AppBar>
+
       {renderMobileMenu}
-      {renderMenu}
+      {loggedIn && (
+        renderMenu
+      )}
+
     </div>
   );
 }
