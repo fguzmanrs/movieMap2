@@ -8,6 +8,7 @@ export default function layout(props) {
         <React.Fragment>
             {!props.noHeader && (
                 <Navbar />
+                //  <Carousel />
             )}  
             {props.children}
             <Footer />

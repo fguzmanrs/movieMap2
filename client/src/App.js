@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
-import Navbar from './navbar/navbar.js';
 import SignIn from './signIn/signIn.js';
 import SignUp from './signUp/signUp.js';
 import About from './about/about.js';
-import Profile from './Profile/profile.js';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Footer from './footer/footer.js';
 import Layout from './layout/layout.js';
-// import { Route } from 'react-router-dom';
+import MovieCarousel from './carousel/movieCarousel.js'
 
 function App(props) {
   return (
@@ -18,26 +15,12 @@ function App(props) {
       {/* // categoryRegistered = ['My List', 'Because you searched ...', 'Because you watched ... ', 'New Releases', 'Top Rated']; */}
       {/* // categoryVisitor = ['New Releases', 'Top Rated']; */}
 
-      {/* //State : signIN and signUp footer: null */}
-
       <BrowserRouter>
-
-        {/* <Route path={user ? "/home" : "signin"} component={} /> */}
-
         <Switch>
-          {/* <Navbar />
-          // User signed in 
-          <Route path="/home">
-            
-            {/* {js code map } */}
-          {/* {category.map{el => <Carousel title={el}} */}
-          {/* <Footer />
-          </Route> */}
           <Route path='/home'>
             <Layout>
-              {/* <Carousel /> */}
+              <MovieCarousel/>
             </Layout>
-
           </Route>
 
           <Route path="/about">
