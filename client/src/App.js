@@ -14,7 +14,7 @@ import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
-
+import CurrentUserContext from "./context/current-user.context/current-user.context";
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
@@ -24,8 +24,6 @@ const mockData = {
     { id: 5, title: "Test 5", summary: "Test 5" },
   ],
 };
-
-import CurrentUserContext from "./context/current-user.context/current-user.context";
 
 function App(props) {
   //! Bring Context API(global state)
@@ -70,7 +68,6 @@ function App(props) {
         {console.log("🥭", user, userPopulated)}
         {console.log("🦊context", currentUserContext)}
         <BrowserRouter>
-          <Navbar currentUser={currentUserContext} />
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
               <Layout>
@@ -109,8 +106,6 @@ function App(props) {
             </Route>
           </Switch>
         </BrowserRouter>
-
-        <Footer />
       </div>
     </CurrentUserContext.Provider>
   );
