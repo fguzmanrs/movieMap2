@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import Navbar from "./navbar/navbar.js";
@@ -7,10 +8,22 @@ import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
 import Profile from "./Profile/profile.js";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+
 import { Typography } from "@material-ui/core";
 import Footer from "./footer/footer.js";
+import Layout from "./layout/layout.js";
+import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
+
+const mockData = {
+  data: [
+    { id: 1, title: "Test 1", summary: "This is a test" },
+    { id: 2, title: "Test 2", summary: "Test 2" },
+    { id: 3, title: "Test 3", summary: "Test 3" },
+    { id: 4, title: "Test 4", summary: "Test 4" },
+    { id: 5, title: "Test 5", summary: "Test 5" },
+  ],
+};
 
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 
@@ -60,41 +73,43 @@ function App(props) {
           <Navbar currentUser={currentUserContext} />
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
-              {/* 
-            <Typography variant="h4">My List</Typography>
-            <Carousel />
-
-            <Typography variant="h4">
-              Recommended because you searched ...
-            </Typography>
-            <Carousel />
-
-            <Typography variant="h4">
-              Recommended because you watched ...
-            </Typography>
-            <Carousel />
-
-            <Typography variant="h4">Top Rated</Typography>
-            <Carousel />
-
-            <Typography variant="h4">New Releases</Typography>
-            <Carousel /> */}
+              <Layout>
+                <MovieCarousel movies={mockData.data} />
+              </Layout>
             </Route>
+
+            <Route path="/about">
+              <Layout>
+                <About />
+              </Layout>
+            </Route>
+
+            <Route path="/profile">
+              <Layout>
+                <About />
+              </Layout>
+            </Route>
+
             <Route
               path="/signIn"
               render={(props) => (
-                <SignIn
-                  {...props}
-                  setCurrentUser={currentUserContext.setCurrentUser}
-                />
+                <Layout noHeader>
+                  <SignIn
+                    {...props}
+                    setCurrentUser={currentUserContext.setCurrentUser}
+                  />
+                </Layout>
               )}
-            />
-            {/* <Route path="/signIn" component={SignIn} /> */}
-            <Route path="/signUp" component={SignUp} />
-            <Route path="/about" component={About} />
-            <Route path="/profile" component={Profile} />
+            ></Route>
+
+            <Route path="/signUp">
+              <Layout noHeader>
+                <SignUp />
+              </Layout>
+            </Route>
           </Switch>
         </BrowserRouter>
+
         <Footer />
       </div>
     </CurrentUserContext.Provider>

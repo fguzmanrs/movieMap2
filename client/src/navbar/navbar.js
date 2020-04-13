@@ -7,7 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import SearchIcon from "@material-ui/icons/Search";
+import Searchbar from "./searchbar.js";
+// import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
@@ -105,6 +106,7 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = "primary-search-account-menu";
+  const loggedIn = false;
 
   const renderMenu = (
     <Menu
@@ -140,17 +142,19 @@ export default function PrimarySearchAppBar() {
       <MenuItem>
         <Link to="/about">About</Link>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      {loggedIn && (
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -165,19 +169,8 @@ export default function PrimarySearchAppBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/home">Movie Map</Link>
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+          <Searchbar />
+
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <Link to="/signIn">Login / Sign up</Link>
@@ -207,8 +200,9 @@ export default function PrimarySearchAppBar() {
           </div>
         </Toolbar>
       </AppBar>
+
       {renderMobileMenu}
-      {renderMenu}
+      {loggedIn && renderMenu}
     </div>
   );
 }
