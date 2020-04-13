@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import FilmCard from "./filmCard.js";
 
 const responsive = {
   superLargeDesktop: {
@@ -22,13 +23,23 @@ const responsive = {
   }
 };
 
-const MovieCarousel = (props) => (
+const MovieCarousel = (props) => {
+
+  const [showCard, setShowCard] = useState(false);
+
+  return (
+  <React.Fragment>
   <Carousel responsive={responsive}>
-    <div>Item 1</div>
-    <div>Item 2</div>
-    <div>Item 3</div>
-    <div>Item 4</div>
+    {props.movies.map( (movie) => {
+      return(<div key = {movie.id} onClick = {() => {setShowCard(true)}}>{movie.title}</div>)
+    } )}
+    
   </Carousel>
-);
+  {showCard && (
+    <FilmCard />
+  )}
+  
+  </React.Fragment>
+)};
 
 export default MovieCarousel

@@ -69,7 +69,7 @@ export default function FilmReviewCard() {
             </IconButton>
           }
           
-          title={<div class="headerTitle" style={{fontSize:'34px', fontWeight: 'bold'}}>Movie Title</div>
+          title={<div className="headerTitle" style={{fontSize:'34px', fontWeight: 'bold'}}>Movie Title</div>
             
           }
         />
@@ -81,7 +81,7 @@ export default function FilmReviewCard() {
           }}>
       
 
-          <div class="right-block" style={{
+          <div className="right-block" style={{
             float: 'right',
             width: '70%',
             height: '500px'
@@ -92,7 +92,7 @@ export default function FilmReviewCard() {
 
           </div>
 
-          <div class="left-block" style={{ 
+          <div className="left-block" style={{ 
             color: '#fff', 
             //backgroundColor: "rgba(210, 204, 243, 0.816)",
             backgroundColor: "#99a0f9",
