@@ -15,40 +15,30 @@ import Footer from "./footer/footer.js";
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 
 function App(props) {
-  let { currentUser, isLogin, setCurrentUser } = useContext(CurrentUserContext);
+  let currentUserContext = useContext(CurrentUserContext);
 
-  const [user, setUser] = useState(currentUser);
-  const [myFavoriteMovies, setMyFavoriteMovies] = useState(undefined);
+  //! State: brief user info
+  const [user, setUser] = useState(currentUserContext.currentUser);
+  //! State: full user info (+ populated my movie lists)
+  const [userPopulated, setUserPopulated] = useState(undefined);
 
-  setCurrentUser = (newUser) => {
+  // Will be passed into signIn page and let it set user's info to the context state once a user sign in
+  currentUserContext.setCurrentUser = (newUser) => {
     setUser(newUser);
   };
 
+  // Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
     if (user) {
       const fetchFunc = async () => {
-        console.log("🐔");
         try {
-          // const instance = axios.create({
-          //   // baseURL: `${URL}:${PORT}`,
-          //   headers: {
-          //     Accept: "application/json",
-          //     "Content-Type": "application/json",
-          //   },
-          //   withCredentials: true,
-          // });
-          console.log("🐮", document.cookie);
-
           const res = await axios.get(
-            // `http://localhost:3000/api/users/populateMyMovieLists`
-            // `http://localhost:3000/api/users/foryou/because/favorite/movie/${user.myFavoriteMovies[0]}`
-            `http://localhost:3000/api/movies/similar/338762`,
+            // `http://localhost:3000/api/users/foryou/because/youMightLike/movie/${user.myFavoriteMovies[0]}`,
+            `http://localhost:3000/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
-          // header: { Cookie: document.cookie }
-          console.log("🐼 pop data", res.data);
 
-          setMyFavoriteMovies(res.data.data);
+          setUserPopulated(res.data.data);
         } catch (err) {
           console.log("🚨", err.response.data.message);
         }
@@ -58,16 +48,18 @@ function App(props) {
     }
   }, [user]);
 
-  console.log("🍅", setCurrentUser);
-
   return (
-    <div className="App App-body">
-      {console.log("🥭", user, myFavoriteMovies)}
-      <BrowserRouter>
-        <Navbar currentUser={currentUser} />
-        <Switch>
-          <Route exact path="/" currentUser={currentUser}>
-            {/* 
+    <CurrentUserContext.Provider
+      value={{ currentUser: userPopulated, isLogin: true }}
+    >
+      <div className="App App-body">
+        {console.log("🥭", user, userPopulated)}
+        {console.log("🦊context", currentUserContext)}
+        <BrowserRouter>
+          <Navbar currentUser={currentUserContext} />
+          <Switch>
+            <Route exact path="/" currentUser={currentUserContext}>
+              {/* 
             <Typography variant="h4">My List</Typography>
             <Carousel />
 
@@ -86,21 +78,25 @@ function App(props) {
 
             <Typography variant="h4">New Releases</Typography>
             <Carousel /> */}
-          </Route>
-          <Route
-            path="/signIn"
-            render={(props) => (
-              <SignIn {...props} setCurrentUser={setCurrentUser} />
-            )}
-          />
-          {/* <Route path="/signIn" component={SignIn} /> */}
-          <Route path="/signUp" component={SignUp} />
-          <Route path="/about" component={About} />
-          <Route path="/profile" component={Profile} />
-        </Switch>
-      </BrowserRouter>
-      <Footer />
-    </div>
+            </Route>
+            <Route
+              path="/signIn"
+              render={(props) => (
+                <SignIn
+                  {...props}
+                  setCurrentUser={currentUserContext.setCurrentUser}
+                />
+              )}
+            />
+            {/* <Route path="/signIn" component={SignIn} /> */}
+            <Route path="/signUp" component={SignUp} />
+            <Route path="/about" component={About} />
+            <Route path="/profile" component={Profile} />
+          </Switch>
+        </BrowserRouter>
+        <Footer />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

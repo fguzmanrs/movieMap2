@@ -64,10 +64,17 @@ export default function SignIn(props) {
 
       console.log("🥒", res);
       const userData = res.data.data;
+
+      // Save user's data to local state
       setUser(userData);
+      // Save user's data to context state so parent comp can use it
       setCurrentUser(userData);
+
+      // Default input fields
       setUsername("");
       setPassword("");
+
+      // Redirect to homepage
       props.history.push("/");
     } catch (err) {
       console.log("🚨", err.response.data.message);

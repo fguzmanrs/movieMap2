@@ -14,7 +14,7 @@ const ErrorFactory = require("./util/errorFactory");
 
 const app = express();
 
-//! Attach Access-Control-Allow-Origin
+//! Cors setting : Attach Access-Control-Allow-Origin
 // var whitelist = ["http://localhost:3000", "http://localhost:3001"];
 // var corsOptions = {
 //   origin: function (origin, callback) {
@@ -26,10 +26,11 @@ const app = express();
 //   },
 // };
 
-//! Async version
-var whitelist = ["http://localhost:3000", "http://localhost:3001"];
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
+//! Cors setting : Async version
+const whitelist = ["http://localhost:3000", "http://localhost:3001"];
+
+const corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
   if (whitelist.indexOf(req.header("Origin")) !== -1) {
     corsOptions = { origin: true, credentials: true }; // reflect (enable) the requested origin in the CORS response
   } else {
@@ -38,14 +39,16 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
+// Apply cors to all response
+app.use(cors(corsOptionsDelegate));
+// Cors pre-flight
+app.options("*", cors(corsOptionsDelegate));
+
 // app.use(cors({ origin: true, credentials: true }));
 // app.options(cors({ origin: true, credentials: true }));
 
 // app.use(cors(corsOptions));
 // app.options("*", cors());
-
-app.use(cors(corsOptionsDelegate));
-app.options("*", cors(corsOptionsDelegate));
 
 // app.use(function (req, res, next) {
 //   // res.header("Access-Control-Allow-Origin", "");
