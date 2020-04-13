@@ -127,17 +127,24 @@ exports.login = catchAsync(async (req, res, next) => {
     //* 5. Create JWT token with user's id
     const token = createToken(data._id);
 
+    // Send a user's info without password
+    data.password = undefined;
+
     //* 6. Send a response
     res
       .cookie("jwt", token, {
+        enabled: true,
+        name: "moviemap-jwt",
         maxAge: 3600000,
-        httpOnly: true,
+        httpOnly: false,
+        secure: false,
       })
       .status(200)
       .json({
         status: "success",
         message: "You are logged in successfully!",
         token,
+        data,
       });
   });
 });
