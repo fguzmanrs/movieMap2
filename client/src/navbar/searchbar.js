@@ -20,16 +20,15 @@ export default function Tags() {
     <div className={classes.root}>
       <Autocomplete
         multiple
-        id="tags-outlined"
+        id="tags-standard"
         options={topGenres}
-        getOptionLabel={(option) => option.title}
-        defaultValue={[topGenres[13]]}
-        filterSelectedOptions
+        getOptionLabel={(option) => option.genre}
+        // defaultValue={[top100Films[13]]}
         renderInput={(params) => (
           <TextField
             {...params}
-            variant="outlined"
-            label="filterSelectedOptions"
+            variant="standard"
+            label="Multiple values"
             placeholder="Favorites"
           />
         )}
@@ -40,28 +39,28 @@ export default function Tags() {
 
 // Top genres ref: imbd check with API
 const topGenres = [
-  { title: 'Action' },
-  { title: 'Adventure' },
-  { title: 'Animation' },
-  { title: 'Biography' },
-  { title: 'Comedy' },
-  { title: 'Crime' },
-  { title: 'Documentary' },
-  { title: 'Drama' },
-  { title: 'Family' },
-  { title: 'Fantasy' },
-  { title: 'Film Noir' },
-  { title: 'History' },
-  { title: 'Horror' },
-  { title: 'Music' },
-  { title: 'Musical' },
-  { title: 'Mystery' },
-  { title: 'Romance' },
-  { title: 'Sci-Fi' },
-  { title: 'Short' },
-  { title: 'Sport' },
-  { title: 'Superhero' },
-  { title: 'Thriller' },
-  { title: 'War' },
-  { title: 'Western' },
+  { genre: 'Action' },
+  { genre: 'Adventure' },
+  { genre: 'Animation' },
+  { genre: 'Biography' },
+  { genre: 'Comedy' },
+  { genre: 'Crime' },
+  { genre: 'Documentary' },
+  { genre: 'Drama' },
+  { genre: 'Family' },
+  { genre: 'Fantasy' },
+  { genre: 'Film Noir' },
+  { genre: 'History' },
+  { genre: 'Horror' },
+  { genre: 'Music' },
+  { genre: 'Musical' },
+  { genre: 'Mystery' },
+  { genre: 'Romance' },
+  { genre: 'Sci-Fi' },
+  { genre: 'Short' },
+  { genre: 'Sport' },
+  { genre: 'Superhero' },
+  { genre: 'Thriller' },
+  { genre: 'War' },
+  { genre: 'Western' },
 ];
