@@ -62,7 +62,10 @@ function App(props) {
 
   return (
     <CurrentUserContext.Provider
-      value={{ currentUser: userPopulated, isLogin: true }}
+      value={{
+        currentUser: userPopulated,
+        isLogin: userPopulated ? true : false,
+      }}
     >
       <div className="App App-body">
         {console.log("🥭", user, userPopulated)}
