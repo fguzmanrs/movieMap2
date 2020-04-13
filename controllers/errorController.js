@@ -53,11 +53,6 @@ exports.globalErrorHandler = (err, req, res, next) => {
     //   );
     // }
 
-    //* Nodemailer error : invalid email
-    // if (err.message === "No recipients defined") {
-    //   err = new ErrorFactory(400, "Please enter valid email.");
-    // }
-
     //* CASE 2.2 : Catch err coming from 3rd party APIs(TMDB, Utelly)
     //? A. There is no such a data
     if (err.message === "Request failed with status code 404") {
