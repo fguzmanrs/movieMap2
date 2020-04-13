@@ -74,28 +74,33 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     //* 5. Store a new user into DB
     db.user.insert(newUserToSave, async (error, data) => {
-      //* 6. Create a JWT token
-      const token = createToken(data._id);
+      try {
+        //* 6. Create a JWT token
+        const token = createToken(data._id);
+        //! 7. Send a welcome email
+        const url = `${req.protocol}://${req.get("host")}`;
+        console.log("user to email: ", data, url);
 
-      //! 7. Send a welcome email
-      const url = `${req.protocol}://${req.get("host")}`;
-      await new Email(data, url).sendWelcome();
+        await new Email(data, url).sendWelcome();
 
-      //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
-      res
-        .cookie("jwt", token, {
-          maxAge: 3600000,
-          httpOnly: true,
-        })
-        .status(200)
-        .json({
-          status: "success",
-          message: "New user has been successfully created!",
-          token,
-          data: {
-            username,
-          },
-        });
+        data.password = undefined;
+
+        //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
+        res
+          .cookie("jwt", token, {
+            maxAge: 3600000,
+            httpOnly: true,
+          })
+          .status(200)
+          .json({
+            status: "success",
+            message: "New user has been successfully created!",
+            token,
+            data,
+          });
+      } catch (err) {
+        return next(new ErrorFactory(400, "Please enter valid email."));
+      }
     });
   });
 });
