@@ -344,9 +344,27 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
       console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
 
       //* 2. Populate each movie list and add it to user's doc(user)
-      await populateAndAddToDoc(myWatchList, user, "myWatchList");
-      await populateAndAddToDoc(myFavoriteMovies, user, "myFavoriteMovies");
-      await populateAndAddToDoc(myReviewedMovies, user, "myReviewedMovies");
+      // If none of that exsits, skip
+      if (myFavoriteMovies || myReviewedMovies || myWatchList) {
+        switch (true) {
+          case myFavoriteMovies.length > 0:
+            await populateAndAddToDoc(
+              myFavoriteMovies,
+              user,
+              "myFavoriteMovies",
+              next
+            );
+          case myReviewedMovies.length > 0:
+            await populateAndAddToDoc(
+              myReviewedMovies,
+              user,
+              "myReviewedMovies",
+              next
+            );
+          case myWatchList.length > 0:
+            await populateAndAddToDoc(myWatchList, user, "myWatchList", next);
+        }
+      }
 
       res.status(200).json({
         status: "success",
@@ -359,7 +377,7 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
 });
 
 //! Helper for population
-async function populateAndAddToDoc(array, data, listName) {
+async function populateAndAddToDoc(array, data, listName, next) {
   //* 1. Convert id arry to url array.
   // [movie id , ...] => [url , ...]
   const urlArr = array.map(
@@ -370,7 +388,13 @@ async function populateAndAddToDoc(array, data, listName) {
   try {
     //* 2. Conver url array to Axios promises array
     // [url , ...] => [promise , ...]
-    const axiosArr = urlArr.map(async (url) => await axios.get(url));
+    const axiosArr = urlArr.map(async (url) =>
+      axios
+        .get(url)
+        .catch((err) =>
+          console.log("📍 Invalid url(movieId): ", err.request.path)
+        )
+    );
 
     //* 3. Await promises
     // [ {promise result} , ... ]
@@ -385,7 +409,13 @@ async function populateAndAddToDoc(array, data, listName) {
 
     return data[listName];
   } catch (err) {
-    console.log("🐷error: ", err);
+    // console.log("🐷There is invalid movieId in the list: ", err);
+    return next(
+      new ErrorFactory(
+        400,
+        `There is an invalid movieId in ${listName} so that it cannot bring the user's detail info.`
+      )
+    );
   }
 }
 
