@@ -23,12 +23,11 @@ export default function Tags() {
         id="tags-standard"
         options={topGenres}
         getOptionLabel={(option) => option.genre}
-        // defaultValue={[top100Films[13]]}
         renderInput={(params) => (
           <TextField
             {...params}
             variant="standard"
-            label="Multiple values"
+            label=""
             placeholder="Favorites"
           />
         )}
