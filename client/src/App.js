@@ -15,6 +15,7 @@ import Footer from "./footer/footer.js";
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 
 function App(props) {
+  //! Bring Context API(global state)
   let currentUserContext = useContext(CurrentUserContext);
 
   //! State: brief user info
