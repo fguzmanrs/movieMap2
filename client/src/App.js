@@ -14,6 +14,7 @@ import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
+
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 const mockData = {
   data: [
