@@ -53,10 +53,14 @@ export default function SignIn(props) {
     console.log("🧄submit form");
 
     try {
-      const res = await axios.post("http://localhost:3000/api/users/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:3000/api/users/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       console.log("🥒", res);
       const userData = res.data.data;

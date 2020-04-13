@@ -29,19 +29,23 @@ function App(props) {
       const fetchFunc = async () => {
         console.log("🐔");
         try {
-          const instance = axios.create({
-            // baseURL: `${URL}:${PORT}`,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          });
-          const res = await instance.get(
-            // `http://localhost:3000/api/users/populateMyMovieLists`
-            `http://localhost:3000/api/users/foryou/because/favorite/movie/${user.myFavoriteMovies[0]}`
-          );
+          // const instance = axios.create({
+          //   // baseURL: `${URL}:${PORT}`,
+          //   headers: {
+          //     Accept: "application/json",
+          //     "Content-Type": "application/json",
+          //   },
+          //   withCredentials: true,
+          // });
+          console.log("🐮", document.cookie);
 
+          const res = await axios.get(
+            // `http://localhost:3000/api/users/populateMyMovieLists`
+            // `http://localhost:3000/api/users/foryou/because/favorite/movie/${user.myFavoriteMovies[0]}`
+            `http://localhost:3000/api/movies/similar/338762`,
+            { withCredentials: true }
+          );
+          // header: { Cookie: document.cookie }
           console.log("🐼 pop data", res.data);
 
           setMyFavoriteMovies(res.data.data);
