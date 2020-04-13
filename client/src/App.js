@@ -31,7 +31,7 @@ function App(props) {
   let currentUserContext = useContext(CurrentUserContext);
 
   //! State: brief user info
-  const [user, setUser] = useState(currentUserContext.currentUser);
+  const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
 
@@ -42,11 +42,12 @@ function App(props) {
 
   // Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
+    console.log("🐤 inside of effect");
     if (user) {
+      console.log("🐦 inside of effect with user");
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
-            // `http://localhost:3000/api/users/foryou/because/youMightLike/movie/${user.myFavoriteMovies[0]}`,
             `http://localhost:3000/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
@@ -69,8 +70,9 @@ function App(props) {
       }}
     >
       <div className="App App-body">
-        {console.log("🥭", user, userPopulated)}
-        {console.log("🦊context", currentUserContext)}
+        {console.log("🥭user in App", user, userPopulated)}
+        {console.log("🦊user context(global data) in App", currentUserContext)}
+        {console.log("🦁user populated in App", userPopulated)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
@@ -103,11 +105,17 @@ function App(props) {
               )}
             ></Route>
 
-            <Route path="/signUp">
-              <Layout noHeader>
-                <SignUp />
-              </Layout>
-            </Route>
+            <Route
+              path="/signUp"
+              render={(props) => (
+                <Layout noHeader>
+                  <SignUp
+                    {...props}
+                    setCurrentUser={currentUserContext.setCurrentUser}
+                  />
+                </Layout>
+              )}
+            ></Route>
           </Switch>
         </BrowserRouter>
       </div>

@@ -62,7 +62,7 @@ export default function SignIn(props) {
         { withCredentials: true }
       );
 
-      console.log("🥒", res);
+      console.log("🥒 logged in: ", res);
       const userData = res.data.data;
 
       // Save user's data to local state
@@ -83,8 +83,8 @@ export default function SignIn(props) {
 
   return (
     <Container component="main" maxWidth="xs">
-      {console.log("🥬", user)}
-      {console.log("🐻", props, setCurrentUser)}
+      {/* {console.log("🥬", user)}
+      {console.log("🐻", props, setCurrentUser)} */}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
