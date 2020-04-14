@@ -16,6 +16,20 @@ const useStyles = makeStyles((theme) => ({
 export default function Tags() {
   const classes = useStyles();
 
+  //   state = {
+  //     users: []
+  //   }
+  //   searchReturn() {
+  //     const url = `${API_URL}/users/`;
+  //     axios.get(url).then(response => response.movies)
+  //     .then((movie) => {
+  //       this.setState({ users: movie })
+  //       console.log(this.state.users)
+  //      })
+  //   }
+  //   // [...]
+  // }
+
   return (
     <div className={classes.root}>
       <Autocomplete
@@ -28,8 +42,8 @@ export default function Tags() {
           <TextField
             {...params}
             variant="standard"
-            label="Multiple values"
-            placeholder="Favorites"
+            label=""
+            placeholder="Select a genre"
           />
         )}
       />

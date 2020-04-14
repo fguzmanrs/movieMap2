@@ -31,6 +31,7 @@ const MovieCarousel = (props) => {
   <React.Fragment>
   <Carousel responsive={responsive}>
     {props.movies.map( (movie) => {
+      
       return(<div key = {movie.id} onClick = {() => {setShowCard(true)}}>{movie.title}</div>)
     } )}
     
