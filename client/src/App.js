@@ -2,18 +2,19 @@ import React, { useEffect, useContext, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
-import Navbar from "./navbar/navbar.js";
-import Carousel from "./carousel/carousel.js";
+// import Navbar from "./navbar/navbar.js";
+// import Carousel from "./carousel/carousel.js";
 import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
-import Profile from "./Profile/profile.js";
+// import Profile from "./Profile/profile.js";
 
-import { Typography } from "@material-ui/core";
-import Footer from "./footer/footer.js";
+// import { Typography } from "@material-ui/core";
+// import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
+
 import CurrentUserContext from "./context/current-user.context/current-user.context";
 const mockData = {
   data: [
@@ -30,9 +31,16 @@ function App(props) {
   let currentUserContext = useContext(CurrentUserContext);
 
   //! State: brief user info
-  const [user, setUser] = useState(currentUserContext.currentUser);
+  const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
+  
+  // State: searchbar genre
+  const [search, setSearch] = useState([]);
+  const handleChange = value => {
+    setSearch(value);
+  };
+
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
@@ -41,11 +49,12 @@ function App(props) {
 
   // Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
+    console.log("🐤 inside of effect");
     if (user) {
+      console.log("🐦 inside of effect with user");
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
-            // `http://localhost:3000/api/users/foryou/because/youMightLike/movie/${user.myFavoriteMovies[0]}`,
             `http://localhost:3000/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
@@ -62,16 +71,20 @@ function App(props) {
 
   return (
     <CurrentUserContext.Provider
-      value={{ currentUser: userPopulated, isLogin: true }}
+      value={{
+        currentUser: userPopulated,
+        isLogin: userPopulated ? true : false,
+      }}
     >
       <div className="App App-body">
-        {console.log("🥭", user, userPopulated)}
-        {console.log("🦊context", currentUserContext)}
+        {console.log("🥭user in App", user, userPopulated)}
+        {console.log("🦊user context(global data) in App", currentUserContext)}
+        {console.log("🦁user populated in App", userPopulated)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
-              <Layout>
-                <MovieCarousel movies={mockData.data} />
+              <Layout onChange={handleChange}>
+                <MovieCarousel movies={mockData.data} searchedFilms={search}/>
               </Layout>
             </Route>
 
@@ -99,11 +112,17 @@ function App(props) {
               )}
             ></Route>
 
-            <Route path="/signUp">
-              <Layout noHeader>
-                <SignUp />
-              </Layout>
-            </Route>
+            <Route
+              path="/signUp"
+              render={(props) => (
+                <Layout noHeader>
+                  <SignUp
+                    {...props}
+                    setCurrentUser={currentUserContext.setCurrentUser}
+                  />
+                </Layout>
+              )}
+            ></Route>
           </Switch>
         </BrowserRouter>
       </div>
