@@ -12,6 +12,7 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === "development") {
+      console.log("email to", this.to, this.url);
       return nodemailer.createTransport({
         host: "smtp.mailtrap.io",
         port: 2525,
