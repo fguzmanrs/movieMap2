@@ -13,31 +13,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tags() {
+export default function Tags(props) {
   const classes = useStyles();
-
-  //   state = {
-  //     users: []
-  //   }
-  //   searchReturn() {
-  //     const url = `${API_URL}/users/`;
-  //     axios.get(url).then(response => response.movies)
-  //     .then((movie) => {
-  //       this.setState({ users: movie })
-  //       console.log(this.state.users)
-  //      })
-  //   }
-  //   // [...]
-  // }
 
   return (
     <div className={classes.root}>
-      <Autocomplete
+      <Autocomplete onChange={(event, value) => {props.onChange(value)}}
         multiple
         id="tags-standard"
         options={topGenres}
         getOptionLabel={(option) => option.genre}
-        // defaultValue={[top100Films[13]]}
         renderInput={(params) => (
           <TextField
             {...params}

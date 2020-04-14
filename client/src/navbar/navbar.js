@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -169,7 +169,7 @@ export default function PrimarySearchAppBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             <Link to="/home">Movie Map</Link>
           </Typography>
-          <Searchbar />
+          <Searchbar onChange={props.onChange}/>
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

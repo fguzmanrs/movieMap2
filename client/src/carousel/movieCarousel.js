@@ -26,12 +26,11 @@ const responsive = {
 const MovieCarousel = (props) => {
 
   const [showCard, setShowCard] = useState(false);
-
+  console.log(props.searchedFilms)
   return (
   <React.Fragment>
   <Carousel responsive={responsive}>
     {props.movies.map( (movie) => {
-      
       return(<div key = {movie.id} onClick = {() => {setShowCard(true)}}>{movie.title}</div>)
     } )}
     
