@@ -14,16 +14,66 @@ const ErrorFactory = require("./util/errorFactory");
 
 const app = express();
 
-// Attach Access-Control-Allow-Origin to every req header
-app.use(cors());
-app.options("*", cors());
+//! Cors setting : Attach Access-Control-Allow-Origin
+// var whitelist = ["http://localhost:3000", "http://localhost:3001"];
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("sssNot allowed by CORS"));
+//     }
+//   },
+// };
+
+//! Cors setting : Async version
+const whitelist = ["http://localhost:3000", "http://localhost:3001"];
+
+const corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
+  if (whitelist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true, credentials: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+// Apply cors to all response
+app.use(cors(corsOptionsDelegate));
+// Cors pre-flight
+app.options("*", cors(corsOptionsDelegate));
+
+// app.use(cors({ origin: true, credentials: true }));
+// app.options(cors({ origin: true, credentials: true }));
+
+// app.use(cors(corsOptions));
+// app.options("*", cors());
+
+// app.use(function (req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "");
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   // res.header("Content-Type", "application/json;charset=UTF-8");
+//   // res.header("Access-Control-Allow-Credentials", true);
+//   // res.header(
+//   //   "Access-Control-Allow-Headers",
+//   //   "Origin, X-Requested-With, Content-Type, Accept"
+//   // );
+//   next();
+// });
 
 // Frontend folder location
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-} else {
-  app.use(express.static(path.join(__dirname, "public")));
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+// } else {
+//   app.use(express.static(path.join(__dirname, "public")));
+// }
+//! For test API call from frontend with react
+app.use(express.static("client/build"));
 
 // Body parser
 app.use(express.json());
