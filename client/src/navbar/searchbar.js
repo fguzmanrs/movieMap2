@@ -1,38 +1,32 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 500,
-    '& > * + *': {
-      marginTop: theme.spacing(3),
-    },
-  },
-}));
-
-export default function Tags(props) {
-  const classes = useStyles();
-
+// option for future use of multiple tags
+export default function FixedTags(props) {
   return (
-    <div className={classes.root}>
-      <Autocomplete onChange={(event, value) => {props.onChange(value)}}
-        multiple
-        id="tags-standard"
-        options={topGenres}
-        getOptionLabel={(option) => option.genre}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            label=""
-            placeholder="Select a genre"
-          />
-        )}
-      />
-    </div>
+    <Autocomplete onChange={(event, value) => { props.onChange(value) }}
+      multiple
+      id="fixed-tags"
+      options={topGenres}
+      getOptionLabel={(option) => option.genre}
+      renderTags={(value, getTagProps) =>
+        value.map((option, index) => (
+          <Chip label={option.genre} {...getTagProps({ index })} disabled={index === 0} />
+        ))
+      }
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="standard"
+          label=""
+          placeholder="Select a genre"
+        />
+      )}
+    />
   );
 }
 
