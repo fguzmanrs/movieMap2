@@ -42,7 +42,7 @@ const corsOptionsDelegate = function (req, callback) {
 // Apply cors to all response
 app.use(cors(corsOptionsDelegate));
 // Cors pre-flight
-app.options("*", cors(corsOptionsDelegate));
+// app.options("*", cors(corsOptionsDelegate));
 
 // app.use(cors({ origin: true, credentials: true }));
 // app.options(cors({ origin: true, credentials: true }));
