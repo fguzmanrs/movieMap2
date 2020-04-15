@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 // option for future use of multiple tags
 export default function FixedTags(props) {
   return (
-    <Autocomplete onChange={(event, value) => { props.onChange(value) }}
+    <Autocomplete onChange={(value) => { props.onChange(value) }}
       multiple
       id="fixed-tags"
       options={topGenres}
