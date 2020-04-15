@@ -29,6 +29,8 @@ db.runCommand({ ping: 1 }, function (err, res) {
 
 //! JWT CREATOR : Create JSON Web Token with a user id for authentication with stateless server
 const createToken = (userId) => {
+  console.log("🥯", process.env.JWT_SECRET);
+
   const token = jwt.sign(
     {
       userId,
@@ -36,6 +38,7 @@ const createToken = (userId) => {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
+
   return token;
 };
 
