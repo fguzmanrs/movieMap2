@@ -26,7 +26,7 @@ const responsive = {
 const MovieCarousel = (props) => {
 
   const [showCard, setShowCard] = useState(false);
-
+  console.log(props.searchedFilms)
   return (
   <React.Fragment>
   <Carousel responsive={responsive}>

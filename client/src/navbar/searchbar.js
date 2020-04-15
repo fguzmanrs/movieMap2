@@ -13,23 +13,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tags() {
+export default function Tags(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Autocomplete
+      <Autocomplete onChange={(event, value) => {props.onChange(value)}}
         multiple
         id="tags-standard"
         options={topGenres}
         getOptionLabel={(option) => option.genre}
-        // defaultValue={[top100Films[13]]}
         renderInput={(params) => (
           <TextField
             {...params}
             variant="standard"
-            label="Multiple values"
-            placeholder="Favorites"
+            label=""
+            placeholder="Select a genre"
           />
         )}
       />

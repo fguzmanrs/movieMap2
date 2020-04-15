@@ -7,7 +7,7 @@ export default function layout(props) {
     return (
         <React.Fragment>
             {!props.noHeader && (
-                <Navbar />
+                <Navbar onChange={props.onChange}/>
                 //  <Carousel />
             )}  
             {props.children}
