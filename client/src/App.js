@@ -34,13 +34,12 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
-  
+
   // State: searchbar genre
   const [search, setSearch] = useState([]);
-  const handleChange = value => {
+  const handleChange = (value) => {
     setSearch(value);
   };
-
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
@@ -55,7 +54,8 @@ function App(props) {
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/users/populateMyMovieLists`,
+            // `http://localhost:3000/api/users/populateMyMovieLists`,
+            `/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
 
@@ -84,7 +84,7 @@ function App(props) {
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
               <Layout onChange={handleChange}>
-                <MovieCarousel movies={mockData.data} searchedFilms={search}/>
+                <MovieCarousel movies={mockData.data} searchedFilms={search} />
               </Layout>
             </Route>
 
