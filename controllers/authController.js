@@ -154,7 +154,7 @@ exports.login = catchAsync(async (req, res, next) => {
           data,
         });
     } catch (err) {
-      console.log("🌶🌶🌶 ERROR OCCURRED!");
+      console.log("🌶🌶🌶 ERROR OCCURRED!", err);
     }
   });
 });
