@@ -8,14 +8,25 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import updateSettings from "../util/updateSettings";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import Icon from "@material-ui/core/Icon";
+
+import "./profile.style.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: "50%",
+    margin: "0 auto",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
+  },
+  button: {
+    margin: theme.spacing(1.5),
   },
 }));
 
@@ -30,11 +41,10 @@ export default function Profile({ user }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const res = e.currentTarget.elements;
     const { firstName, lastName, photo } = e.currentTarget.elements;
 
     console.log(
-      "🍖 form data(firstname.value,lastname.value,photo,photo.files): ",
+      "🍖form data(firstname.value, lastname.value, photo, photo.files): ",
       firstName.value,
       lastName.value,
       photo,
@@ -46,7 +56,8 @@ export default function Profile({ user }) {
     form.append("lastName", lastName.value);
     form.append("photo", photo.files[0]);
 
-    const updatedRes = updateSettings(form, "accountInfo");
+    //! Send updated data to server
+    updateSettings(form, "accountInfo");
   };
 
   return (
@@ -81,8 +92,28 @@ export default function Profile({ user }) {
                 name="lastName"
                 defaultValue={user.lastName}
               />
-              <input type="file" id="myFile" name="photo" />
-              <button>Update</button>
+
+              <Button raised="raised" component="label" color="primary">
+                <CloudUploadIcon />
+                {"Profile Image"}
+                <input style={{ display: "none" }} type="file" name="photo" />
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                update
+              </Button>
+
+              {/* <input
+  type="file"
+  id="myFile"
+  name="photo"
+  aria-label="Profile picture upload"
+  style={{ display: "none" }}
+/> */}
             </div>
           </form>
         </ExpansionPanelDetails>
