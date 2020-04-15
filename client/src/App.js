@@ -34,6 +34,13 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
+  
+  // State: searchbar genre
+  const [search, setSearch] = useState([]);
+  const handleChange = value => {
+    setSearch(value);
+  };
+
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
@@ -76,8 +83,8 @@ function App(props) {
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
-              <Layout>
-                <MovieCarousel movies={mockData.data} />
+              <Layout onChange={handleChange}>
+                <MovieCarousel movies={mockData.data} searchedFilms={search}/>
               </Layout>
             </Route>
 
