@@ -148,11 +148,14 @@ exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
   }
 
   const keywordId = matchedKeywordSet.id;
+  console.log("🧅 goign through search by keyword", keywordId);
 
   //* 3. Search movies by keyword id
   const tmdbUrlForDiscover = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=${keywordId}`;
 
   const moviesByKeyword = await axios(tmdbUrlForDiscover);
+
+  console.log("🧅 goign through search by keyword: data", moviesByKeyword);
 
   res.status(200).json({
     status: "success",
