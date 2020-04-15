@@ -128,29 +128,34 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     console.log("😈 loggedin user: ", data);
+    console.log("🍟 for check from DEPLOYED app: ", data);
 
-    //* 5. Create JWT token with user's id
-    const token = createToken(data._id);
+    try {
+      //* 5. Create JWT token with user's id
+      const token = createToken(data._id);
 
-    // Send a user's info without password
-    data.password = undefined;
+      // Send a user's info without password
+      data.password = undefined;
 
-    //* 6. Send a response
-    res
-      .cookie("jwt", token, {
-        enabled: true,
-        name: "moviemap-jwt",
-        maxAge: 3600000,
-        httpOnly: false,
-        secure: false,
-      })
-      .status(200)
-      .json({
-        status: "success",
-        message: "You are logged in successfully!",
-        token,
-        data,
-      });
+      //* 6. Send a response
+      res
+        .cookie("jwt", token, {
+          enabled: true,
+          name: "moviemap-jwt",
+          maxAge: 3600000,
+          httpOnly: false,
+          secure: false,
+        })
+        .status(200)
+        .json({
+          status: "success",
+          message: "You are logged in successfully!",
+          token,
+          data,
+        });
+    } catch (err) {
+      console.log("🌶🌶🌶 ERROR OCCURRED!");
+    }
   });
 });
 
