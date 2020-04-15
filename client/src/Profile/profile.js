@@ -33,12 +33,18 @@ export default function Profile({ user }) {
     const res = e.currentTarget.elements;
     const { firstName, lastName, photo } = e.currentTarget.elements;
 
-    console.log("🍖 form data: ", firstName.value, lastName.value, photo.value);
+    console.log(
+      "🍖 form data(firstname.value,lastname.value,photo,photo.files): ",
+      firstName.value,
+      lastName.value,
+      photo,
+      photo.files
+    );
 
     const form = new FormData();
     form.append("firstName", firstName.value);
     form.append("lastName", lastName.value);
-    form.append("photo", photo.value);
+    form.append("photo", photo.files[0]);
 
     const updatedRes = updateSettings(form, "accountInfo");
   };

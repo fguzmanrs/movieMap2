@@ -31,29 +31,29 @@ const MovieCarousel = (props) => {
   // reason: sometimes general variable cannot properly work to be used inside of Return(below HTML rendering part) and it helps auto re-rendering
   const [movies, setMovies] = useState([]);
 
-  console.log("🥩 props: ", props);
+  // console.log("🥩 props: ", props);
 
   //! 2. Add Event handler using useEffect()
   // whenever the second parameter is changed, this will be triggered and run the code again.
   // [] means only one time render after HTML page is rendered.
-  useEffect(() => {
-    //! 3. Define Function(API call & store data to the state)
-    const getData = async function () {
-      //! 4. Prepare a query(Search keyword)
-      // print out the query to console and make sure this is the exact search keyword
-      // const query = props.searchedFilms;
-      const query = "horror"; // test
+  // useEffect(() => {
+  //   //! 3. Define Function(API call & store data to the state)
+  //   const getData = async function () {
+  //     //! 4. Prepare a query(Search keyword)
+  //     // print out the query to console and make sure this is the exact search keyword
+  //     // const query = props.searchedFilms;
+  //     const query = "horror"; // test
 
-      //* Calling API to get searched movies with axios and return the data
-      const res = await axios.get(`/api/movies/search/keyword/${query}`);
+  //     //* Calling API to get searched movies with axios and return the data
+  //     const res = await axios.get(`/api/movies/search/keyword/${query}`);
 
-      //* Store this data to the state using useState's set method you defined above
-      setMovies(res.data.data);
-    };
+  //     //* Store this data to the state using useState's set method you defined above
+  //     setMovies(res.data.data);
+  //   };
 
-    //! 5. Call Fuction you defined
-    getData();
-  }, []);
+  //   //! 5. Call Fuction you defined
+  //   getData();
+  // }, []);
 
   return (
     <React.Fragment>
