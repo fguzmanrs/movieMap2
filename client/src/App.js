@@ -2,8 +2,6 @@ import React, { useEffect, useContext, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
-// import Navbar from "./navbar/navbar.js";
-// import Carousel from "./carousel/carousel.js";
 import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
