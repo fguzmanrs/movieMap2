@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import FilmCard from "./filmCard.js";
@@ -28,18 +28,39 @@ const MovieCarousel = (props) => {
   const [showCard, setShowCard] = useState(false);
   console.log(props.searchedFilms)
   return (
-  <React.Fragment>
-  <Carousel responsive={responsive}>
-    {props.movies.map( (movie) => {
-      return(<div key = {movie.id} onClick = {() => {setShowCard(true)}}>{movie.title}</div>)
-    } )}
-    
-  </Carousel>
-  {showCard && (
-    <FilmCard />
-  )}
-  
-  </React.Fragment>
-)};
+    <React.Fragment>
+      <Carousel responsive={responsive}>
+        {props.movies.map((movie) => {
+          return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
+        })}
+
+      </Carousel>
+      {showCard && (
+        <FilmCard />
+      )}
+
+      <Carousel responsive={responsive}>
+        {props.movies.map((movie) => {
+          return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
+        })}
+
+      </Carousel>
+      {showCard && (
+        <FilmCard />
+      )}
+
+      <Carousel responsive={responsive}>
+        {props.movies.map((movie) => {
+          return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
+        })}
+
+      </Carousel>
+      {showCard && (
+        <FilmCard />
+      )}
+
+    </React.Fragment >
+  )
+};
 
 export default MovieCarousel
