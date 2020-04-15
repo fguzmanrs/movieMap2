@@ -139,7 +139,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         message: "Successfully updated account info!",
         data: {
           user: data,
-          photo: req.file.filename,
+          photo: req.file ? req.file.filename : req.user.photo,
         },
       });
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 // import Navbar from "./navbar/navbar.js";
@@ -7,7 +7,7 @@ import "./App.css";
 import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
-// import Profile from "./Profile/profile.js";
+import Profile from "./profile/profile";
 
 // import { Typography } from "@material-ui/core";
 // import Footer from "./footer/footer.js";
@@ -87,11 +87,28 @@ function App(props) {
               </Layout>
             </Route>
 
-            <Route path="/profile">
+            {/* <Route path="/profile">
               <Layout>
                 <About />
               </Layout>
-            </Route>
+            </Route> */}
+
+            <Route
+              path="/profile"
+              render={(props) =>
+                userPopulated ? (
+                  <Layout>
+                    <Profile
+                      {...props}
+                      user={userPopulated}
+                      // setCurrentUser={currentUserContext.setCurrentUser}
+                    />
+                  </Layout>
+                ) : (
+                  <Redirect to="/" />
+                )
+              }
+            ></Route>
 
             <Route
               path="/signIn"

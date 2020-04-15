@@ -167,7 +167,7 @@ export default function PrimarySearchAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            <Link to="/home">Movie Map</Link>
+            <Link to="/">Movie Map</Link>
           </Typography>
           <Searchbar />
 
@@ -175,6 +175,7 @@ export default function PrimarySearchAppBar() {
           <div className={classes.sectionDesktop}>
             <Link to="/signIn">Login / Sign up</Link>
             <Link to="/about">About</Link>
+            <Link to="/profile">Account</Link>
 
             <IconButton
               edge="end"
