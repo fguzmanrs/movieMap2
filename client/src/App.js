@@ -35,7 +35,7 @@ function App(props) {
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
   
-  // State: searchbar genre
+  // State: searchbar
   const [search, setSearch] = useState([]);
   const handleChange = value => {
     setSearch(value);
