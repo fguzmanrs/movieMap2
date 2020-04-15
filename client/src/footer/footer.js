@@ -31,11 +31,8 @@ export default function Footer() {
 
     return (
         <footer className={classes.footer}>
-            <Typography variant="h6" align="center" gutterBottom>
-                Footer
-            </Typography>
             <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-                Our tagline?
+                Fantastic 404
             </Typography>
             <Copyright />
         </footer>
