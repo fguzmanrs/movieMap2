@@ -25,38 +25,38 @@ const responsive = {
 
 const MovieCarousel = (props) => {
 
-  const [showCard, setShowCard] = useState(false);
+  const [showCard, setShowCard ] = useState(false);
   console.log(props.searchedFilms)
   return (
     <React.Fragment>
-      <Carousel responsive={responsive}>
+      <Carousel id = "carousel1" responsive={responsive}>
         {props.movies.map((movie) => {
           return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
         })}
 
       </Carousel>
       {showCard && (
-        <FilmCard />
+        <FilmCard id = "filmCard1" />
       )}
 
-      <Carousel responsive={responsive}>
+      <Carousel id = "carousel2" responsive={responsive}>
         {props.movies.map((movie) => {
           return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
         })}
 
       </Carousel>
       {showCard && (
-        <FilmCard />
+        <FilmCard id = "filmCard2" />
       )}
 
-      <Carousel responsive={responsive}>
+      <Carousel id = "carousel3" responsive={responsive}>
         {props.movies.map((movie) => {
           return (<div key={movie.id} onClick={() => { setShowCard(true) }}>{movie.title}</div>)
         })}
 
       </Carousel>
       {showCard && (
-        <FilmCard />
+        <FilmCard id = "filmCard3" />
       )}
 
     </React.Fragment >
