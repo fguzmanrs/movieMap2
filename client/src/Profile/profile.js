@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -30,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile({ user }) {
+export default function Profile(props, { user }) {
   const classes = useStyles();
 
-  console.log("🌽profile's user: ", user);
+  console.log("🌽profile's user: ", props.user);
 
   //   const firstNameRef = useRef();
   //   const lastNameRef = useRef();
@@ -60,6 +61,10 @@ export default function Profile({ user }) {
     console.log("🌭 form", form.get("firstName"));
     //! Send updated data to server
     updateSettings(form, "accountInfo");
+    console.log("🍢", props);
+    // props.history.push("/profile");
+    // window.location.replace("/profile");
+    reload();
   };
 
   //! Handle submit user's password
@@ -81,7 +86,17 @@ export default function Profile({ user }) {
 
     //! Send updated data to server
     updateSettings(data, "password");
+    console.log("🍢", props);
+    props.push("/profile");
   };
+
+  function reload() {
+    const current = props.location.pathname;
+    props.history.replace(`/reload`);
+    setTimeout(() => {
+      props.history.replace(current);
+    });
+  }
 
   return (
     <div className={classes.root}>
@@ -106,14 +121,14 @@ export default function Profile({ user }) {
                 id="standard-helperText"
                 label="First Name"
                 name="firstName"
-                defaultValue={user.firstName}
+                defaultValue={props.user.firstName}
                 // inputProps={{ref: input => this.titleInput = input}}
               />
               <TextField
                 id="standard-helperText"
                 label="Last Name"
                 name="lastName"
-                defaultValue={user.lastName}
+                defaultValue={props.user.lastName}
               />
 
               <Button raised="raised" component="label" color="primary">

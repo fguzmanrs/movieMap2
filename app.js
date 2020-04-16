@@ -76,8 +76,12 @@ app.use(cors(corsOptionsDelegate));
 // } else {
 //   app.use(express.static(path.join(__dirname, "public")));
 // }
+
+// server server's user profile images for frontend
+app.use(express.static(path.join(__dirname, "public")));
+
 //! For test API call from frontend with react
-app.use(express.static("client/build"));
+// app.use(express.static("client/build"));
 
 // Body parser
 app.use(express.json());
@@ -90,6 +94,10 @@ app.use(cookieParser());
 app.use("/api/movies", movieRouter);
 app.use("/api/users", userRouter);
 app.use("/api/reviews", reviewRouter);
+// app.get("/images", (req, res) => {
+//   console.log("🍥", req.url);
+//   res.sendFile(path.join(__dirname), `/images/default.png`);
+// });
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"));

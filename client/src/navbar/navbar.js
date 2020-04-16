@@ -12,6 +12,7 @@ import Searchbar from "./searchbar.js";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
+import Avatar from "@material-ui/core/Avatar";
 
 import "./navbar.css";
 
@@ -193,7 +194,15 @@ export default function PrimarySearchAppBar(props) {
             <div className="navMenu">
               <Link to="/about">About</Link>
             </div>
-            <IconButton
+            <Avatar
+              alt="e"
+              src={
+                isLogin
+                  ? `/images/users/${currentUser.photo}`
+                  : "/images/users/default.png"
+              }
+            />
+            {/* <IconButton
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
@@ -202,7 +211,7 @@ export default function PrimarySearchAppBar(props) {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton> */}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
