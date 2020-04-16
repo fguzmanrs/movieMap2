@@ -82,7 +82,7 @@ app.use(cors(corsOptionsDelegate));
 app.use(express.static("client/build"));
 
 // server server's user profile images for frontend
-app.use(express.static(path.join(__dirname, "/public/assets/images")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Body parser
 app.use(express.json());
