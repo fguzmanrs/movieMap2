@@ -182,7 +182,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   //* 1. Check if a user is logged in(via JWT)
   const token = req.cookies.jwt;
   console.log("🍑token:", token, req.cookies);
-
+  console.log("🍳", req.body);
   if (!token) {
     return next(
       new ErrorFactory(401, "You are not logged in! Please log in first.")
@@ -321,6 +321,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 //! ROUTE: update password
 exports.updatePassword = catchAsync(async (req, res, next) => {
+  console.log("🦴 req.body", req.body);
   //* 1. Find user
   db.user.findOne(
     { _id: mongojs.ObjectId(req.user._id) },
@@ -329,7 +330,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       if (!user) {
         return next(new ErrorFactory(401, "Please login first please!"));
       }
-
+      console.log("🦴 req.body, userpwd", req, req.body.formData);
       //* 2. Check if the entered current pwd is correct
       const pwdIsCorrect = await bcrypt.compare(
         req.body.currentPassword,

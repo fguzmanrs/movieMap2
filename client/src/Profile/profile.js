@@ -39,7 +39,8 @@ export default function Profile({ user }) {
   //   const lastNameRef = useRef();
   //   const photoRef = useRef();
 
-  const handleSubmit = (e) => {
+  //! Handle submit user's basic info
+  const handleSubmitAccount = (e) => {
     e.preventDefault();
     const { firstName, lastName, photo } = e.currentTarget.elements;
 
@@ -56,8 +57,30 @@ export default function Profile({ user }) {
     form.append("lastName", lastName.value);
     form.append("photo", photo.files[0]);
 
+    console.log("🌭 form", form.get("firstName"));
     //! Send updated data to server
     updateSettings(form, "accountInfo");
+  };
+
+  //! Handle submit user's password
+  const handleSubmitPassword = (e) => {
+    e.preventDefault();
+
+    const { currentPassword, newPassword } = e.currentTarget.elements;
+
+    console.log(
+      "🥓form data(currentPassword.value, newPassword.value): ",
+      currentPassword.value,
+      newPassword.value
+    );
+
+    const data = {
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    };
+
+    //! Send updated data to server
+    updateSettings(data, "password");
   };
 
   return (
@@ -77,7 +100,7 @@ export default function Profile({ user }) {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             malesuada lacus ex, sit amet blandit leo lobortis eget.
           </Typography> */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitAccount}>
             <div>
               <TextField
                 id="standard-helperText"
@@ -127,22 +150,36 @@ export default function Profile({ user }) {
           <Typography className={classes.heading}>Change Password</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <form onSubmit={handleSubmitPassword}>
+            <div>
+              <TextField
+                id="standard-helperText"
+                label="Current password"
+                name="currentPassword"
+                type="password"
+                // defaultValue={user.password}
+                // inputProps={{ref: input => this.titleInput = input}}
+              />
+
+              <TextField
+                id="standard-helperText"
+                label="New password"
+                name="newPassword"
+                type="password"
+                // defaultValue=""
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                update
+              </Button>
+            </div>
+          </form>
         </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel disabled>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3a-content"
-          id="panel3a-header"
-        >
-          <Typography className={classes.heading}>
-            Disabled Expansion Panel
-          </Typography>
-        </ExpansionPanelSummary>
       </ExpansionPanel>
     </div>
   );
