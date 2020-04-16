@@ -64,7 +64,7 @@ function App(props) {
     setUserPopulated(undefined);
     setUser(undefined);
     console.log("🍦props in app.js: ", props);
-    window.location.assign("/");
+    // window.location.assign("/");
   };
 
   // Detect user's change and call another ajax call for detail user info(list populated one)

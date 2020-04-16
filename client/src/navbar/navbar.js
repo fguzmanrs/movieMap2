@@ -189,9 +189,9 @@ export default function Navbar(props) {
           <div className={classes.sectionDesktop}>
             {isLogin ? (
               <div className="navMenu">
-                <a to="/about" onClick={props.setLogout}>
+                <Link to="/" onClick={props.setLogout}>
                   Logout
-                </a>
+                </Link>
                 <Link to="/profile">Account</Link>
               </div>
             ) : (
