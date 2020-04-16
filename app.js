@@ -77,11 +77,11 @@ app.use(cors(corsOptionsDelegate));
 //   app.use(express.static(path.join(__dirname, "public")));
 // }
 
-// server server's user profile images for frontend
-app.use(express.static(path.join(__dirname, "public")));
-
 //! For test API call from frontend with react
 app.use(express.static("client/build"));
+
+// server server's user profile images for frontend
+app.use(express.static(path.join(__dirname, "public/assets/images")));
 
 // Body parser
 app.use(express.json());
