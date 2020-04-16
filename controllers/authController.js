@@ -182,7 +182,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   //* 1. Check if a user is logged in(via JWT)
   const token = req.cookies.jwt;
   console.log("🍑token:", token, req.cookies);
-  console.log("🍳", req.body);
+  console.log("🍳req.body", req.body);
   if (!token) {
     return next(
       new ErrorFactory(401, "You are not logged in! Please log in first.")

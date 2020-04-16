@@ -1,0 +1,18 @@
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.makeStyles-sectionDesktop-8 > * {
+  top: 50%;
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+}
+
+.navMenu > * {
+  margin-right: 20px;
+  font-size: 20px;
+}

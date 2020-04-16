@@ -13,6 +13,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 
+import "./navbar.css";
+
 //! Bring Context(Global stsate)
 import CurrentUserContext from "../context/current-user.context/current-user.context";
 
@@ -166,17 +168,31 @@ export default function PrimarySearchAppBar(props) {
       {console.log("🐸from nav", isLogin, currentUser)}
       <AppBar position="static">
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            className={(classes.title, "navMenu")}
+            variant="h6"
+            noWrap
+          >
             <Link to="/">Movie Map</Link>
           </Typography>
-          <Searchbar onChange={props.onChange}/>
+          <Searchbar onChange={props.onChange} />
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Link to="/signIn">Login / Sign up</Link>
-            <Link to="/about">About</Link>
-            <Link to="/profile">Account</Link>
-
+            {isLogin ? (
+              <div className="navMenu">
+                <Link to="/">Logout</Link>
+                <Link to="/profile">Account</Link>
+              </div>
+            ) : (
+              <div className="navMenu">
+                <Link to="/signIn">Login</Link>
+                <Link to="/signUp">Signup</Link>
+              </div>
+            )}
+            <div className="navMenu">
+              <Link to="/about">About</Link>
+            </div>
             <IconButton
               edge="end"
               aria-label="account of current user"
