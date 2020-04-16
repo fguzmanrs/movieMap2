@@ -81,7 +81,7 @@ app.use(cors(corsOptionsDelegate));
 app.use(express.static(path.join(__dirname, "public")));
 
 //! For test API call from frontend with react
-// app.use(express.static("client/build"));
+app.use(express.static("client/build"));
 
 // Body parser
 app.use(express.json());
