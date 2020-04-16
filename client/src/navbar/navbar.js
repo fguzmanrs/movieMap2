@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import axios from "axios";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,7 +12,7 @@ import Searchbar from "./searchbar.js";
 // import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 
 import "./navbar.css";
@@ -172,6 +173,7 @@ export default function Navbar(props) {
         currentUser,
         currentPhoto
       )}
+      {console.log("🍙props from navbar:", props)}
       <AppBar position="static">
         <Toolbar>
           <Typography
@@ -187,7 +189,9 @@ export default function Navbar(props) {
           <div className={classes.sectionDesktop}>
             {isLogin ? (
               <div className="navMenu">
-                <Link to="/">Logout</Link>
+                <a to="/about" onClick={props.setLogout}>
+                  Logout
+                </a>
                 <Link to="/profile">Account</Link>
               </div>
             ) : (

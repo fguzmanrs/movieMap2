@@ -15,6 +15,7 @@ const CurrentUserContext = createContext({
   //   myWatchList: [],
   setCurrentUser: () => {},
   setCurrentPhoto: () => {},
+  setLogout: () => {},
 });
 
 export default CurrentUserContext;
