@@ -17,7 +17,7 @@ import Avatar from "@material-ui/core/Avatar";
 import "./navbar.css";
 
 //! Bring Context(Global stsate)
-import CurrentUserContext from "../context/current-user.context/current-user.context";
+import CurrentUserContext from "../context/current-user.context";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar(props) {
+export default function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -162,11 +162,16 @@ export default function PrimarySearchAppBar(props) {
   );
 
   //! Use Context data
-  const { isLogin, currentUser } = useContext(CurrentUserContext);
+  const { isLogin, currentUser, currentPhoto } = useContext(CurrentUserContext);
 
   return (
     <div className={classes.grow}>
-      {console.log("🐸from nav", isLogin, currentUser)}
+      {console.log(
+        "🐸ContextAPI data in nav from App.js",
+        isLogin,
+        currentUser,
+        currentPhoto
+      )}
       <AppBar position="static">
         <Toolbar>
           <Typography
@@ -199,7 +204,8 @@ export default function PrimarySearchAppBar(props) {
               src={
                 isLogin
                   ? `/images/users/${currentUser.photo}`
-                  : "/images/users/default.png"
+                  : // ? `/images/users/${currentPhoto}`
+                    "/images/users/user-default.png"
               }
             />
             {/* <IconButton

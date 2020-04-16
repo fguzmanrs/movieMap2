@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -14,6 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Icon from "@material-ui/core/Icon";
+
+import CurrentUserContext from "../context/current-user.context";
 
 import "./profile.style.css";
 
@@ -31,40 +33,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile(props, { user }) {
+export default function Profile(props) {
   const classes = useStyles();
 
   console.log("🌽profile's user: ", props.user);
+  const currentUserContext = useContext(CurrentUserContext);
 
-  //   const firstNameRef = useRef();
-  //   const lastNameRef = useRef();
-  //   const photoRef = useRef();
+  // const [userFirtName, setUserFirstName] = useState(
+  //   currentUserContext.currentUser.firstName
+  // );
+  // const [userLastName, setUserLastName] = useState(
+  //   currentUserContext.currentUser.lastName
+  // );
+
+  //! Update user's data in App.js
+  // to instantly update navbar's user image when a user update a photo here
+  //* Solution 1: use seperate photo context
+  // currentUserContext.setCurrentPhoto = (newPhoto) => {
+  //   props.setCurrentPhoto(newPhoto);
+  // };
+  //* Solution 2: partially update user's context
+  currentUserContext.setCurrentUser = (firstName, lastName, photo) => {
+    props.setCurrentUser({ ...props.currentUser, firstName, lastName, photo });
+  };
 
   //! Handle submit user's basic info
-  const handleSubmitAccount = (e) => {
+  const handleSubmitAccount = async (e) => {
     e.preventDefault();
     const { firstName, lastName, photo } = e.currentTarget.elements;
 
-    console.log(
-      "🍖form data(firstname.value, lastname.value, photo, photo.files): ",
-      firstName.value,
-      lastName.value,
-      photo,
-      photo.files
-    );
+    // console.log(
+    //   "🍖form data(firstname.value, lastname.value, photo, photo.files): ",
+    //   firstName.value,
+    //   lastName.value,
+    //   photo,
+    //   photo.files
+    // );
 
     const form = new FormData();
     form.append("firstName", firstName.value);
     form.append("lastName", lastName.value);
     form.append("photo", photo.files[0]);
+    // console.log("🌭 form", form.get("firstName"));
 
-    console.log("🌭 form", form.get("firstName"));
     //! Send updated data to server
-    updateSettings(form, "accountInfo");
-    console.log("🍢", props);
+    const updatedUser = await updateSettings(form, "accountInfo");
+    console.log("🍣", updatedUser.photo);
+
+    //* Update user's photo in App.js
+    // currentUserContext.setCurrentPhoto(updatedUser.photo);
+    currentUserContext.setCurrentUser(
+      updatedUser.firstName,
+      updatedUser.lastName,
+      updatedUser.photo
+    );
+
+    // setUserFirstName(updatedUser.firstName);
+    // setUserLastName(updatedUser.LastName);
+
+    //* Reload page
     // props.history.push("/profile");
     // window.location.replace("/profile");
-    reload();
+    // reload();
   };
 
   //! Handle submit user's password
@@ -87,19 +117,15 @@ export default function Profile(props, { user }) {
     //! Send updated data to server
     updateSettings(data, "password");
     console.log("🍢", props);
-    props.push("/profile");
+    // props.push("/profile");
   };
-
-  function reload() {
-    const current = props.location.pathname;
-    props.history.replace(`/reload`);
-    setTimeout(() => {
-      props.history.replace(current);
-    });
-  }
 
   return (
     <div className={classes.root}>
+      {console.log(
+        "🍤 current user contextAPI: ",
+        currentUserContext.currentUser
+      )}
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -121,14 +147,18 @@ export default function Profile(props, { user }) {
                 id="standard-helperText"
                 label="First Name"
                 name="firstName"
-                defaultValue={props.user.firstName}
+                // defaultValue={props.user.firstName}
+                defaultValue={currentUserContext.currentUser.firstName}
+                // defaultValue={userFirtName}
                 // inputProps={{ref: input => this.titleInput = input}}
               />
               <TextField
                 id="standard-helperText"
                 label="Last Name"
                 name="lastName"
-                defaultValue={props.user.lastName}
+                // defaultValue={props.user.lastName}
+                defaultValue={currentUserContext.currentUser.lastName}
+                // defaultValue={userLastName}
               />
 
               <Button raised="raised" component="label" color="primary">
@@ -199,6 +229,15 @@ export default function Profile(props, { user }) {
     </div>
   );
 }
+
+// function reload() {
+//   const current = props.location.pathname;
+//   props.history.replace(`/reload`);
+//   // Not updating data part in the page, just reloading and return the same previous page even if data is updated. Not suitable for injecting updated data to page.
+//   setTimeout(() => {
+//     props.history.replace(current);
+//   });
+// }
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {

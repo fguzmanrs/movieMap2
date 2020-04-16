@@ -13,7 +13,7 @@ import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
 
-import CurrentUserContext from "./context/current-user.context/current-user.context";
+import CurrentUserContext from "./context/current-user.context";
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
@@ -32,6 +32,8 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
+  //! State: user's profile photo
+  const [photo, setPhoto] = useState("");
 
   // State: searchbar genre
   const [search, setSearch] = useState([]);
@@ -43,6 +45,9 @@ function App(props) {
   currentUserContext.setCurrentUser = (newUser) => {
     setUser(newUser);
   };
+  // currentUserContext.setCurrentPhoto = (newPhoto) => {
+  //   setPhoto(newPhoto);
+  // };
 
   // Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
@@ -72,6 +77,8 @@ function App(props) {
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
+        // currentPhoto: userPopulated ? userPopulated.photo : "",
+        currentPhoto: userPopulated ? photo : "",
       }}
     >
       <div className="App App-body">
@@ -106,7 +113,8 @@ function App(props) {
                     <Profile
                       {...props}
                       user={userPopulated}
-                      // setCurrentUser={currentUserContext.setCurrentUser}
+                      // setCurrentPhoto={currentUserContext.setCurrentPhoto}
+                      setCurrentUser={currentUserContext.setCurrentUser}
                     />
                   </Layout>
                 ) : (

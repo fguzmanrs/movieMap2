@@ -16,3 +16,8 @@ a {
   margin-right: 20px;
   font-size: 20px;
 }
+
+.MuiAvatar-root {
+  width: 30px !important;
+  height: 30px !important;
+}

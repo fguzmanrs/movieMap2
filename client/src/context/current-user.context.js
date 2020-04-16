@@ -3,6 +3,7 @@ import { createContext } from "react";
 const CurrentUserContext = createContext({
   isLogin: false,
   currentUser: null,
+  currentPhoto: "",
   //   id: "",
   //   username: "",
   //   email: "",
@@ -13,6 +14,7 @@ const CurrentUserContext = createContext({
   //   myReviewedMovies: [],
   //   myWatchList: [],
   setCurrentUser: () => {},
+  setCurrentPhoto: () => {},
 });
 
 export default CurrentUserContext;

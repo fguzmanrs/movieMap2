@@ -12,7 +12,7 @@ const updateSettings = async (data, type) => {
     console.log("🥐 user update result: ", res);
 
     if (res.status === 200) {
-      return res.data;
+      return res.data.data;
     }
   } catch (err) {
     console.log(err);
