@@ -30,7 +30,6 @@ const app = express();
 const whitelist = [
   "http://localhost:3000",
   "http://localhost:3001",
-  "https://git.heroku.com/secure-retreat-34944",
   "https://secure-retreat-34944.herokuapp.com/",
 ];
 
