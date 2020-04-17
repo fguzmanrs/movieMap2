@@ -9,10 +9,10 @@ export default function SearchBar(props) {
     if (value) {
       console.log("🍫Searchbar's value: ", value); // format: {genre: "Advanture"}
 
-      const keywordId = value.id;
+      // const keywordId = value.id;
 
       // Set search keyword in App.js
-      props.onChange(keywordId);
+      props.onChange(value);
     }
   };
 

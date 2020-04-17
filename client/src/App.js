@@ -108,7 +108,7 @@ function App(props) {
   useEffect(() => {
     if (search) {
       const fetchFunc = async () => {
-        const res = await axios.get(`/api/movies/search/genre/${search}`);
+        const res = await axios.get(`/api/movies/search/genre/${search.id}`);
         const searchMovies = res.data.data;
         console.log("🍿 seachMovies: ", searchMovies);
 
@@ -144,6 +144,7 @@ function App(props) {
                 <MovieCarousel
                   newMovies={newMovies}
                   searchMovies={searchMovies}
+                  searchGenre={search.name}
                 />
               </Layout>
             </Route>

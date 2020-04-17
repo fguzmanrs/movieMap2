@@ -45,8 +45,18 @@ const MovieCarousel = (props) => {
     setCardIndex,
     setShowCard
   ) => {
+    const titleSelector = () => {
+      switch (carouselName) {
+        case "searchMovies":
+          return `Recommended by your search: ${props.searchGenre}`;
+        default:
+          return "Most Popular New Movies";
+      }
+    };
+
     return (
       <div>
+        <h3>{titleSelector()}</h3>
         <Carousel id="carousel1" responsive={responsive}>
           {moviesData.map((movie, i) => {
             //* Card click event handler
