@@ -1,19 +1,19 @@
 import React, { useRef, useState, useContext } from "./node_modules/react";
 // import { Link } from "./node_modules/react-router-dom";
-import { makeStyles } from "./node_modules/@material-ui/core/styles";
-import ExpansionPanel from "./node_modules/@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "./node_modules/@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "./node_modules/@material-ui/core/ExpansionPanelDetails";
-import Typography from "./node_modules/@material-ui/core/Typography";
-import ExpandMoreIcon from "./node_modules/@material-ui/icons/ExpandMore";
-// import Autocomplete from "./node_modules/@material-ui/lab/Autocomplete";
-import TextField from "./node_modules/@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+// import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 import updateSettings from "../util/updateSettings";
-import Button from "./node_modules/@material-ui/core/Button";
-// import IconButton from "./node_modules/@material-ui/core/IconButton";
-// import PhotoCamera from "./node_modules/@material-ui/icons/PhotoCamera";
-import CloudUploadIcon from "./node_modules/@material-ui/icons/CloudUpload";
-// import Icon from "./node_modules/@material-ui/core/Icon";
+import Button from "@material-ui/core/Button";
+// import IconButton from "@material-ui/core/IconButton";
+// import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+// import Icon from "@material-ui/core/Icon";
 
 import CurrentUserContext from "../context/current-user.context";
 
