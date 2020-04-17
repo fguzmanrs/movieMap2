@@ -106,15 +106,17 @@ function App(props) {
 
   // Get search movies
   useEffect(() => {
-    const fetchFunc = async () => {
-      const res = await axios.get(`/api/movies/search/keyword/${search}`);
-      const searchMovies = res.data.data;
-      console.log("🍿 seachMovies: ", searchMovies);
+    if (search) {
+      const fetchFunc = async () => {
+        const res = await axios.get(`/api/movies/search/genre/${search}`);
+        const searchMovies = res.data.data;
+        console.log("🍿 seachMovies: ", searchMovies);
 
-      setSearchMovies(searchMovies);
-    };
+        setSearchMovies(searchMovies);
+      };
 
-    fetchFunc();
+      fetchFunc();
+    }
   }, [search]);
 
   return (

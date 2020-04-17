@@ -172,11 +172,14 @@ export default function FilmReviewCard(props) {
           <div>
             {streamingList
               ? streamingList.map((streaming) => {
-                  //! Atom ticket's logo link is broken, so skip this
-                  if (streaming.name !== "AtomTicketsIVAUS") {
+                  //! Skip some broken logo links
+                  if (
+                    streaming.name !== "AtomTicketsIVAUS" &&
+                    streaming.name !== "DisneyPlusIVAUS"
+                  ) {
                     return (
                       <a
-                        key={streaming.url}
+                        key={`${streaming.icon}`}
                         href={`${streaming.url}`}
                         target="_blank"
                       >

@@ -91,7 +91,12 @@ const MovieCarousel = (props) => {
           })}
         </Carousel>
         {showCard && (
-          <FilmCard id="filmCard1" cardIndex={cardIndex} movies={moviesData} />
+          <FilmCard
+            id="filmCard1"
+            cardIndex={cardIndex}
+            movies={moviesData}
+            // name={carouselName}
+          />
         )}
       </div>
     );
@@ -112,14 +117,15 @@ const MovieCarousel = (props) => {
         setCardIndex1,
         setShowCard1
       )}
-      {carouselGenerator(
-        "searchMovies",
-        props.searchMovies,
-        cardIndex2,
-        showCard2,
-        setCardIndex2,
-        setShowCard2
-      )}
+      {props.searchMovies &&
+        carouselGenerator(
+          "searchMovies",
+          props.searchMovies,
+          cardIndex2,
+          showCard2,
+          setCardIndex2,
+          setShowCard2
+        )}
       //! working fine
       {/* <Carousel id="carousel1" responsive={responsive}>
         {props.newMovies.map((movie, i) => {

@@ -251,13 +251,13 @@ exports.getRecommendation = catchAsync(async (req, res, next) => {
   // const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}&with_keywords=${keywordId}`;
 
   const { genreId } = req.params;
-  const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}`;
+  const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}`;
 
   const movies = await axios(tmdbUrl);
 
   res.status(200).json({
     status: "success",
-    data: movies.data,
+    data: movies.data.results,
   });
 });
 
