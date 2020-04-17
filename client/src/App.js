@@ -12,9 +12,8 @@ import Forgotpassword from "./forgot-password/forgot-password";
 // import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
-// import react-router (use)
-
 import CurrentUserContext from "./context/current-user.context";
+
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
