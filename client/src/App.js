@@ -5,7 +5,7 @@ import "./App.css";
 import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
-import Profile from "./profile/profile";
+import Profile from "./Profile/profile";
 
 // import { Typography } from "@material-ui/core";
 // import Footer from "./footer/footer.js";
