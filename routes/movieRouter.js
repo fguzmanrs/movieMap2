@@ -25,9 +25,11 @@ router.get("/search/title/:title", movieController.searchMoviesByTitle);
 
 //! Search movies by keyword
 router.get("/search/keyword/:keyword", movieController.searchMoviesByKeyword);
+//! Search movies by genre
+router.get("/search/genre/:genreId", movieController.getRecommendation);
 
 //! Protect below routers : only login user can access below routers
-router.use(authController.protect);
+// router.use(authController.protect);
 
 //! Get similar movies
 router.get("/similar/:movieId", movieController.getSimilarMovies);
@@ -35,7 +37,6 @@ router.get("/similar/:movieId", movieController.getSimilarMovies);
 // 4. Recommend movies
 // used api: TMDB - discover > movie discover with user's the most hitted genre, keyword
 // router.get("/recommend/:genreId/:keywordId", movieController.getRecommendation);
-// router.get("/recommend/:genreId", movieController.getRecommendation);
 
 // 5. Create a movie(When user clicks one specific movie, add a movie to 'movie' table)
 // router.post("/", movieController.createMovie);

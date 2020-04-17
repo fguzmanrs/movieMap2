@@ -224,6 +224,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //! ROUTE: forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  console.log("🧇req.body.email", req.body.email);
   //* Get user info
   db.user.findOne({ email: req.body.email }, async (error, user) => {
     if (!user) {

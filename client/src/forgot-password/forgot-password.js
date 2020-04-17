@@ -13,10 +13,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Link as RouterLink } from "react-router-dom";
-
-import "./signIn.css";
-
 // import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,48 +38,30 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn(props) {
   const classes = useStyles();
 
-  const { setCurrentUser } = props;
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  const [forgotPwdEmail, setforgotPwdEmail] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    name === "username" ? setUsername(value) : setPassword(value);
-  };
+    const email = e.target.value;
 
-  // const handleForgotPassword = async (e) => {
-  //   try {
-  //     await axios.get("");
-  //   } catch (err) {}
-  // };
+    console.log("🥞 email:", email);
+
+    setforgotPwdEmail(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("🧄submit form");
+    console.log("🧄submit form with email:", forgotPwdEmail);
 
     try {
       const res = await axios.post(
-        // "http://localhost:3000/api/users/login",
-        "/api/users/login",
+        "/api/users/forgotPassword",
         {
-          username,
-          password,
+          email: forgotPwdEmail,
         },
         { withCredentials: true }
       );
 
-      console.log("🥒 logged in: ", res);
-      const userData = res.data.data;
-
-      // Save user's data to local state
-      setUser(userData);
-      // Save user's data to context state so parent comp can use it
-      setCurrentUser(userData);
-
-      // Default input fields
-      setUsername("");
-      setPassword("");
+      console.log("🍕 result of forgotpwd api call: ", res);
 
       // Redirect to homepage
       props.history.push("/");
@@ -102,7 +80,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Forgot Password
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
@@ -110,30 +88,13 @@ export default function SignIn(props) {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="email"
+            label="email"
+            name="email"
+            autoComplete="email"
             autoFocus
             onChange={handleChange}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChange}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          {/* <Link href="/home"> */}
           <Button
             type="submit"
             // onClick={() => {props.history.push("/") }}
@@ -142,22 +103,8 @@ export default function SignIn(props) {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Forgot Password
           </Button>
-          {/* </Link> */}
-
-          <Grid container className="signinLink">
-            <Grid item xs>
-              <RouterLink to="/forgotpassword" variant="body2">
-                Forgot password?
-              </RouterLink>
-            </Grid>
-            <Grid item>
-              <RouterLink to="/signUp" variant="body2">
-                {"Don't have an account? SignUp"}
-              </RouterLink>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>

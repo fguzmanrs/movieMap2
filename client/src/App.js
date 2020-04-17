@@ -6,6 +6,10 @@ import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
 import Profile from "./profile/profile";
+import Forgotpassword from "./forgot-password/forgot-password";
+
+// import { Typography } from "@material-ui/core";
+// import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 import CurrentUserContext from "./context/current-user.context";
@@ -28,11 +32,12 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
-  //! State: user's profile photo
-  const [photo, setPhoto] = useState("");
+  //! State: search, search movies
+  const [search, setSearch] = useState("");
+  const [searchMovies, setSearchMovies] = useState([]);
+  //! State: new movies
+  const [newMovies, setNewMovies] = useState([]);
 
-  // State: searchbar genre
-  const [search, setSearch] = useState([]);
   const handleChange = (value) => {
     setSearch(value);
   };
@@ -63,11 +68,9 @@ function App(props) {
     // window.location.assign("/");
   };
 
-  // Detect user's change and call another ajax call for detail user info(list populated one)
+  //* Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
-    console.log("🐤 inside of effect");
     if (user) {
-      console.log("🐦 inside of effect with user");
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
@@ -86,20 +89,49 @@ function App(props) {
     }
   }, [user]);
 
+  //* Get new movies
+  useEffect(() => {
+    const fetchFunc = async () => {
+      const res = await axios.get("/api/movies/recent");
+      const newMovies = res.data.data;
+      console.log("🍿 newMovies: ", newMovies);
+
+      setNewMovies(newMovies);
+    };
+
+    fetchFunc();
+  }, []);
+
+  //* Get search movies
+  useEffect(() => {
+    if (search) {
+      const fetchFunc = async () => {
+        const res = await axios.get(`/api/movies/search/genre/${search.id}`);
+        const searchMovies = res.data.data;
+        console.log("🍿 seachMovies: ", searchMovies);
+
+        setSearchMovies(searchMovies);
+      };
+
+      fetchFunc();
+    }
+  }, [search]);
+
   return (
     <CurrentUserContext.Provider
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
         // currentPhoto: userPopulated ? userPopulated.photo : "",
-        currentPhoto: userPopulated ? photo : "",
+        // currentPhoto: userPopulated ? photo : "",
       }}
     >
       <div className="App App-body">
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
-        {console.log("🍭setlogout: ", currentUserContext.setLogout)}
+        {/* {console.log("🍭setlogout: ", currentUserContext.setLogout)} */}
+        {console.log("🥗search keyword: ", search)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
@@ -107,7 +139,11 @@ function App(props) {
                 onChange={handleChange}
                 setLogout={currentUserContext.setLogout}
               >
-                <MovieCarousel movies={mockData.data} searchedFilms={search} />
+                <MovieCarousel
+                  newMovies={newMovies}
+                  searchMovies={searchMovies}
+                  searchGenre={search.name}
+                />
               </Layout>
             </Route>
 
@@ -116,12 +152,6 @@ function App(props) {
                 <About />
               </Layout>
             </Route>
-
-            {/* <Route path="/profile">
-              <Layout>
-                <About />
-              </Layout>
-            </Route> */}
 
             <Route
               path="/profile"
@@ -161,6 +191,15 @@ function App(props) {
                     {...props}
                     setCurrentUser={currentUserContext.setCurrentUser}
                   />
+                </Layout>
+              )}
+            ></Route>
+
+            <Route
+              path="/forgotpassword"
+              render={(props) => (
+                <Layout noHeader>
+                  <Forgotpassword {...props} />
                 </Layout>
               )}
             ></Route>
