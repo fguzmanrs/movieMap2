@@ -93,7 +93,6 @@ const MovieCarousel = (props) => {
           return (
             <div
               key={`newMovie-${i}`}
-              onClick={handleClick}
               className={`newMoviePoster`}
               id={`newMoviePoster-${i}`}
             >
@@ -101,6 +100,8 @@ const MovieCarousel = (props) => {
               <img
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                 className="poster"
+                style={{ cursor: "pointer" }}
+                onClick={handleClick}
               />
             </div>
           );

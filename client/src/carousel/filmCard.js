@@ -94,11 +94,11 @@ export default function FilmReviewCard(props) {
     >
       <CardHeader
         style={{ backgroundColor: "#99a0f9", color: "white" }}
-        avatar={
-          <Avatar aria-label="film" className={classes.avatar}>
-            R
-          </Avatar>
-        }
+        // avatar={
+        //   <Avatar aria-label="film" className={classes.avatar}>
+        //     R
+        //   </Avatar>
+        // }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -175,7 +175,11 @@ export default function FilmReviewCard(props) {
                   //! Atom ticket's logo link is broken, so skip this
                   if (streaming.name !== "AtomTicketsIVAUS") {
                     return (
-                      <a key={streaming.url} href={`${streaming.url}`}>
+                      <a
+                        key={streaming.url}
+                        href={`${streaming.url}`}
+                        target="_blank"
+                      >
                         <img src={`${streaming.icon}`}></img>
                       </a>
                     );
