@@ -32,12 +32,10 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
-  //! State: user's profile photo
-  // const [photo, setPhoto] = useState("");
-
-  // State: searchbar genre
+  //! State: search, search movies
   const [search, setSearch] = useState("");
   const [searchMovies, setSearchMovies] = useState([]);
+  //! State: new movies
   const [newMovies, setNewMovies] = useState([]);
 
   const handleChange = (value) => {
@@ -70,7 +68,7 @@ function App(props) {
     // window.location.assign("/");
   };
 
-  // Detect user's change and call another ajax call for detail user info(list populated one)
+  //* Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
     if (user) {
       const fetchFunc = async () => {
@@ -91,7 +89,7 @@ function App(props) {
     }
   }, [user]);
 
-  // Get new movies
+  //* Get new movies
   useEffect(() => {
     const fetchFunc = async () => {
       const res = await axios.get("/api/movies/recent");
@@ -104,7 +102,7 @@ function App(props) {
     fetchFunc();
   }, []);
 
-  // Get search movies
+  //* Get search movies
   useEffect(() => {
     if (search) {
       const fetchFunc = async () => {

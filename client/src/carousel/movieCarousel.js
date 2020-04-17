@@ -34,9 +34,7 @@ const MovieCarousel = (props) => {
   const [showCard2, setShowCard2] = useState(false);
   const [cardIndex2, setCardIndex2] = useState(-1);
 
-  // const [showCard2, setShowCard2] = useState(false);
-  // const [showCard3, setShowCard3] = useState(false);
-
+  //! Carousle Generator
   const carouselGenerator = (
     carouselName,
     moviesData,
@@ -45,10 +43,11 @@ const MovieCarousel = (props) => {
     setCardIndex,
     setShowCard
   ) => {
+    //* Carousel's title
     const titleSelector = () => {
       switch (carouselName) {
         case "searchMovies":
-          return `Recommended by your last search: ${props.searchGenre}`;
+          return `Recommended by Your Last Search: ${props.searchGenre}`;
         default:
           return "Most Popular New Movies";
       }
@@ -59,14 +58,14 @@ const MovieCarousel = (props) => {
         <h3>{titleSelector()}</h3>
         <Carousel id="carousel1" responsive={responsive}>
           {moviesData.map((movie, i) => {
-            //* Card click event handler
+            //* 1. Card click event handler
             const handleClick = (e) => {
               console.log(
                 "🥨 e.target: ",
                 e.target.closest(`.${carouselName}Poster`)
               );
 
-              //* Determin which poster is clicked and render accordingly
+              //* 2. Determin which poster is clicked and render accordingly
               const posterHtml = e.target.closest(`.${carouselName}Poster`);
               const index = posterHtml.id.split(`${carouselName}Poster-`)[1];
               console.log("🍞 index: ", index);
@@ -75,11 +74,11 @@ const MovieCarousel = (props) => {
                 console.log("you clicked the same poster so close it.");
                 setShowCard(!showCard);
               } else {
-                console.log("you clicked differrent poster.");
-                console.log("before b", showCard);
+                console.log(
+                  "you clicked differrent poster so keep it open but change poster."
+                );
                 setShowCard(true);
                 setCardIndex(index);
-                console.log("after b", showCard);
               }
             };
 
@@ -101,12 +100,7 @@ const MovieCarousel = (props) => {
           })}
         </Carousel>
         {showCard && (
-          <FilmCard
-            id="filmCard1"
-            cardIndex={cardIndex}
-            movies={moviesData}
-            // name={carouselName}
-          />
+          <FilmCard id="filmCard1" cardIndex={cardIndex} movies={moviesData} />
         )}
       </div>
     );
@@ -114,10 +108,7 @@ const MovieCarousel = (props) => {
 
   return (
     <React.Fragment>
-      {
-        //! 6. Inject state data to component
-        console.log("🥕new movies: ", props.newMovies)
-      }
+      {console.log("🥕new movies: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
       {carouselGenerator(
         "newMovies",

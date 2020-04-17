@@ -170,27 +170,26 @@ export default function FilmReviewCard(props) {
           </Typography>
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
           <div>
-            {streamingList
-              ? streamingList.map((streaming) => {
-                  //! Skip some broken logo links
-                  if (
-                    streaming.name !== "AtomTicketsIVAUS" &&
-                    streaming.name !== "DisneyPlusIVAUS"
-                  ) {
-                    return (
-                      <a
-                        key={`${streaming.icon}`}
-                        href={`${streaming.url}`}
-                        target="_blank"
-                      >
-                        <img src={`${streaming.icon}`}></img>
-                      </a>
-                    );
-                  } else {
-                    return;
-                  }
-                })
-              : ""}
+            {streamingList &&
+              streamingList.map((streaming) => {
+                //! Skip some broken logo links
+                if (
+                  streaming.name !== "AtomTicketsIVAUS" &&
+                  streaming.name !== "DisneyPlusIVAUS"
+                ) {
+                  return (
+                    <a
+                      key={`${streaming.icon}`}
+                      href={`${streaming.url}`}
+                      target="_blank"
+                    >
+                      <img src={`${streaming.icon}`}></img>
+                    </a>
+                  );
+                } else {
+                  return;
+                }
+              })}
           </div>
         </div>
       </CardContent>
