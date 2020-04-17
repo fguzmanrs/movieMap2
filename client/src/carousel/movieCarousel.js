@@ -25,7 +25,9 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
-  const [showCard, setShowCard] = useState(false);
+  const [showCard1, setShowCard1] = useState(false);
+  const [showCard2, setShowCard2] = useState(false);
+  const [showCard3, setShowCard3] = useState(false);
 
   //! 1. Define state(local variable for this comp) using a useState(init value)
   // reason: sometimes general variable cannot properly work to be used inside of Return(below HTML rendering part) and it helps auto re-rendering
@@ -71,7 +73,7 @@ const MovieCarousel = (props) => {
             <div
               key={movie.id}
               onClick={() => {
-                setShowCard(true);
+                setShowCard1(true);
               }}
             >
               {movie.title}
@@ -79,7 +81,7 @@ const MovieCarousel = (props) => {
           );
         })}
       </Carousel>
-      {showCard && <FilmCard id="filmCard1" />}
+      {showCard1 && <FilmCard id="filmCard1" />}
 
       <Carousel id="carousel2" responsive={responsive}>
         {props.movies.map((movie) => {
@@ -87,7 +89,7 @@ const MovieCarousel = (props) => {
             <div
               key={movie.id}
               onClick={() => {
-                setShowCard(true);
+                setShowCard2(true);
               }}
             >
               {movie.title}
@@ -95,7 +97,7 @@ const MovieCarousel = (props) => {
           );
         })}
       </Carousel>
-      {showCard && <FilmCard id="filmCard2" />}
+      {showCard2 && <FilmCard id="filmCard2" />}
 
       <Carousel id="carousel3" responsive={responsive}>
         {props.movies.map((movie) => {
@@ -103,7 +105,7 @@ const MovieCarousel = (props) => {
             <div
               key={movie.id}
               onClick={() => {
-                setShowCard(true);
+                setShowCard3(true);
               }}
             >
               {movie.title}
@@ -111,7 +113,7 @@ const MovieCarousel = (props) => {
           );
         })}
       </Carousel>
-      {showCard && <FilmCard id="filmCard3" />}
+      {showCard3 && <FilmCard id="filmCard3" />}
     </React.Fragment>
   );
 };
