@@ -26,11 +26,11 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
-  // First Carousel
+  //! First Carousel
   const [showCard1, setShowCard1] = useState(false);
   const [cardIndex1, setCardIndex1] = useState(-1);
 
-  // Second Carousel
+  //! Second Carousel
   const [showCard2, setShowCard2] = useState(false);
   const [cardIndex2, setCardIndex2] = useState(-1);
 
@@ -101,15 +101,24 @@ const MovieCarousel = (props) => {
     <React.Fragment>
       {
         //! 6. Inject state data to component
-        console.log("🥕movies: ", props.newMovies)
+        console.log("🥕new movies: ", props.newMovies)
       }
+      {console.log("🥕search movies: ", props.searchMovies)}
       {carouselGenerator(
-        "newMovie",
+        "newMovies",
         props.newMovies,
         cardIndex1,
         showCard1,
         setCardIndex1,
         setShowCard1
+      )}
+      {carouselGenerator(
+        "searchMovies",
+        props.searchMovies,
+        cardIndex2,
+        showCard2,
+        setCardIndex2,
+        setShowCard2
       )}
       //! working fine
       {/* <Carousel id="carousel1" responsive={responsive}>

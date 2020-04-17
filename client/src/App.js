@@ -37,11 +37,12 @@ function App(props) {
 
   // State: searchbar genre
   const [search, setSearch] = useState("");
+  const [searchMovies, setSearchMovies] = useState([]);
+  const [newMovies, setNewMovies] = useState([]);
+
   const handleChange = (value) => {
     setSearch(value);
   };
-
-  const [newMovies, setNewMovies] = useState([]);
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
@@ -90,6 +91,7 @@ function App(props) {
     }
   }, [user]);
 
+  // Get new movies
   useEffect(() => {
     const fetchFunc = async () => {
       const res = await axios.get("/api/movies/recent");
@@ -101,6 +103,19 @@ function App(props) {
 
     fetchFunc();
   }, []);
+
+  // Get search movies
+  useEffect(() => {
+    const fetchFunc = async () => {
+      const res = await axios.get(`/api/movies/search/keyword/${search}`);
+      const searchMovies = res.data.data;
+      console.log("🍿 seachMovies: ", searchMovies);
+
+      setSearchMovies(searchMovies);
+    };
+
+    fetchFunc();
+  }, [search]);
 
   return (
     <CurrentUserContext.Provider
@@ -124,7 +139,10 @@ function App(props) {
                 onChange={handleChange}
                 setLogout={currentUserContext.setLogout}
               >
-                <MovieCarousel newMovies={newMovies} searchedFilms={search} />
+                <MovieCarousel
+                  newMovies={newMovies}
+                  searchMovies={searchMovies}
+                />
               </Layout>
             </Route>
 

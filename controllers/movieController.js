@@ -246,20 +246,20 @@ exports.searchMoviesByKeyword = catchAsync(async (req, res, next) => {
 // Recommend movies based on a genre id, keyword id
 // required parameter: TMDB genre id, keyword id
 // Reduced to TMDB genre id (by dropdown menu)
-// exports.getRecommendation = catchAsync(async (req, res, next) => {
-//   // const { genreId, keywordId } = req.params;
-//   // const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}&with_keywords=${keywordId}`;
-//   console.info("movieController.getRecommendation();");
-//   const { genreId } = req.params;
-//   const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}`;
+exports.getRecommendation = catchAsync(async (req, res, next) => {
+  // const { genreId, keywordId } = req.params;
+  // const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}&with_keywords=${keywordId}`;
 
-//   const movies = await axios(tmdbUrl);
+  const { genreId } = req.params;
+  const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}`;
 
-//   res.status(200).json({
-//     status: "success",
-//     data: movies.data,
-//   });
-// });
+  const movies = await axios(tmdbUrl);
+
+  res.status(200).json({
+    status: "success",
+    data: movies.data,
+  });
+});
 
 // Post a movie to DB
 // required info via req.body: title, overview, genreId, popularity, posterPath, releaseDate, keywordId(stringified array), tmdbRate, tmdbId(stringified array)

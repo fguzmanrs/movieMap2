@@ -12,7 +12,7 @@ export default function SearchBar(props) {
       const keyword = value.genre;
 
       // Set search keyword in App.js
-      props.onChange(keyword);
+      props.onChange(keyword.toLowerCase());
     }
   };
 
