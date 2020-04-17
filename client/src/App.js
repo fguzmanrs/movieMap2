@@ -33,13 +33,15 @@ function App(props) {
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
   //! State: user's profile photo
-  const [photo, setPhoto] = useState("");
+  // const [photo, setPhoto] = useState("");
 
   // State: searchbar genre
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState("");
   const handleChange = (value) => {
     setSearch(value);
   };
+
+  const [newMovies, setNewMovies] = useState([]);
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
@@ -69,9 +71,7 @@ function App(props) {
 
   // Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
-    console.log("🐤 inside of effect");
     if (user) {
-      console.log("🐦 inside of effect with user");
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
@@ -90,20 +90,33 @@ function App(props) {
     }
   }, [user]);
 
+  useEffect(() => {
+    const fetchFunc = async () => {
+      const res = await axios.get("/api/movies/recent");
+      const newMovies = res.data.data;
+      console.log("🍿 newMovies: ", newMovies);
+
+      setNewMovies(newMovies);
+    };
+
+    fetchFunc();
+  }, []);
+
   return (
     <CurrentUserContext.Provider
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
         // currentPhoto: userPopulated ? userPopulated.photo : "",
-        currentPhoto: userPopulated ? photo : "",
+        // currentPhoto: userPopulated ? photo : "",
       }}
     >
       <div className="App App-body">
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
-        {console.log("🍭setlogout: ", currentUserContext.setLogout)}
+        {/* {console.log("🍭setlogout: ", currentUserContext.setLogout)} */}
+        {console.log("🥗search keyword: ", search)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
@@ -111,7 +124,7 @@ function App(props) {
                 onChange={handleChange}
                 setLogout={currentUserContext.setLogout}
               >
-                <MovieCarousel movies={mockData.data} searchedFilms={search} />
+                <MovieCarousel newMovies={newMovies} searchedFilms={search} />
               </Layout>
             </Route>
 
@@ -120,12 +133,6 @@ function App(props) {
                 <About />
               </Layout>
             </Route>
-
-            {/* <Route path="/profile">
-              <Layout>
-                <About />
-              </Layout>
-            </Route> */}
 
             <Route
               path="/profile"
