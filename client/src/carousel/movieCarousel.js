@@ -48,7 +48,7 @@ const MovieCarousel = (props) => {
     const titleSelector = () => {
       switch (carouselName) {
         case "searchMovies":
-          return `Recommended by your search: ${props.searchGenre}`;
+          return `Recommended by your last search: ${props.searchGenre}`;
         default:
           return "Most Popular New Movies";
       }
@@ -127,7 +127,7 @@ const MovieCarousel = (props) => {
         setCardIndex1,
         setShowCard1
       )}
-      {props.searchMovies &&
+      {props.searchMovies.length > 1 &&
         carouselGenerator(
           "searchMovies",
           props.searchMovies,
@@ -136,83 +136,6 @@ const MovieCarousel = (props) => {
           setCardIndex2,
           setShowCard2
         )}
-      //! working fine
-      {/* <Carousel id="carousel1" responsive={responsive}>
-        {props.newMovies.map((movie, i) => {
-          //* Card click event handler
-          const handleClick = (e) => {
-            console.log("🥨 e.target: ", e.target.closest(".newMoviePoster"));
-
-            //* Determin which poster is clicked and render accordingly
-            const posterHtml = e.target.closest(".newMoviePoster");
-            const index = posterHtml.id.split("newMoviePoster-")[1];
-            console.log("🍞 index: ", index);
-
-            if (card1Index === index) {
-              console.log("you clicked the same poster so close it.");
-              setShowCard1(!showCard1);
-            } else {
-              console.log("you clicked differrent poster.");
-              console.log("before b", showCard1);
-              setShowCard1(true);
-              setCard1Index(index);
-              console.log("after b", showCard1);
-            }
-          };
-
-          return (
-            <div
-              key={`newMovie-${i}`}
-              className={`newMoviePoster`}
-              id={`newMoviePoster-${i}`}
-            >
-              {console.log("when render b", showCard1, card1Index)}
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                className="poster"
-                style={{ cursor: "pointer" }}
-                onClick={handleClick}
-              />
-            </div>
-          );
-        })}
-      </Carousel>
-      {showCard1 && (
-        <FilmCard
-          id="filmCard1"
-          cardIndex={card1Index}
-          movies={props.newMovies}
-        />
-      )} */}
-      //! working fine
-      {/* <Carousel id="carousel2" responsive={responsive}>
-        {props.movies.map((movie) => {
-          return (
-            <div
-              key={movie.id}
-              onClick={() => {
-                setShowCard2(true);
-              }}
-            ></div>
-          );
-        })}
-      </Carousel>
-      {showCard2 && <FilmCard id="filmCard2" />} */}
-      {/* <Carousel id="carousel3" responsive={responsive}>
-        {props.movies.map((movie) => {
-          return (
-            <div
-              key={movie.id}
-              onClick={() => {
-                setShowCard3(true);
-              }}
-            >
-              {movie.title}
-            </div>
-          );
-        })}
-      </Carousel> 
-      {showCard3 && <FilmCard id="filmCard3" />}*/}
     </React.Fragment>
   );
 };
