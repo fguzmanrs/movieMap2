@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import axios from "axios";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,10 +12,13 @@ import Searchbar from "./searchbar.js";
 // import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import Avatar from "@material-ui/core/Avatar";
+
+import "./navbar.css";
 
 //! Bring Context(Global stsate)
-import CurrentUserContext from "../context/current-user.context/current-user.context";
+import CurrentUserContext from "../context/current-user.context";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -80,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar(props) {
+export default function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -159,25 +163,56 @@ export default function PrimarySearchAppBar(props) {
   );
 
   //! Use Context data
-  const { isLogin, currentUser } = useContext(CurrentUserContext);
+  const { isLogin, currentUser, currentPhoto } = useContext(CurrentUserContext);
 
   return (
     <div className={classes.grow}>
-      {console.log("🐸from nav", isLogin, currentUser)}
+      {console.log(
+        "🐸ContextAPI data in nav from App.js",
+        isLogin,
+        currentUser,
+        currentPhoto
+      )}
+      {console.log("🍙props from navbar:", props)}
       <AppBar position="static">
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            className={(classes.title, "navMenu")}
+            variant="h6"
+            noWrap
+          >
             <Link to="/">Movie Map</Link>
           </Typography>
-          <Searchbar onChange={props.onChange}/>
+          <Searchbar onChange={props.onChange} />
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Link to="/signIn">Login / Sign up</Link>
-            <Link to="/about">About</Link>
-            <Link to="/profile">Account</Link>
-
-            <IconButton
+            {isLogin ? (
+              <div className="navMenu">
+                <Link to="/" onClick={props.setLogout}>
+                  Logout
+                </Link>
+                <Link to="/profile">Account</Link>
+              </div>
+            ) : (
+              <div className="navMenu">
+                <Link to="/signIn">Login</Link>
+                <Link to="/signUp">Signup</Link>
+              </div>
+            )}
+            <div className="navMenu">
+              <Link to="/about">About</Link>
+            </div>
+            <Avatar
+              alt="e"
+              src={
+                isLogin
+                  ? `/images/users/${currentUser.photo}`
+                  : // ? `/images/users/${currentPhoto}`
+                    "/images/users/user-default.png"
+              }
+            />
+            {/* <IconButton
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
@@ -186,7 +221,7 @@ export default function PrimarySearchAppBar(props) {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton> */}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

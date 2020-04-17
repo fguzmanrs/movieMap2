@@ -13,7 +13,7 @@ import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 // import react-router (use)
 
-import CurrentUserContext from "./context/current-user.context/current-user.context";
+import CurrentUserContext from "./context/current-user.context";
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
@@ -32,6 +32,8 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
+  //! State: user's profile photo
+  const [photo, setPhoto] = useState("");
 
   // State: searchbar genre
   const [search, setSearch] = useState([]);
@@ -42,6 +44,27 @@ function App(props) {
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
     setUser(newUser);
+  };
+  // currentUserContext.setCurrentPhoto = (newPhoto) => {
+  //   setPhoto(newPhoto);
+  // };
+
+  currentUserContext.setLogout = (e) => {
+    // Logout from server(delete cooki with JWT)
+    console.log("🍰clicked");
+    const callLogout = async () => {
+      const res = await axios.get("/api/users/logout");
+    };
+
+    callLogout();
+
+    // change isLogin to false
+
+    // delete contextAPI user, userPopulated
+    setUserPopulated(undefined);
+    setUser(undefined);
+    console.log("🍦props in app.js: ", props);
+    // window.location.assign("/");
   };
 
   // Detect user's change and call another ajax call for detail user info(list populated one)
@@ -72,22 +95,28 @@ function App(props) {
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
+        // currentPhoto: userPopulated ? userPopulated.photo : "",
+        currentPhoto: userPopulated ? photo : "",
       }}
     >
       <div className="App App-body">
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
+        {console.log("🍭setlogout: ", currentUserContext.setLogout)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
-              <Layout onChange={handleChange}>
+              <Layout
+                onChange={handleChange}
+                setLogout={currentUserContext.setLogout}
+              >
                 <MovieCarousel movies={mockData.data} searchedFilms={search} />
               </Layout>
             </Route>
 
             <Route path="/about">
-              <Layout>
+              <Layout setLogout={currentUserContext.setLogout}>
                 <About />
               </Layout>
             </Route>
@@ -102,11 +131,12 @@ function App(props) {
               path="/profile"
               render={(props) =>
                 userPopulated ? (
-                  <Layout>
+                  <Layout setLogout={currentUserContext.setLogout}>
                     <Profile
                       {...props}
                       user={userPopulated}
-                      // setCurrentUser={currentUserContext.setCurrentUser}
+                      // setCurrentPhoto={currentUserContext.setCurrentPhoto}
+                      setCurrentUser={currentUserContext.setCurrentUser}
                     />
                   </Layout>
                 ) : (
@@ -118,7 +148,7 @@ function App(props) {
             <Route
               path="/signIn"
               render={(props) => (
-                <Layout noHeader>
+                <Layout noHeader setLogout={currentUserContext.setLogout}>
                   <SignIn
                     {...props}
                     setCurrentUser={currentUserContext.setCurrentUser}
@@ -130,7 +160,7 @@ function App(props) {
             <Route
               path="/signUp"
               render={(props) => (
-                <Layout noHeader>
+                <Layout noHeader setLogout={currentUserContext.setLogout}>
                   <SignUp
                     {...props}
                     setCurrentUser={currentUserContext.setCurrentUser}

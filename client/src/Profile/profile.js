@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -8,43 +9,123 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import updateSettings from "../util/updateSettings";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import Icon from "@material-ui/core/Icon";
+
+import CurrentUserContext from "../context/current-user.context";
+
+import "./profile.style.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: "50%",
+    margin: "0 auto",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
+  button: {
+    margin: theme.spacing(1.5),
+  },
 }));
 
-export default function Profile({ user }) {
+export default function Profile(props) {
   const classes = useStyles();
 
-  console.log("🌽profile's user: ", user);
+  console.log("🌽profile's user: ", props.user);
+  const currentUserContext = useContext(CurrentUserContext);
 
-  //   const firstNameRef = useRef();
-  //   const lastNameRef = useRef();
-  //   const photoRef = useRef();
+  // const [userFirtName, setUserFirstName] = useState(
+  //   currentUserContext.currentUser.firstName
+  // );
+  // const [userLastName, setUserLastName] = useState(
+  //   currentUserContext.currentUser.lastName
+  // );
 
-  const handleSubmit = (e) => {
+  //! Update user's data in App.js
+  // to instantly update navbar's user image when a user update a photo here
+  //* Solution 1: use seperate photo context
+  // currentUserContext.setCurrentPhoto = (newPhoto) => {
+  //   props.setCurrentPhoto(newPhoto);
+  // };
+  //* Solution 2: partially update user's context
+  currentUserContext.setCurrentUser = (firstName, lastName, photo) => {
+    props.setCurrentUser({ ...props.currentUser, firstName, lastName, photo });
+  };
+
+  //! Handle submit user's basic info
+  const handleSubmitAccount = async (e) => {
     e.preventDefault();
-    const res = e.currentTarget.elements;
     const { firstName, lastName, photo } = e.currentTarget.elements;
 
-    console.log("🍖 form data: ", firstName.value, lastName.value, photo.value);
+    // console.log(
+    //   "🍖form data(firstname.value, lastname.value, photo, photo.files): ",
+    //   firstName.value,
+    //   lastName.value,
+    //   photo,
+    //   photo.files
+    // );
 
     const form = new FormData();
     form.append("firstName", firstName.value);
     form.append("lastName", lastName.value);
-    form.append("photo", photo.value);
+    form.append("photo", photo.files[0]);
+    // console.log("🌭 form", form.get("firstName"));
 
-    const updatedRes = updateSettings(form, "accountInfo");
+    //! Send updated data to server
+    const updatedUser = await updateSettings(form, "accountInfo");
+    console.log("🍣", updatedUser.photo);
+
+    //* Update user's photo in App.js
+    // currentUserContext.setCurrentPhoto(updatedUser.photo);
+    currentUserContext.setCurrentUser(
+      updatedUser.firstName,
+      updatedUser.lastName,
+      updatedUser.photo
+    );
+
+    // setUserFirstName(updatedUser.firstName);
+    // setUserLastName(updatedUser.LastName);
+
+    //* Reload page
+    // props.history.push("/profile");
+    // window.location.replace("/profile");
+    // reload();
+  };
+
+  //! Handle submit user's password
+  const handleSubmitPassword = (e) => {
+    e.preventDefault();
+
+    const { currentPassword, newPassword } = e.currentTarget.elements;
+
+    console.log(
+      "🥓form data(currentPassword.value, newPassword.value): ",
+      currentPassword.value,
+      newPassword.value
+    );
+
+    const data = {
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    };
+
+    //! Send updated data to server
+    updateSettings(data, "password");
+    console.log("🍢", props);
+    // props.push("/profile");
   };
 
   return (
     <div className={classes.root}>
+      {console.log(
+        "🍤 current user contextAPI: ",
+        currentUserContext.currentUser
+      )}
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -60,23 +141,47 @@ export default function Profile({ user }) {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             malesuada lacus ex, sit amet blandit leo lobortis eget.
           </Typography> */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitAccount}>
             <div>
               <TextField
                 id="standard-helperText"
                 label="First Name"
                 name="firstName"
-                defaultValue={user.firstName}
+                // defaultValue={props.user.firstName}
+                defaultValue={currentUserContext.currentUser.firstName}
+                // defaultValue={userFirtName}
                 // inputProps={{ref: input => this.titleInput = input}}
               />
               <TextField
                 id="standard-helperText"
                 label="Last Name"
                 name="lastName"
-                defaultValue={user.lastName}
+                // defaultValue={props.user.lastName}
+                defaultValue={currentUserContext.currentUser.lastName}
+                // defaultValue={userLastName}
               />
-              <input type="file" id="myFile" name="photo" />
-              <button>Update</button>
+
+              <Button raised="raised" component="label" color="primary">
+                <CloudUploadIcon />
+                {"Profile Image"}
+                <input style={{ display: "none" }} type="file" name="photo" />
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                update
+              </Button>
+
+              {/* <input
+  type="file"
+  id="myFile"
+  name="photo"
+  aria-label="Profile picture upload"
+  style={{ display: "none" }}
+/> */}
             </div>
           </form>
         </ExpansionPanelDetails>
@@ -90,26 +195,49 @@ export default function Profile({ user }) {
           <Typography className={classes.heading}>Change Password</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <form onSubmit={handleSubmitPassword}>
+            <div>
+              <TextField
+                id="standard-helperText"
+                label="Current password"
+                name="currentPassword"
+                type="password"
+                // defaultValue={user.password}
+                // inputProps={{ref: input => this.titleInput = input}}
+              />
+
+              <TextField
+                id="standard-helperText"
+                label="New password"
+                name="newPassword"
+                type="password"
+                // defaultValue=""
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                update
+              </Button>
+            </div>
+          </form>
         </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel disabled>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3a-content"
-          id="panel3a-header"
-        >
-          <Typography className={classes.heading}>
-            Disabled Expansion Panel
-          </Typography>
-        </ExpansionPanelSummary>
       </ExpansionPanel>
     </div>
   );
 }
+
+// function reload() {
+//   const current = props.location.pathname;
+//   props.history.replace(`/reload`);
+//   // Not updating data part in the page, just reloading and return the same previous page even if data is updated. Not suitable for injecting updated data to page.
+//   setTimeout(() => {
+//     props.history.replace(current);
+//   });
+// }
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
