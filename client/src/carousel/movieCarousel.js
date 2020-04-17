@@ -65,10 +65,7 @@ const MovieCarousel = (props) => {
     <React.Fragment>
       {
         //! 6. Inject state data to component
-        console.log(
-          "🥕api data, movies: YOU CAN USE THIS DATA FOR YOUR COMPONENT like this",
-          props.movies
-        )
+        console.log("🥕movies: ", props.newMovies)
       }
       <Carousel id="carousel1" responsive={responsive}>
         {props.newMovies.map((movie, i) => {
@@ -85,8 +82,11 @@ const MovieCarousel = (props) => {
               console.log("you clicked the same poster so close it.");
               setShowCard1(!showCard1);
             } else {
+              console.log("you clicked differrent poster.");
+              console.log("before b", showCard1);
               setShowCard1(true);
               setCard1Index(index);
+              console.log("after b", showCard1);
             }
           };
 
@@ -97,6 +97,7 @@ const MovieCarousel = (props) => {
               className={`newMoviePoster`}
               id={`newMoviePoster-${i}`}
             >
+              {console.log("when render b", showCard1, card1Index)}
               <img
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                 className="poster"

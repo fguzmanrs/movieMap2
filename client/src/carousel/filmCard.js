@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -15,6 +15,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 /*import ShareIcon from '@material-ui/icons/Share';*/
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,39 @@ export default function FilmReviewCard(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const currentMovie = props.movies[props.cardIndex];
+  // const [currentMovie, setCurrentMovie] = useState(null);
+  const [streamingList, setStreamingList] = useState(null);
+
+  // Rerender a movie when index is changed
+  useEffect(() => {
+    if (props.movies[props.cardIndex]) {
+      // setCurrentMovie(props.movies[props.cardIndex]);
+
+      const getProviders = async () => {
+        const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
+        const providers = res.data.data;
+        console.log("🎞 providers:", providers);
+
+        setStreamingList(providers);
+      };
+      getProviders();
+    }
+  }, [props.cardIndex]);
+
+  // useEffect(() => {
+  //   if (currentMovie) {
+  //     const getProviders = async () => {
+  //       const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
+  //       const providers = res.data.data;
+  //       console.log("🎞 providers:", providers);
+
+  //       setStreamingList(providers);
+  //     };
+  //     getProviders();
+  //   }
+  // }, [currentMovie]);
 
   //rgba(210, 204, 243, 0.816)
   return (
@@ -80,7 +114,7 @@ export default function FilmReviewCard(props) {
             className="headerTitle"
             style={{ fontSize: "34px", fontWeight: "bold" }}
           >
-            Movie Title
+            {currentMovie ? currentMovie.title : ""}
           </div>
         }
       />
@@ -100,9 +134,11 @@ export default function FilmReviewCard(props) {
           }}
         >
           <img
-            src={`https://image.tmdb.org/t/p/original/${
-              props.movies[props.cardIndex].backdrop_path
-            }`}
+            src={
+              currentMovie
+                ? `https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path}`
+                : ""
+            }
             alt="poster"
             style={{
               height: "500px",
@@ -125,12 +161,23 @@ export default function FilmReviewCard(props) {
             boxShadow: "100px 0px 150px 250px #99a0f9",
           }}
         >
-          <Typography>Summary</Typography>
-          <Typography>Rating</Typography>
-          <Typography>Genre</Typography>
-          <Typography>Cast</Typography>
-          <Typography>Trailer</Typography>
-          <Typography>Watch Options</Typography>
+          <Typography>{currentMovie ? currentMovie.overview : ""}</Typography>
+          <Typography>
+            {currentMovie ? `${currentMovie.vote_average}/10` : ""}
+          </Typography>
+          <Typography>
+            {currentMovie ? currentMovie.release_date : ""}
+          </Typography>
+          <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
+          <div>
+            {streamingList
+              ? streamingList.map((streaming) => (
+                  <a key={streaming.url} href={`${streaming.url}`}>
+                    <img src={`${streaming.icon}`}></img>
+                  </a>
+                ))
+              : ""}
+          </div>
         </div>
       </CardContent>
     </Card>
