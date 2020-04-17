@@ -6,14 +6,10 @@ import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
 import Profile from "./profile/profile";
-
-// import { Typography } from "@material-ui/core";
-// import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
-// import react-router (use)
-
 import CurrentUserContext from "./context/current-user.context";
+
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
