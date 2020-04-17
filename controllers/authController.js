@@ -77,9 +77,11 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     //* 5. Store a new user into DB
     db.user.insert(newUserToSave, async (error, data) => {
+      //* 6. Create a JWT token
+      const token = createToken(data._id);
+      console.log("🌮token created: ", token);
+
       try {
-        //* 6. Create a JWT token
-        const token = createToken(data._id);
         //! 7. Send a welcome email
         const url = `${req.protocol}://${req.get("host")}`;
         console.log("user to email: ", data, url);
@@ -87,23 +89,24 @@ exports.signup = catchAsync(async (req, res, next) => {
         await new Email(data, url).sendWelcome();
 
         data.password = undefined;
-
-        //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
-        res
-          .cookie("jwt", token, {
-            maxAge: 3600000,
-            httpOnly: true,
-          })
-          .status(200)
-          .json({
-            status: "success",
-            message: "New user has been successfully created!",
-            token,
-            data,
-          });
       } catch (err) {
+        console.log("🚨 Error occured while sending email.", err);
         return next(new ErrorFactory(400, "Please enter valid email."));
       }
+
+      //* 8. Send a respond with cookie: Prevents from accessing/modifying the cookie from anywhere except http browser. Expires after 1 hour.
+      res
+        .cookie("jwt", token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .status(200)
+        .json({
+          status: "success",
+          message: "New user has been successfully created!",
+          token,
+          data,
+        });
     });
   });
 });
@@ -182,7 +185,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   //* 1. Check if a user is logged in(via JWT)
   const token = req.cookies.jwt;
   console.log("🍑token:", token, req.cookies);
-
+  console.log("🍳req.body", req.body);
   if (!token) {
     return next(
       new ErrorFactory(401, "You are not logged in! Please log in first.")
@@ -321,6 +324,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 //! ROUTE: update password
 exports.updatePassword = catchAsync(async (req, res, next) => {
+  console.log("🦴 req.body", req.body);
   //* 1. Find user
   db.user.findOne(
     { _id: mongojs.ObjectId(req.user._id) },
@@ -329,7 +333,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       if (!user) {
         return next(new ErrorFactory(401, "Please login first please!"));
       }
-
+      console.log("🦴 req.body, userpwd", req, req.body.formData);
       //* 2. Check if the entered current pwd is correct
       const pwdIsCorrect = await bcrypt.compare(
         req.body.currentPassword,
