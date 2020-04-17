@@ -26,40 +26,76 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
+  // First Carousel
   const [showCard1, setShowCard1] = useState(false);
-  const [card1Index, setCard1Index] = useState(-1);
+  const [cardIndex1, setCardIndex1] = useState(-1);
 
-  // const [showCard1, setShowCard1] = useState({show:false, movieType: "newMovies", index: 0}); // {show: boolean, movieType: "", index: n }
+  // Second Carousel
   const [showCard2, setShowCard2] = useState(false);
-  const [showCard3, setShowCard3] = useState(false);
+  const [cardIndex2, setCardIndex2] = useState(-1);
 
-  //! 1. Define state(local variable for this comp) using a useState(init value)
-  // reason: sometimes general variable cannot properly work to be used inside of Return(below HTML rendering part) and it helps auto re-rendering
-  // const [movies, setMovies] = useState([]);
+  // const [showCard2, setShowCard2] = useState(false);
+  // const [showCard3, setShowCard3] = useState(false);
 
-  // console.log("🥩 props: ", props);
+  const carouselGenerator = (
+    carouselName,
+    moviesData,
+    cardIndex,
+    showCard,
+    setCardIndex,
+    setShowCard
+  ) => {
+    return (
+      <div>
+        <Carousel id="carousel1" responsive={responsive}>
+          {moviesData.map((movie, i) => {
+            //* Card click event handler
+            const handleClick = (e) => {
+              console.log(
+                "🥨 e.target: ",
+                e.target.closest(`.${carouselName}Poster`)
+              );
 
-  //! 2. Add Event handler using useEffect()
-  // whenever the second parameter is changed, this will be triggered and run the code again.
-  // [] means only one time render after HTML page is rendered.
-  // useEffect(() => {
-  //   //! 3. Define Function(API call & store data to the state)
-  //   const getData = async function () {
-  //     //! 4. Prepare a query(Search keyword)
-  //     // print out the query to console and make sure this is the exact search keyword
-  //     // const query = props.searchedFilms;
-  //     const query = "horror"; // test
+              //* Determin which poster is clicked and render accordingly
+              const posterHtml = e.target.closest(`.${carouselName}Poster`);
+              const index = posterHtml.id.split(`${carouselName}Poster-`)[1];
+              console.log("🍞 index: ", index);
 
-  //     //* Calling API to get searched movies with axios and return the data
-  //     const res = await axios.get(`/api/movies/search/keyword/${query}`);
+              if (cardIndex === index) {
+                console.log("you clicked the same poster so close it.");
+                setShowCard1(!showCard);
+              } else {
+                console.log("you clicked differrent poster.");
+                console.log("before b", showCard);
+                setShowCard(true);
+                setCardIndex(index);
+                console.log("after b", showCard);
+              }
+            };
 
-  //     //* Store this data to the state using useState's set method you defined above
-  //     setMovies(res.data.data);
-  //   };
-
-  //   //! 5. Call Fuction you defined
-  //   getData();
-  // }, []);
+            return (
+              <div
+                key={`${carouselName}-${i}`}
+                className={`${carouselName}Poster`}
+                id={`${carouselName}Poster-${i}`}
+              >
+                {console.log("when render b", showCard, cardIndex)}
+                <img
+                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                  className="poster"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleClick}
+                />
+              </div>
+            );
+          })}
+        </Carousel>
+        {showCard && (
+          <FilmCard id="filmCard1" cardIndex={cardIndex} movies={moviesData} />
+        )}
+      </div>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -67,7 +103,16 @@ const MovieCarousel = (props) => {
         //! 6. Inject state data to component
         console.log("🥕movies: ", props.newMovies)
       }
-      <Carousel id="carousel1" responsive={responsive}>
+      {carouselGenerator(
+        "newMovie",
+        props.newMovies,
+        cardIndex1,
+        showCard1,
+        setCardIndex1,
+        setShowCard1
+      )}
+      //! working fine
+      {/* <Carousel id="carousel1" responsive={responsive}>
         {props.newMovies.map((movie, i) => {
           //* Card click event handler
           const handleClick = (e) => {
@@ -113,8 +158,8 @@ const MovieCarousel = (props) => {
           cardIndex={card1Index}
           movies={props.newMovies}
         />
-      )}
-
+      )} */}
+      //! working fine
       {/* <Carousel id="carousel2" responsive={responsive}>
         {props.movies.map((movie) => {
           return (
@@ -123,15 +168,12 @@ const MovieCarousel = (props) => {
               onClick={() => {
                 setShowCard2(true);
               }}
-            >
-              {movie.title}
-            </div>
+            ></div>
           );
         })}
       </Carousel>
-      {showCard2 && <FilmCard id="filmCard2" />}
-
-      <Carousel id="carousel3" responsive={responsive}>
+      {showCard2 && <FilmCard id="filmCard2" />} */}
+      {/* <Carousel id="carousel3" responsive={responsive}>
         {props.movies.map((movie) => {
           return (
             <div
@@ -144,8 +186,8 @@ const MovieCarousel = (props) => {
             </div>
           );
         })}
-      </Carousel>
-      {showCard3 && <FilmCard id="filmCard3" />} */}
+      </Carousel> 
+      {showCard3 && <FilmCard id="filmCard3" />}*/}
     </React.Fragment>
   );
 };
