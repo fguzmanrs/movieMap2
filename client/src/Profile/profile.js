@@ -1,23 +1,23 @@
 import React, { useRef, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "./node_modules/react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+//import Autocomplete from "./node_modules/@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import updateSettings from "../util/updateSettings";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
+//import IconButton from "./node_modules/@material-ui/core/IconButton";
+//import PhotoCamera from "./node_modules/@material-ui/icons/PhotoCamera";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import Icon from "@material-ui/core/Icon";
+//import Icon from "./node_modules/@material-ui/core/Icon";
 
 import CurrentUserContext from "../context/current-user.context";
 
-import "./profile.style.css";
+//import "./profile.style.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
