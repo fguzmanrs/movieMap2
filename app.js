@@ -27,7 +27,11 @@ const app = express();
 // };
 
 //! Cors setting : Async version
-const whitelist = ["http://localhost:3000", "http://localhost:3001"];
+const whitelist = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://git.heroku.com/secure-retreat-34944",
+];
 
 const corsOptionsDelegate = function (req, callback) {
   let corsOptions;

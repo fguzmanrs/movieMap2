@@ -54,7 +54,8 @@ export default function SignIn(props) {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/users/login",
+        // "http://localhost:3000/api/users/login",
+        "/api/users/login",
         {
           username,
           password,
