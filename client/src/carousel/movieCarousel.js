@@ -73,7 +73,7 @@ const MovieCarousel = (props) => {
 
               if (cardIndex === index) {
                 console.log("you clicked the same poster so close it.");
-                setShowCard1(!showCard);
+                setShowCard(!showCard);
               } else {
                 console.log("you clicked differrent poster.");
                 console.log("before b", showCard);
