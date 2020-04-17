@@ -171,11 +171,18 @@ export default function FilmReviewCard(props) {
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
           <div>
             {streamingList
-              ? streamingList.map((streaming) => (
-                  <a key={streaming.url} href={`${streaming.url}`}>
-                    <img src={`${streaming.icon}`}></img>
-                  </a>
-                ))
+              ? streamingList.map((streaming) => {
+                  //! Atom ticket's logo link is broken, so skip this
+                  if (streaming.name !== "AtomTicketsIVAUS") {
+                    return (
+                      <a key={streaming.url} href={`${streaming.url}`}>
+                        <img src={`${streaming.icon}`}></img>
+                      </a>
+                    );
+                  } else {
+                    return;
+                  }
+                })
               : ""}
           </div>
         </div>
