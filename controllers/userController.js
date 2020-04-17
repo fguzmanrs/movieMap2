@@ -71,6 +71,7 @@ exports.uploadUserPhoto = upload.single("photo");
 
 //! Middleware: resizing, converting, saving the photo to server's file system(public/~)
 exports.resizePhoto = catchAsync(async (req, res, next) => {
+  console.log("🥦req.file:", req.file);
   if (!req.file) return next();
 
   //* Create file's name and save it to req
@@ -114,6 +115,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //* Save file's name to req.body
   if (req.file) filteredBody.photo = req.file.filename;
 
+  console.log("🍌filteredBody", filteredBody);
+
   db.user.findAndModify(
     {
       query: { _id: mongojs.ObjectId(req.user._id) },
@@ -123,7 +126,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       new: true,
     },
     (error, data) => {
-      console.log("🍉data", data);
+      console.log("🍉updated data", data);
 
       if (!data) {
         return next(
@@ -139,7 +142,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         message: "Successfully updated account info!",
         data: {
           user: data,
-          photo: req.file.filename,
+          photo: req.file ? req.file.filename : req.user.photo,
         },
       });
     }

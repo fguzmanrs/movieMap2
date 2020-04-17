@@ -1,0 +1,7 @@
+.signinLink {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  margin-bottom: 20px;
+}

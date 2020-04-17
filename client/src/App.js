@@ -1,16 +1,19 @@
 import React, { useEffect, useContext, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import SignIn from "./signIn/signIn.js";
 import SignUp from "./signUp/signUp.js";
 import About from "./about/about.js";
-// import Profile from "./Profile/profile.js";
+import Profile from "./profile/profile";
+import Forgotpassword from "./forgot-password/forgot-password";
+
+// import { Typography } from "@material-ui/core";
+// import Footer from "./footer/footer.js";
 import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
-// import react-router (use)
+import CurrentUserContext from "./context/current-user.context";
 
-import CurrentUserContext from "./context/current-user.context/current-user.context";
 const mockData = {
   data: [
     { id: 1, title: "Test 1", summary: "This is a test" },
@@ -29,27 +32,50 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
-  
-  const [search, setSearch] = useState([]);
-  const handleChange = value => {
+  //! State: search, search movies
+  const [search, setSearch] = useState("");
+  const [searchMovies, setSearchMovies] = useState([]);
+  //! State: new movies
+  const [newMovies, setNewMovies] = useState([]);
+
+  const handleChange = (value) => {
     setSearch(value);
   };
-
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
   currentUserContext.setCurrentUser = (newUser) => {
     setUser(newUser);
   };
+  // currentUserContext.setCurrentPhoto = (newPhoto) => {
+  //   setPhoto(newPhoto);
+  // };
 
-  // Detect user's change and call another ajax call for detail user info(list populated one)
+  currentUserContext.setLogout = (e) => {
+    // Logout from server(delete cooki with JWT)
+    console.log("🍰clicked");
+    const callLogout = async () => {
+      const res = await axios.get("/api/users/logout");
+    };
+
+    callLogout();
+
+    // change isLogin to false
+
+    // delete contextAPI user, userPopulated
+    setUserPopulated(undefined);
+    setUser(undefined);
+    console.log("🍦props in app.js: ", props);
+    // window.location.assign("/");
+  };
+
+  //* Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
-    console.log("🐤 inside of effect");
     if (user) {
-      console.log("🐦 inside of effect with user");
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:3000/api/users/populateMyMovieLists`,
+            // `http://localhost:3000/api/users/populateMyMovieLists`,
+            `/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
 
@@ -63,41 +89,92 @@ function App(props) {
     }
   }, [user]);
 
+  //* Get new movies
+  useEffect(() => {
+    const fetchFunc = async () => {
+      const res = await axios.get("/api/movies/recent");
+      const newMovies = res.data.data;
+      console.log("🍿 newMovies: ", newMovies);
+
+      setNewMovies(newMovies);
+    };
+
+    fetchFunc();
+  }, []);
+
+  //* Get search movies
+  useEffect(() => {
+    if (search) {
+      const fetchFunc = async () => {
+        const res = await axios.get(`/api/movies/search/genre/${search.id}`);
+        const searchMovies = res.data.data;
+        console.log("🍿 seachMovies: ", searchMovies);
+
+        setSearchMovies(searchMovies);
+      };
+
+      fetchFunc();
+    }
+  }, [search]);
+
   return (
     <CurrentUserContext.Provider
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
+        // currentPhoto: userPopulated ? userPopulated.photo : "",
+        // currentPhoto: userPopulated ? photo : "",
       }}
     >
       <div className="App App-body">
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
+        {/* {console.log("🍭setlogout: ", currentUserContext.setLogout)} */}
+        {console.log("🥗search keyword: ", search)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
-              <Layout onChange={handleChange}>
-                <MovieCarousel movies={mockData.data} searchedFilms={search}/>
+              <Layout
+                onChange={handleChange}
+                setLogout={currentUserContext.setLogout}
+              >
+                <MovieCarousel
+                  newMovies={newMovies}
+                  searchMovies={searchMovies}
+                  searchGenre={search.name}
+                />
               </Layout>
             </Route>
 
             <Route path="/about">
-              <Layout>
-                <About />
-              </Layout>
-            </Route>
-
-            <Route path="/profile">
-              <Layout>
+              <Layout setLogout={currentUserContext.setLogout}>
                 <About />
               </Layout>
             </Route>
 
             <Route
+              path="/profile"
+              render={(props) =>
+                userPopulated ? (
+                  <Layout setLogout={currentUserContext.setLogout}>
+                    <Profile
+                      {...props}
+                      user={userPopulated}
+                      // setCurrentPhoto={currentUserContext.setCurrentPhoto}
+                      setCurrentUser={currentUserContext.setCurrentUser}
+                    />
+                  </Layout>
+                ) : (
+                  <Redirect to="/" />
+                )
+              }
+            ></Route>
+
+            <Route
               path="/signIn"
               render={(props) => (
-                <Layout noHeader>
+                <Layout noHeader setLogout={currentUserContext.setLogout}>
                   <SignIn
                     {...props}
                     setCurrentUser={currentUserContext.setCurrentUser}
@@ -109,11 +186,20 @@ function App(props) {
             <Route
               path="/signUp"
               render={(props) => (
-                <Layout noHeader>
+                <Layout noHeader setLogout={currentUserContext.setLogout}>
                   <SignUp
                     {...props}
                     setCurrentUser={currentUserContext.setCurrentUser}
                   />
+                </Layout>
+              )}
+            ></Route>
+
+            <Route
+              path="/forgotpassword"
+              render={(props) => (
+                <Layout noHeader>
+                  <Forgotpassword {...props} />
                 </Layout>
               )}
             ></Route>
