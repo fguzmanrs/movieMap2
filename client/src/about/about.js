@@ -62,7 +62,7 @@ export default function Album() {
                   <CardMedia
                     className={classes.cardMedia}
                     image="https://source.unsplash.com/random"
-                    title="Image title"
+                    title=""
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
