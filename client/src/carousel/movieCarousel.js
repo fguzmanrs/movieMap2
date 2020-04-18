@@ -143,7 +143,7 @@ const MovieCarousel = (props) => {
 
   return (
     <React.Fragment>
-      {console.log("🥕new movies: ", props.newMovies)}
+      {console.log("🥕new moviesss: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
       {carouselGenerator(
         "newMovies",
