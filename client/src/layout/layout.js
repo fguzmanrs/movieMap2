@@ -11,7 +11,11 @@ export default function layout(props) {
       )}
       {console.log("🍬props in layout", props)}
       {props.children}
+      
+      
       <Footer />
+     
+      
     </React.Fragment>
   );
 }

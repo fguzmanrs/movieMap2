@@ -1,5 +1,5 @@
 a {
-  color: #fff;
+  color: #Fff;
   text-decoration: none;
 }
 
@@ -10,6 +10,7 @@ a {
 .navMenu {
   display: flex;
   align-items: center;
+  
 }
 
 .navMenu > * {
@@ -20,4 +21,18 @@ a {
 .MuiAvatar-root {
   width: 30px !important;
   height: 30px !important;
+}
+
+.MuiAppBar-colorPrimary {
+  background-color: #305360;
+}
+.MuiInput-underline {
+  display: none;
+}
+.MuiInput-underline:before {
+  display: none;
+}
+
+.MuiInput-underline:after {
+  display: none;
 }

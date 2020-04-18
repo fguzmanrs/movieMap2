@@ -71,14 +71,14 @@ const MovieCarousel = (props) => {
           return `Recommended by Your Last Search: ${props.searchGenre}`;
         case "userFavorite":
           return `Your Favorites`;
-        default:
-          return "Most Popular New Movies";
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
         // case "favMovies":
         // return
         case "similarMovies":
           return `Recommeded by Your Last Favorite Movie: ${currentUser.myFavoriteMovies[0].title}`;
+        default:
+          return "Most Popular New Movies";
       }
     };
 
@@ -86,8 +86,12 @@ const MovieCarousel = (props) => {
       <div>
         {console.log("🥑currentUser from context: ", currentUser)}
         {console.log("🥑🥑🥑moviesData: ", moviesData)}
-        <h3>{titleSelector()}</h3>
-        <Carousel id="carousel1" responsive={responsive}>
+        <h2 style={{ color: "#fff" }}>{titleSelector()}</h2>
+        <Carousel
+          id="carousel1"
+          responsive={responsive}
+          style={{ marginBottom: "50px" }}
+        >
           {moviesData.map((movie, i) => {
             //* 1. Card click event handler
             const handleClick = (e) => {

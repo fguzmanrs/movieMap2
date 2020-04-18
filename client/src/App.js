@@ -148,7 +148,7 @@ function App(props) {
         // currentPhoto: userPopulated ? photo : "",
       }}
     >
-      <div className="App App-body">
+      <div className="App App-body" style = {{height: "100%", margin: "0"}}>
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
