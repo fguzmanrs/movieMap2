@@ -1,8 +1,15 @@
-## Movie Map App
-Our application has been created to help film buffs who want targeted movie reccomendatios and the information and resources to watch their finds. Our app is able to provide up-to-date information withour requiring a user to search through multiple apps, websites, and subscription services.
+## Movie Map 2
+
+![Landing page](README.images/landingPage.png)
 
 ## Description
-Using various film APIs we were able to create an app that allows for registered users to receive tailored film recommendations, with information for how to watch the recommended films. In addition, registered users can save their searches and create watchlists. Movie Map saves time by being a one stop film search engine.
+Our application helps film buffs receive personalized recommendations and information on how to watch their finds, without having to search through multiple apps, websites, and subscription services. Using various film APIs we were able to create an app that allows for registered users to receive tailored film recommendations, with information for how to watch the recommended films. In addition, registered users can save their searches and create watchlists. Movie Map saves time by being a one stop film search engine.
+
+## Motivation
+We had the idea for Movie Map when a teammate found themselves having to flip through each of their media subscriptions for a film to watch and then having to flip back and forth to narrow down the search and find a film that was interesting. They figured having a web app where they could receive tailored film recommendations and the immediate information on where to watch them would save time they could spend, well, watching movies.
+
+## Results
+Using various film APIs we were able to create an app that allows registered users to receive tailored film recommendations with information and links for how to watch each film. In addition, registered users can save their searches, create watchlists, and make modifications to their user account. Non-registered users can still use the app as a film search engine. Movie Map saves time by being a one stop film search engine. 
 
 ## Prerequisites
 **Web browser.** - *We recommend Google Chrome.*
@@ -12,21 +19,45 @@ N/A - Not applicable - No installation required.
 
 ## Getting Started
 1. Open web browser.
-2. Navigate to ______
+2. Navigate to moviemap2.herokuapp.com (https://moviemap2.herokuapp.com/)
+
+## Flow, creating your user profile
+![Sign up page](README.images/signUp.png)
+1. Create your own user account by selecting the ‘Sign Up’ link on the top right corner of the page.
+2. Enter your email, username, and password on the page and you will be redirected to the landing page with the option now to create a watchlist, save your favorite films,and get increasingly personalized recommendations as you search and view more films.  
+
+## Flow, registered users
+![Landing page for registered users](README.images/landingPageRegistered.png)
+1. On the top right corner of the landing page select ‘Login’.
+2. Enter your credentials to access your personalized page. Several rows of carousels will generate: Popular Movies, Last Search, Because You watched, Trending Films
+3. For a search, select genre in the search bar.
+4. The app will then generate a carousel of film recommendations below the default carousel of current top films.  
+5. Click a film in the carousel to see additional film details and list of service providers. Each service provider name will serve as a link to connect to the film page on the providers site. In the detail box you can save films for later viewing.
+
+## Did you forget your password? No problem
+![Password recovery page](README.images/forgotPassword.png)
 
 ## Technologies in this project
-* [CSS](https://www.w3.org/Style/CSS/Overview.en.html/)
-* [HTML](https://www.w3.org/html/)
-* [JavaScript](https://www.javascript.com/)
+* [CSS](https://www.w3.org/Style/CSS/Overview.en.html/) - Cascading Style Sheets is a style sheet language used for describing the presentation of a document written in a markup language like HTML. CSS is a cornerstone technology of the World Wide Web, alongside HTML and JavaScript.
+* [HTML5](https://www.w3.org/html/) - HTML5 is a markup language used for structuring and presenting content on the World Wide Web. HTML5 was the fifth and last major version of HTML that is a World Wide Web Consortium recommendation.
+* [JavaScript](https://www.javascript.com/) - JavaScript, often abbreviated as JS, is a programming language that conforms to the ECMAScript specification.
 * [Materialize](https://materializecss.com/) - A modern responsive front-end framework.
-* [MySQL](https://www.mysql.com/) - MySQL is the world's most popular open source database.
+* [mongoDB](https://www.mongodb.com/) - MongoDB is a general purpose, document-based, distributed database built for modern application developers and for the cloud era. No database makes you more productive.
+* [mongojs](https://www.npmjs.com/package/mongojs/) - A node.js module for mongodb, that emulates the official mongodb API as much as possible. It wraps mongodb-native and is available through npm.
 * [node.js](https://nodejs.org/en/) - As an asynchronous event-driven JavaScript runtime, Node.js is designed to build scalable network applications.
-* [Sequelize](https://sequelize.org/) - Sequelize is a promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.
+* [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
 * [TMDb](https://www.themoviedb.org/documentation/api/) - API: The Movie Database (TMDb) is a community built movie and TV database.
 * [Utelly](https://www.utelly.com/) - API: Metadata aggregation, search, recommendations and content promotion channels. Delivered as a Cross-platform SaaS Product.
 
+## Features in future releases
+* Moving forward, it would be beneficial to have our own inhouse review database.
+* We would also like to add a TV recommendation functionality.
+
 ## Authors
-* **Emily Yu** - *Backend* - [bluerainmango](https://github.com/bluerainmango)
-* **Fabiola Guzman** - *Frontend* - [fguzmanrs](https://github.com/fguzmanrs)
-* **Francisco Ortiz** - *Backend* - [ffortizn](https://github.com/ffortizn)
-* **Hayden Cross** - *Frontend* - [HCross28](https://github.com/HCross28)
+* **Emily Yu** - *Backend* - [bluerainmango](https://github.com/bluerainmango) - Authentication, user communications and APIs.
+* **Fabiola Guzman** - *Frontend* - [fguzmanrs](https://github.com/fguzmanrs) - Project lead and app style.
+* **Francisco Ortiz** - *Backend* - [ffortizn](https://github.com/ffortizn) - Lead database coder.
+* **Hayden Cross** - *Frontend* - [HCross28](https://github.com/HCross28) - Lead UI designer & app layout.
+
+## Some technical documentation
+ [Don't click, it is kind of technical](https://drive.google.com/drive/u/0/folders/1zCejLJMu0FXk1kbjKm0YaBqTdvrpExLg)
