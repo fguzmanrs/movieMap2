@@ -22,7 +22,7 @@ N/A - Not applicable - No installation required.
 2. Navigate to moviemap2.herokuapp.com (https://moviemap2.herokuapp.com/)
 
 ## Flow, creating your user profile
-![Sign up page](signUp.png)
+![Sign up page](README.images/signUp.png)
 1. Create your own user account by selecting the ‘Sign Up’ link on the top right corner of the page.
 2. Enter your email, username, and password on the page and you will be redirected to the landing page with the option now to create a watchlist, save your favorite films,and get increasingly personalized recommendations as you search and view more films.  
 
