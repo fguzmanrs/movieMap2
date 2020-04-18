@@ -133,20 +133,18 @@ export default function FilmReviewCard(props) {
             height: "500px",
           }}
         >
-          <img
-            src={
-              currentMovie
-                ? `https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path}`
-                : ""
-            }
-            alt="poster"
-            style={{
-              height: "500px",
-              width: "100%",
-              objectFit: "cover",
-              objectPosition: "top",
-            }}
-          />
+          {currentMovie && currentMovie.backdrop_path && (
+            <img
+              src={`https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path}`}
+              alt="poster"
+              style={{
+                height: "500px",
+                width: "100%",
+                objectFit: "cover",
+                objectPosition: "top",
+              }}
+            />
+          )}
         </div>
 
         <div
