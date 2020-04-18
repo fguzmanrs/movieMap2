@@ -27,7 +27,7 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, userSummary } = useContext(CurrentUserContext);
 
   //! First Carousel
   const [showCard1, setShowCard1] = useState(false);
@@ -40,6 +40,15 @@ const MovieCarousel = (props) => {
   //! Third Carousel
   const [showCard3, setShowCard3] = useState(false);
   const [cardIndex3, setCardIndex3] = useState(-1);
+
+  // useEffect(() => {
+  //   if (userSummary && userSummary.myFavoriteMovies.length > 1) {
+  //     if(userSummary.myFavoriteMovies.includes(props.newMovies))
+  //     setShowCard1(false);
+  //     // setShowCard2(false);
+  //     // setShowCard3(false);
+  //   }
+  // }, [userSummary]);
 
   //! Carousle Generator
   const carouselGenerator = (

@@ -210,7 +210,10 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
       {
         query: { _id: mongojs.ObjectId(req.user._id) },
         update: {
-          $push: { [addToMyList]: parseInt(movieId) },
+          // $push: { [addToMyList]: parseInt(movieId) },
+          $push: {
+            [addToMyList]: { $each: [parseInt(movieId)], $position: 0 },
+          },
         },
         new: true,
       },

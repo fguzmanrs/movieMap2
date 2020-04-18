@@ -66,16 +66,31 @@ export default function FilmReviewCard(props) {
     const updateFavoriteList = async () => {
       console.log("🍊 movie id, isFavorite", currentMovie.id, isFavorite);
 
-      if (isFavorite) {
-        await axios.delete(`/api/users/${currentMovie.id}/from/favorite`);
-      } else {
-        await axios.patch(
-          `/api/users/addTo/favorite/movieId/${currentMovie.id}`
-        );
+      let res;
+      try {
+        if (isFavorite) {
+          res = await axios.delete(
+            `/api/users/${currentMovie.id}/from/favorite`
+          );
+        } else {
+          res = await axios.patch(
+            `/api/users/addTo/favorite/movieId/${currentMovie.id}`
+          );
+        }
+      } catch (err) {
+        console.log(err);
       }
+
+      const updatedUser = res.data.data;
+      console.log("🎂", updatedUser);
+      // Set user in App.js with updated user info
+      currentUserContext.setCurrentUser(updatedUser);
+
+      setIsFavorite(!isFavorite);
     };
 
-    setIsFavorite(!isFavorite);
+    updateFavoriteList();
+    utilSetIsFavorite();
   };
 
   //* Set initial favlist when user login
@@ -94,10 +109,16 @@ export default function FilmReviewCard(props) {
   //* Rerender fav heart icon when myFavlist is changed
   useEffect(() => {
     //Check this movie is included in user's favorite movie list
+    utilSetIsFavorite();
+  }, [myFavList, props.movies]);
+
+  function utilSetIsFavorite() {
     if (myFavList.includes(currentMovie.id)) {
       setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
     }
-  }, [myFavList]);
+  }
 
   //* Rerender a card when index is changed
   useEffect(() => {
@@ -112,21 +133,9 @@ export default function FilmReviewCard(props) {
         setStreamingList(providers);
       };
       getProviders();
+      utilSetIsFavorite();
     }
   }, [props.cardIndex]);
-
-  // useEffect(() => {
-  //   if (currentMovie) {
-  //     const getProviders = async () => {
-  //       const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
-  //       const providers = res.data.data;
-  //       console.log("🎞 providers:", providers);
-
-  //       setStreamingList(providers);
-  //     };
-  //     getProviders();
-  //   }
-  // }, [currentMovie]);
 
   //rgba(210, 204, 243, 0.816)
   return (
