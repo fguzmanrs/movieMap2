@@ -33,7 +33,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4];
+const cards = [
+{
+    img:
+      "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
+    member: "Emily",
+    role: "Back-End",
+    bio: "Emily is Extraordinary", 
+    github: "GITHUB", 
+    linkedin: "LINKEDIN",
+    portfolio: "PORTFOLIO"
+  },
+  {
+    img:
+      "https://images.unsplash.com/photo-1564198879220-63f2734f7cec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2072&q=80",
+    member: "Fabiola",
+    role: "Front-End",
+    bio: "Fabiola is Fabulous", 
+    github: "GITHUB", 
+    linkedin: "LINKEDIN",
+    portfolio: "PORTFOLIO"
+  },
+  {
+    img:
+      "https://images.unsplash.com/photo-1559534747-b6ea1cae1c88?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80",
+    member: "Francisco",
+    role: "Back-End",
+    bio: "Francisco is Fantastic", 
+    github: "GITHUB", 
+    linkedin: "LINKEDIN",
+    portfolio: "PORTFOLIO"
+  },
+  {
+    img:
+      "https://images.unsplash.com/photo-1562772186-ad68d3906ca9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
+    member: "Hayden",
+    role: "Front-End",
+    bio: "Hayden is Hilarious", 
+    github: "GITHUB", 
+    linkedin: "LINKEDIN",
+    portfolio: "PORTFOLIO"
+  }
+];
 
 export default function Album() {
   const classes = useStyles();
@@ -57,33 +98,33 @@ export default function Album() {
           {/* End hero unit */}
           <Grid container spacing={4}>
             {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={6} lg={3} xl={3}>
+              <Grid item key={card} xs={12} sm={4} md={4} lg={4} xl={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={card.img}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Team Member
+                      {card.member}
                     </Typography>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Role
+                      {card.role}
                     </Typography>
                     <Typography>
-                      Bio
+                      {card.bio}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      < Link>Github</Link>
+                      < Link>{card.github}</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link>LinkedIn</Link>
+                      < Link>{card.linkedin}</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link>Portfolio</Link>
+                      < Link>{card.portfolio}</Link>
                     </Button>
                   </CardActions>
                 </Card>
