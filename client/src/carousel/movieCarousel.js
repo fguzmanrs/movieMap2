@@ -41,6 +41,7 @@ const MovieCarousel = (props) => {
   const [showCard3, setShowCard3] = useState(false);
   const [cardIndex3, setCardIndex3] = useState(-1);
 
+  // Force closing 1st carousel
   // useEffect(() => {
   //   if (userSummary && userSummary.myFavoriteMovies.length > 1) {
   //     if(userSummary.myFavoriteMovies.includes(props.newMovies))
