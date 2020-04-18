@@ -5,3 +5,48 @@
   height: 50px;
   margin-bottom: 20px;
 }
+
+.App .App-body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.MuiTextField-root {
+  background-color: #bce0ef;
+  color: black;
+}
+
+.MuiInputBase-input {
+  background-color: #bce0ef;
+}
+
+input {
+  background-color: #bce0ef;
+}
+
+.MuiFormControl-root {
+  background-color: #bce0ef;
+}
+
+.MuiInputBase-root {
+  background-color: #bce0ef;
+}
+
+.MuiFormControl-marginNormal {
+  background-color: #bce0ef;
+}
+
+.MuiFormControl-fullWidth {
+  background-color: #bce0ef;
+}
+
+.MuiInputBase-formControl {
+  background-color: #bce0ef;
+} 
+
+.MuiOutlinedInput-input {
+  background-color: #bce0ef;
+}
