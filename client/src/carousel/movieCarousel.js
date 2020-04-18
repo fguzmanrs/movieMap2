@@ -26,13 +26,23 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
-  //! First Carousel
+  //! First Carousel: Popular New Releases
   const [showCard1, setShowCard1] = useState(false);
   const [cardIndex1, setCardIndex1] = useState(-1);
 
-  //! Second Carousel
+  //! Second Carousel: Last Searched
   const [showCard2, setShowCard2] = useState(false);
   const [cardIndex2, setCardIndex2] = useState(-1);
+
+  //! Third Carousel: My Favorites
+  // const [showCard3, setShowCard3] = useState(false);
+  // const [cardIndex3, setCardIndex3] = useState(-1);
+
+  //! Fourth Carousel: Last Watched
+  const [showCard4, setShowCard4] = useState(false);
+  const [cardIndex4, setCardIndex4] = useState(-1);
+
+  console.log(props.lastMovie);
 
   //! Carousle Generator
   const carouselGenerator = (
@@ -46,10 +56,14 @@ const MovieCarousel = (props) => {
     //* Carousel's title
     const titleSelector = () => {
       switch (carouselName) {
-        case "searchMovies":
-          return `Recommended by Your Last Search: ${props.searchGenre}`;
         default:
           return "Most Popular New Movies";
+        case "searchMovies":
+          return `Recommended by Your Last Search: ${props.searchGenre}`;
+        // case "favMovies":
+          // return 
+        case "lastMovies":
+          return `Recommeded by Your Last Watched Movie: ${props.lastMovies}`
       }
     };
 
@@ -126,7 +140,25 @@ const MovieCarousel = (props) => {
           showCard2,
           setCardIndex2,
           setShowCard2
-        )}
+      )}
+      {/* {props.searchMovies.length > 1 &&
+        carouselGenerator(
+          "favMovies",
+          props.searchMovies,
+          cardIndex3,
+          showCard3,
+          setCardIndex3,
+          setShowCard3
+      )} */}
+      {/* {props.lastMovie.length > 1 &&
+        carouselGenerator(
+          "lastMovies",
+          props.lastMovies,
+          cardIndex4,
+          showCard4,
+          setCardIndex4,
+          setShowCard4
+      )} */}
     </React.Fragment>
   );
 };

@@ -9,10 +9,10 @@ function App(props) {
     <div className="App App-body" >
       <Navbar />
 
-      <Typography variant='h4'>Top Rated</Typography>
+      <Typography variant='h4'>Popular New Releases</Typography>
       <Carousel />
 
-      <Typography variant='h4'>New Releases</Typography>
+      <Typography variant='h4'>Your Choice Genre</Typography>
       <Carousel />
     </div>
   );

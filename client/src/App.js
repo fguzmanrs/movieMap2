@@ -14,16 +14,6 @@ import Layout from "./layout/layout.js";
 import MovieCarousel from "./carousel/movieCarousel.js";
 import CurrentUserContext from "./context/current-user.context";
 
-const mockData = {
-  data: [
-    { id: 1, title: "Test 1", summary: "This is a test" },
-    { id: 2, title: "Test 2", summary: "Test 2" },
-    { id: 3, title: "Test 3", summary: "Test 3" },
-    { id: 4, title: "Test 4", summary: "Test 4" },
-    { id: 5, title: "Test 5", summary: "Test 5" },
-  ],
-};
-
 function App(props) {
   //! Bring Context API(global state)
   let currentUserContext = useContext(CurrentUserContext);
@@ -32,11 +22,15 @@ function App(props) {
   const [user, setUser] = useState(undefined);
   //! State: full user info (+ populated my movie lists)
   const [userPopulated, setUserPopulated] = useState(undefined);
+  //! State: new movies
+  const [newMovies, setNewMovies] = useState([]);
   //! State: search, search movies
   const [search, setSearch] = useState("");
   const [searchMovies, setSearchMovies] = useState([]);
-  //! State: new movies
-  const [newMovies, setNewMovies] = useState([]);
+  //! State: last movies
+  const [myFavoriteList, setMyFavoriteList] = useState([]);
+  const [lastMovie, setLastMovie] = useState([]);
+  
 
   const handleChange = (value) => {
     setSearch(value);
@@ -80,6 +74,7 @@ function App(props) {
           );
 
           setUserPopulated(res.data.data);
+          setMyFavoriteList(userPopulated.myFavoriteMovies);
         } catch (err) {
           console.log("🚨", err.response.data.message);
         }
@@ -117,6 +112,26 @@ function App(props) {
     }
   }, [search]);
 
+   //* Get last movies
+  useEffect(() => {
+    if (userPopulated && userPopulated.myFavoriteMovies) {
+      const fetchFunc = async () => {
+        const myFavList = userPopulated.myFavoriteMovies
+        console.log(myFavoriteList);
+        const lastFavorite = myFavList[myFavList.lenght-1]
+        console.log(lastFavorite);
+        const res = await axios.get(`/api/movies/similar/${lastFavorite.id}`);
+        const lastMovie = res.data.data;
+        console.log("🍿 lastFavorite: ", lastFavorite);
+        console.log("🍿 lastMovie: ", lastMovie);
+
+        setLastMovie(lastMovie);
+      };
+
+      fetchFunc();
+    }
+  }, [myFavoriteList]);
+
   return (
     <CurrentUserContext.Provider
       value={{
@@ -143,6 +158,8 @@ function App(props) {
                   newMovies={newMovies}
                   searchMovies={searchMovies}
                   searchGenre={search.name}
+                  // favMovies={favMovies}
+                  lastMovie={lastMovie}
                 />
               </Layout>
             </Route>
