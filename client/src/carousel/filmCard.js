@@ -141,7 +141,7 @@ export default function FilmReviewCard(props) {
                 ? `https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path}`
                 : ""
             }
-            alt="poster"
+            alt="Movie Poster"
             style={{
               height: "500px",
               width: "100%",
