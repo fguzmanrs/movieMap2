@@ -193,6 +193,31 @@ exports.addMyMovie = catchAsync(async (req, res, next) => {
   const addToMyList = myListChecker(addTo, next);
   if (!addToMyList) return;
 
+  //* if use doesn't have list
+  if (!req.user.myFavoriteMovies) {
+    //* Save a movie to the list
+    db.user.findAndModify(
+      {
+        query: { _id: mongojs.ObjectId(req.user._id) },
+        update: {
+          // $push: { [addToMyList]: parseInt(movieId) },
+          $push: {
+            [addToMyList]: { $each: [parseInt(movieId)], $position: 0 },
+          },
+        },
+        new: true,
+      },
+      (error, data) => {
+        console.log(addToMyList);
+        res.status(200).json({
+          status: "success",
+          message: `Successfully added to my ${addTo} movies!`,
+          data,
+        });
+      }
+    );
+  }
+
   //* Validate duplicated movieId(tmdbId)
   db.user.findOne({ _id: mongojs.ObjectId(req.user._id) }, (error, data) => {
     console.log("🍈user data: ", data);

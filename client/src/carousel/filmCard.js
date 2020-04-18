@@ -97,7 +97,7 @@ export default function FilmReviewCard(props) {
   useEffect(() => {
     if (
       currentUserContext.userSummary &&
-      currentUserContext.userSummary.myFavoriteMovies.length > 0
+      currentUserContext.userSummary.myFavoriteMovies
     ) {
       // [12,324]
       const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
