@@ -30,17 +30,18 @@ export default function Footer() {
     const classes = useStyles();
 
     return (
+        
         <footer className={classes.footer} style={{ 
-                    position: "fixed", 
-                    bottom: "0",
-                    width: "100%",
-                    backgroundColor: "#8baebd", 
-                    color: "white" 
-                    }}>
+            position: "absolute",
+            marginTop: "20px",
+            backgroundColor: "#8baebd", 
+            color: "white" 
+            }}>
             <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
                 Fantastic 404
             </Typography>
             <Copyright />
         </footer>
+      
     );
 }

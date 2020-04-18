@@ -86,14 +86,15 @@ export default function FilmReviewCard(props) {
     <Card
       className={classes.root}
       style={{
-        backgroundColor: "#99a0f9",
+        
         border: "none",
-        boxShadow: "0px -5px 20px 20px #99a0f9",
+        boxShadow: "0px -5px 20px 20px #305360",
         borderRadius: "none",
+        marginBottom: "50px"
       }}
     >
       <CardHeader
-        style={{ backgroundColor: "#99a0f9", color: "white" }}
+        style={{ backgroundColor: "#BCE0EF", color: "white", backgroundImage: "linear-gradient(-90deg, #305360, #8BAEBD)", }}
         // avatar={
         //   <Avatar aria-label="film" className={classes.avatar}>
         //     R
@@ -122,7 +123,7 @@ export default function FilmReviewCard(props) {
       <CardContent
         style={{
           padding: "0px",
-          backgroundColor: "rgba(210, 204, 243, 0.816)",
+          
         }}
       >
         <div
@@ -131,6 +132,7 @@ export default function FilmReviewCard(props) {
             float: "right",
             width: "70%",
             height: "500px",
+            backgroundColor: "#305360"
           }}
         >
           <img
@@ -153,20 +155,29 @@ export default function FilmReviewCard(props) {
           className="left-block"
           style={{
             color: "#fff",
+            
             //backgroundColor: "rgba(210, 204, 243, 0.816)",
-            backgroundColor: "#99a0f9",
+            backgroundColor: "#8BAEBD",
             float: "right",
             width: "30%",
             height: "500px",
-            boxShadow: "100px 0px 150px 250px #99a0f9",
+            boxShadow: "200px 0px 150px 250px #8BAEBD",
           }}
         >
-          <Typography>{currentMovie ? currentMovie.overview : ""}</Typography>
-          <Typography>
-            {currentMovie ? `${currentMovie.vote_average}/10` : ""}
+          <Typography style = {{color: "black", paddingLeft: "20px", fontWeight: "bold", fontSize: "20px"}}>
+
+            {currentMovie ? currentMovie.overview : ""}
+
           </Typography>
-          <Typography>
-            {currentMovie ? currentMovie.release_date : ""}
+          <Typography style = {{color: "black", fontWeight: "bold", fontSize: "25px", marginTop: "20px", marginBottom: "10px",}}>
+            
+            Rating:  {currentMovie ? `${currentMovie.vote_average}/10` : ""}
+          
+          </Typography>
+          <Typography style = {{color: "black", fontWeight: "bold", fontSize: "25px", marginTop: "10px", marginBottom: "20px",}}>
+            
+            Release Date:  {currentMovie ? currentMovie.release_date : ""}
+
           </Typography>
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
           <div>
@@ -178,12 +189,12 @@ export default function FilmReviewCard(props) {
                   streaming.name !== "DisneyPlusIVAUS"
                 ) {
                   return (
-                    <a
+                    <a style = {{marginLeft: "20px"}}
                       key={`${streaming.icon}`}
                       href={`${streaming.url}`}
                       target="_blank"
                     >
-                      <img src={`${streaming.icon}`}></img>
+                      <img style = {{height: "50px"}} src={`${streaming.icon}`}></img>
                     </a>
                   );
                 } else {

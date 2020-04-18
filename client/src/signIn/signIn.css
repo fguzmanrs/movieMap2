@@ -15,38 +15,39 @@
 }
 
 .MuiTextField-root {
-  background-color: #bce0ef;
+  background-color: #fff;
   color: black;
-}
-
-.MuiInputBase-input {
-  background-color: #bce0ef;
-}
-
-input {
-  background-color: #bce0ef;
-}
-
-.MuiFormControl-root {
-  background-color: #bce0ef;
-}
-
-.MuiInputBase-root {
-  background-color: #bce0ef;
-}
-
-.MuiFormControl-marginNormal {
-  background-color: #bce0ef;
-}
-
-.MuiFormControl-fullWidth {
-  background-color: #bce0ef;
-}
-
-.MuiInputBase-formControl {
-  background-color: #bce0ef;
 } 
 
-.MuiOutlinedInput-input {
+/* .MuiInputBase-input {
   background-color: #bce0ef;
-}
+} */
+
+/* input {
+  background-color: #bce0ef;
+} */
+
+/* .MuiFormControl-root {
+  background-color: #bce0ef;
+} */
+
+/* .MuiInputBase-root {
+  background-color: #bce0ef;
+} */
+
+/* .MuiFormControl-marginNormal {
+  background-color: #bce0ef;
+} */
+
+/* .MuiFormControl-fullWidth {
+  background-color: #bce0ef;
+} */
+
+/* .MuiInputBase-formControl {
+  background-color: #bce0ef;
+}  */
+
+/* .MuiOutlinedInput-input {
+  background-color: #bce0ef;
+} */
+

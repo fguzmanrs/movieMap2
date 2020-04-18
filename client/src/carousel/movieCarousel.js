@@ -49,14 +49,14 @@ const MovieCarousel = (props) => {
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
         default:
-          return "Most Popular New Movies";
+          return "Popular New Releases";
       }
     };
 
     return (
       <div>
-        <h3>{titleSelector()}</h3>
-        <Carousel id="carousel1" responsive={responsive}>
+        <h2 style = {{color: "#fff"}}>{titleSelector()}</h2>
+        <Carousel id="carousel1" responsive={responsive} style = {{marginBottom: "50px"}}>
           {moviesData.map((movie, i) => {
             //* 1. Card click event handler
             const handleClick = (e) => {

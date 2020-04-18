@@ -17,7 +17,7 @@ export default function SearchBar(props) {
   };
 
   return (
-    <Autocomplete
+    <Autocomplete style = {{borderBottom: "none"}}
       onChange={handleChange}
       // multiple
       id="fixed-tags"
@@ -34,7 +34,7 @@ export default function SearchBar(props) {
       }
       style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField
+        <TextField style = {{paddingLeft: "10px", paddingRight: "5px", borderRadius: "20px", borderBottom: "none"}}
           {...params}
           variant="standard"
           label=""
