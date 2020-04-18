@@ -341,35 +341,32 @@ exports.deleteUserById = catchAsync(async (req, res, next) => {
 // total 3 movie lists in each user's doc
 // Purpose: make each list [movie id, movie id, movie id...] to [{movie data}, {movie data}...]
 exports.populateMyList = catchAsync(async (req, res, next) => {
+  // if (!req.user.myFavoriteMovies) {
+  //   res.status(200).json({
+  //     status: "success",
+  //     message:
+  //       "Successfully got a user's info including all movie list data populated.",
+  //     data: user,
+  //   });
+  // }
+
   //* 1. Get a user's info first
   db.user.findOne(
     { _id: mongojs.ObjectId(req.user._id) },
     async (error, user) => {
-      const { myFavoriteMovies, myReviewedMovies, myWatchList } = user;
+      const { myFavoriteMovies } = user;
 
-      console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
+      console.log("🥝lists:", myFavoriteMovies);
 
       //* 2. Populate each movie list and add it to user's doc(user)
       // If none of that exsits, skip
-      if (myFavoriteMovies || myReviewedMovies || myWatchList) {
-        switch (true) {
-          case myFavoriteMovies.length > 0:
-            await populateAndAddToDoc(
-              myFavoriteMovies,
-              user,
-              "myFavoriteMovies",
-              next
-            );
-          case myReviewedMovies.length > 0:
-            await populateAndAddToDoc(
-              myReviewedMovies,
-              user,
-              "myReviewedMovies",
-              next
-            );
-          case myWatchList.length > 0:
-            await populateAndAddToDoc(myWatchList, user, "myWatchList", next);
-        }
+      if (myFavoriteMovies && myFavoriteMovies.length > 0) {
+        await populateAndAddToDoc(
+          myFavoriteMovies,
+          user,
+          "myFavoriteMovies",
+          next
+        );
       }
 
       res.status(200).json({
@@ -381,6 +378,48 @@ exports.populateMyList = catchAsync(async (req, res, next) => {
     }
   );
 });
+
+// exports.populateMyList = catchAsync(async (req, res, next) => {
+//   //* 1. Get a user's info first
+//   db.user.findOne(
+//     { _id: mongojs.ObjectId(req.user._id) },
+//     async (error, user) => {
+//       const { myFavoriteMovies, myReviewedMovies, myWatchList } = user;
+
+//       console.log("🥝lists:", myFavoriteMovies, myReviewedMovies, myWatchList);
+
+//       //* 2. Populate each movie list and add it to user's doc(user)
+//       // If none of that exsits, skip
+//       if (myFavoriteMovies || myReviewedMovies || myWatchList) {
+//         switch (true) {
+//           case myFavoriteMovies.length > 0:
+//             await populateAndAddToDoc(
+//               myFavoriteMovies,
+//               user,
+//               "myFavoriteMovies",
+//               next
+//             );
+//           case myReviewedMovies.length > 0:
+//             await populateAndAddToDoc(
+//               myReviewedMovies,
+//               user,
+//               "myReviewedMovies",
+//               next
+//             );
+//           case myWatchList.length > 0:
+//             await populateAndAddToDoc(myWatchList, user, "myWatchList", next);
+//         }
+//       }
+
+//       res.status(200).json({
+//         status: "success",
+//         message:
+//           "Successfully got a user's info including all movie list data populated.",
+//         data: user,
+//       });
+//     }
+//   );
+// });
 
 //! Helper for population
 async function populateAndAddToDoc(array, data, listName, next) {

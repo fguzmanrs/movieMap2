@@ -63,7 +63,7 @@ function App(props) {
 
   //* Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
-    if (user) {
+    if (user && user.myFavoriteMovies) {
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
@@ -71,6 +71,8 @@ function App(props) {
             `/api/users/populateMyMovieLists`,
             { withCredentials: true }
           );
+
+          console.log("🍯rrressss", res);
 
           setUserPopulated(res.data.data);
           // setMyFavoriteList(userPopulated.myFavoriteMovies);
@@ -80,6 +82,8 @@ function App(props) {
       };
 
       fetchFunc();
+    } else {
+      setUserPopulated(user);
     }
   }, [user]);
 

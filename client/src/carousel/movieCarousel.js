@@ -85,6 +85,7 @@ const MovieCarousel = (props) => {
     return (
       <div>
         {console.log("🥑currentUser from context: ", currentUser)}
+        {console.log("🥑🥑🥑moviesData: ", moviesData)}
         <h3>{titleSelector()}</h3>
         <Carousel id="carousel1" responsive={responsive}>
           {moviesData.map((movie, i) => {
@@ -145,15 +146,16 @@ const MovieCarousel = (props) => {
     <React.Fragment>
       {console.log("🥕new moviesss: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
-      {carouselGenerator(
-        "newMovies",
-        props.newMovies,
-        cardIndex1,
-        showCard1,
-        setCardIndex1,
-        setShowCard1
-      )}
-      {props.searchMovies.length > 1 &&
+      {props.newMovies &&
+        carouselGenerator(
+          "newMovies",
+          props.newMovies,
+          cardIndex1,
+          showCard1,
+          setCardIndex1,
+          setShowCard1
+        )}
+      {props.searchMovies.length > 0 &&
         carouselGenerator(
           "searchMovies",
           props.searchMovies,
@@ -162,24 +164,26 @@ const MovieCarousel = (props) => {
           setCardIndex2,
           setShowCard2
         )}
-      {currentUser &&
-        carouselGenerator(
-          "userFavorite",
-          currentUser.myFavoriteMovies,
-          cardIndex3,
-          showCard3,
-          setCardIndex3,
-          setShowCard3
-        )}
-      {props.similarMovies.length > 1 &&
-        carouselGenerator(
-          "similarMovies",
-          props.similarMovies,
-          cardIndex4,
-          showCard4,
-          setCardIndex4,
-          setShowCard4
-        )}
+      {currentUser && currentUser.myFavoriteMovies
+        ? carouselGenerator(
+            "userFavorite",
+            currentUser.myFavoriteMovies,
+            cardIndex3,
+            showCard3,
+            setCardIndex3,
+            setShowCard3
+          )
+        : ""}
+      {currentUser && props.similarMovies.length > 0
+        ? carouselGenerator(
+            "similarMovies",
+            props.similarMovies,
+            cardIndex4,
+            showCard4,
+            setCardIndex4,
+            setShowCard4
+          )
+        : ""}
     </React.Fragment>
   );
 };
