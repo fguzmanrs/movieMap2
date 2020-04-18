@@ -63,6 +63,18 @@ export default function FilmReviewCard(props) {
     //  const heartIconHTML = e.target.closest('.MuiSvgIcon-root');
     //  const movieId = heartIconHTML.id.split('-')[2];
 
+    const updateFavoriteList = async () => {
+      console.log("🍊 movie id, isFavorite", currentMovie.id, isFavorite);
+
+      if (isFavorite) {
+        await axios.delete(`/api/users/${currentMovie.id}/from/favorite`);
+      } else {
+        await axios.patch(
+          `/api/users/addTo/favorite/movieId/${currentMovie.id}`
+        );
+      }
+    };
+
     setIsFavorite(!isFavorite);
   };
 
