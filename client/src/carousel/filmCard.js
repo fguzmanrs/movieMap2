@@ -51,10 +51,16 @@ export default function FilmReviewCard(props) {
   const currentMovie = props.movies[props.cardIndex];
   // const [currentMovie, setCurrentMovie] = useState(null);
   const [streamingList, setStreamingList] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleClick = (e) => {
+    console.log("🍒 heart clicked", e);
+    setIsFavorite(!isFavorite);
+  };
 
   // Rerender a movie when index is changed
   useEffect(() => {
-    if (props.movies[props.cardIndex]) {
+    if (currentMovie) {
       // setCurrentMovie(props.movies[props.cardIndex]);
 
       const getProviders = async () => {
@@ -105,8 +111,8 @@ export default function FilmReviewCard(props) {
           </IconButton>
         }
         action={
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton aria-label="add to favorites" onClick={handleClick}>
+            <FavoriteIcon color={isFavorite ? "error" : "inherit"} />
           </IconButton>
         }
         title={
