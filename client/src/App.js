@@ -122,6 +122,7 @@ function App(props) {
       value={{
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
+        setCurrentUser: currentUserContext.setCurrentUser,
         // currentPhoto: userPopulated ? userPopulated.photo : "",
         // currentPhoto: userPopulated ? photo : "",
       }}

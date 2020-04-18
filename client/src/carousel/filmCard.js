@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -16,6 +16,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import axios from "axios";
+import CurrentUserContext from "../context/current-user.context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,18 +48,39 @@ export default function FilmReviewCard(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const currentUserContext = useContext(CurrentUserContext);
 
   const currentMovie = props.movies[props.cardIndex];
   // const [currentMovie, setCurrentMovie] = useState(null);
   const [streamingList, setStreamingList] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [myFavList, setMyFavList] = useState([]);
 
+  // Favorite Heart Icon click event handler
   const handleClick = (e) => {
     console.log("🍒 heart clicked", e);
     setIsFavorite(!isFavorite);
   };
 
-  // Rerender a movie when index is changed
+  //* Set initial favlist when user login
+  useEffect(() => {
+    if (
+      currentUserContext.currentUser &&
+      currentUserContext.currentUser.myFavoriteMovies.length > 0
+    ) {
+      // [12,324]
+      const myFavListArr = currentUserContext.currentUser.myFavoriteMovies;
+      // set myFavList array
+      setMyFavList(myFavListArr);
+    }
+  }, [currentUserContext.currentUser]);
+
+  useEffect(() => {
+    //Check this expanded movie in included in user's favorite movie list
+    myFavList.includes();
+  }, [myFavList]);
+
+  //* Rerender a card when index is changed
   useEffect(() => {
     if (currentMovie) {
       // setCurrentMovie(props.movies[props.cardIndex]);
@@ -98,6 +120,8 @@ export default function FilmReviewCard(props) {
         borderRadius: "none",
       }}
     >
+      {console.log("🍓 currentUserContext in filmCard: ", currentUserContext)}
+      {console.log("🍋🍋 myFavList: ", myFavList)}
       <CardHeader
         style={{ backgroundColor: "#99a0f9", color: "white" }}
         // avatar={
@@ -112,7 +136,10 @@ export default function FilmReviewCard(props) {
         }
         action={
           <IconButton aria-label="add to favorites" onClick={handleClick}>
-            <FavoriteIcon color={isFavorite ? "error" : "inherit"} />
+            <FavoriteIcon
+              color={isFavorite ? "error" : "inherit"}
+              id={`${props.name}-Fav-${currentMovie.id}`}
+            />
           </IconButton>
         }
         title={

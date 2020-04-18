@@ -110,7 +110,12 @@ const MovieCarousel = (props) => {
           })}
         </Carousel>
         {showCard && (
-          <FilmCard id="filmCard1" cardIndex={cardIndex} movies={moviesData} />
+          <FilmCard
+            id="filmCard1"
+            cardIndex={cardIndex}
+            movies={moviesData}
+            name={carouselName}
+          />
         )}
       </div>
     );
