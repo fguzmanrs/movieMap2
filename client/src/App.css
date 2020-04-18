@@ -37,3 +37,13 @@ body {
 footer {
   display: none;
 }
+
+@media only screen and (max-width: 600px) {
+  .right-block {
+    width: 50%;
+  }
+
+  .left-block {
+      width: 50%;
+    }
+}

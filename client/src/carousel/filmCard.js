@@ -17,6 +17,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import axios from "axios";
 
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
@@ -38,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+
+
 }));
 
 export default function FilmReviewCard(props) {
@@ -130,9 +134,10 @@ export default function FilmReviewCard(props) {
           className="right-block"
           style={{
             float: "right",
-            width: "70%",
+            maxWidth: "70%",
             height: "500px",
             backgroundColor: "#305360"
+            
           }}
         >
           <img
@@ -155,11 +160,13 @@ export default function FilmReviewCard(props) {
           className="left-block"
           style={{
             color: "#fff",
-            
+            overflow: "auto",
+            webkitScrollbar: "{display: none}",
             //backgroundColor: "rgba(210, 204, 243, 0.816)",
             backgroundColor: "#8BAEBD",
             float: "right",
             width: "30%",
+            maxWidth: "100%",
             height: "500px",
             boxShadow: "200px 0px 150px 250px #8BAEBD",
           }}
