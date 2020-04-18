@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import FilmCard from "./filmCard.js";
 import axios from "axios";
+import CurrentUserContext from "../context/current-user.context";
 
 import "./movieCarousel.css";
 
@@ -26,6 +27,8 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
+  const { currentUser } = useContext(CurrentUserContext);
+
   //! First Carousel
   const [showCard1, setShowCard1] = useState(false);
   const [cardIndex1, setCardIndex1] = useState(-1);
@@ -33,6 +36,10 @@ const MovieCarousel = (props) => {
   //! Second Carousel
   const [showCard2, setShowCard2] = useState(false);
   const [cardIndex2, setCardIndex2] = useState(-1);
+
+  //! Third Carousel
+  const [showCard3, setShowCard3] = useState(false);
+  const [cardIndex3, setCardIndex3] = useState(-1);
 
   //! Carousle Generator
   const carouselGenerator = (
@@ -48,6 +55,8 @@ const MovieCarousel = (props) => {
       switch (carouselName) {
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
+        case "userFavorite":
+          return `Your Favorite`;
         default:
           return "Most Popular New Movies";
       }
@@ -55,6 +64,7 @@ const MovieCarousel = (props) => {
 
     return (
       <div>
+        {console.log("🥑currentUser from context: ", currentUser)}
         <h3>{titleSelector()}</h3>
         <Carousel id="carousel1" responsive={responsive}>
           {moviesData.map((movie, i) => {
@@ -126,6 +136,15 @@ const MovieCarousel = (props) => {
           showCard2,
           setCardIndex2,
           setShowCard2
+        )}
+      {currentUser &&
+        carouselGenerator(
+          "userFavorite",
+          currentUser.myFavoriteMovies,
+          cardIndex3,
+          showCard3,
+          setCardIndex3,
+          setShowCard3
         )}
     </React.Fragment>
   );
