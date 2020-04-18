@@ -28,7 +28,7 @@ function App(props) {
   const [search, setSearch] = useState("");
   const [searchMovies, setSearchMovies] = useState([]);
   //! State: last movies
-  // const [myFavoriteList, setMyFavoriteList] = useState([]);
+  const [myFavoriteList, setMyFavoriteList] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
 
   const handleChange = (value) => {
@@ -122,6 +122,8 @@ function App(props) {
         const myFavList = userPopulated.myFavoriteMovies;
         console.log("🍩", myFavList);
 
+        setMyFavoriteList(myFavList);
+
         const lastFavorite = myFavList[0];
         console.log("🌰", lastFavorite);
 
@@ -148,7 +150,7 @@ function App(props) {
         // currentPhoto: userPopulated ? photo : "",
       }}
     >
-      <div className="App App-body" style = {{height: "100%", margin: "0"}}>
+      <div className="App App-body" style={{ height: "100%", margin: "0" }}>
         {console.log("🥭user in App", user, userPopulated)}
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
@@ -167,6 +169,7 @@ function App(props) {
                   searchGenre={search.name}
                   // favMovies={favMovies}
                   similarMovies={similarMovies}
+                  myFavoriteList={myFavoriteList}
                 />
               </Layout>
             </Route>

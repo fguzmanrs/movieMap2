@@ -76,7 +76,10 @@ const MovieCarousel = (props) => {
         // case "favMovies":
         // return
         case "similarMovies":
-          return `Recommeded by Your Last Favorite Movie: ${currentUser.myFavoriteMovies[0].title}`;
+          // return `Recommeded by Your Last Favorite Movie: ${props.myFavoriteList && .myFavoriteMovies[0].title}`;
+          return `Recommeded by Your Last Favorite Movie: ${
+            props.myFavoriteList && props.myFavoriteList[0].title
+          }`;
         default:
           return "Most Popular New Movies";
       }
@@ -168,10 +171,11 @@ const MovieCarousel = (props) => {
           setCardIndex2,
           setShowCard2
         )}
+      {/* currentUser.myFavoriteMovies, */}
       {currentUser && currentUser.myFavoriteMovies
         ? carouselGenerator(
             "userFavorite",
-            currentUser.myFavoriteMovies,
+            props.myFavoriteList,
             cardIndex3,
             showCard3,
             setCardIndex3,
