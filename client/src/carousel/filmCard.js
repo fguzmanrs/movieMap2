@@ -59,6 +59,10 @@ export default function FilmReviewCard(props) {
   // Favorite Heart Icon click event handler
   const handleClick = (e) => {
     console.log("🍒 heart clicked", e);
+
+    //  const heartIconHTML = e.target.closest('.MuiSvgIcon-root');
+    //  const movieId = heartIconHTML.id.split('-')[2];
+
     setIsFavorite(!isFavorite);
   };
 
@@ -75,9 +79,12 @@ export default function FilmReviewCard(props) {
     }
   }, [currentUserContext.userSummary]);
 
+  //* Rerender fav heart icon when myFavlist is changed
   useEffect(() => {
-    //Check this expanded movie in included in user's favorite movie list
-    myFavList.includes();
+    //Check this movie is included in user's favorite movie list
+    if (myFavList.includes(currentMovie.id)) {
+      setIsFavorite(true);
+    }
   }, [myFavList]);
 
   //* Rerender a card when index is changed
