@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     position: "relative",
+    borderBottom: "none",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
+    borderBottom: "none",
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -59,12 +61,14 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
+    borderBottom: "none",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
+    borderBottom: "none",
     width: "100%",
     [theme.breakpoints.up("md")]: {
       width: "20ch",
@@ -174,7 +178,7 @@ export default function Navbar(props) {
         currentPhoto
       )}
       {console.log("🍙props from navbar:", props)}
-      <AppBar position="static">
+      <AppBar position="static" style = {{backgroundColor: "#305360"}}>
         <Toolbar>
           <Typography
             className={(classes.title, "navMenu")}
