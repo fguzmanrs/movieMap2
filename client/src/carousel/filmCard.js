@@ -65,15 +65,15 @@ export default function FilmReviewCard(props) {
   //* Set initial favlist when user login
   useEffect(() => {
     if (
-      currentUserContext.currentUser &&
-      currentUserContext.currentUser.myFavoriteMovies.length > 0
+      currentUserContext.userSummary &&
+      currentUserContext.userSummary.myFavoriteMovies.length > 0
     ) {
       // [12,324]
-      const myFavListArr = currentUserContext.currentUser.myFavoriteMovies;
+      const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
       // set myFavList array
       setMyFavList(myFavListArr);
     }
-  }, [currentUserContext.currentUser]);
+  }, [currentUserContext.userSummary]);
 
   useEffect(() => {
     //Check this expanded movie in included in user's favorite movie list

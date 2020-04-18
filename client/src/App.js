@@ -123,6 +123,7 @@ function App(props) {
         currentUser: userPopulated,
         isLogin: userPopulated ? true : false,
         setCurrentUser: currentUserContext.setCurrentUser,
+        userSummary: user,
         // currentPhoto: userPopulated ? userPopulated.photo : "",
         // currentPhoto: userPopulated ? photo : "",
       }}
