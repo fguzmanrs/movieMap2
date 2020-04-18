@@ -82,7 +82,7 @@ export default function FilmReviewCard(props) {
       }
 
       const updatedUser = res.data.data;
-      console.log("🎂", updatedUser);
+      console.log("🎂updated user:", updatedUser);
       // Set user in App.js with updated user info
       currentUserContext.setCurrentUser(updatedUser);
 
