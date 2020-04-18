@@ -22,7 +22,7 @@ import CurrentUserContext from "../context/current-user.context";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "50%",
-    margin: "0 auto",
+    margin: "50px auto",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
