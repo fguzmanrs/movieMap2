@@ -33,13 +33,17 @@ const MovieCarousel = (props) => {
   const [showCard1, setShowCard1] = useState(false);
   const [cardIndex1, setCardIndex1] = useState(-1);
 
-  //! Second Carousel
+  //! Second Carousel: Last Searched
   const [showCard2, setShowCard2] = useState(false);
   const [cardIndex2, setCardIndex2] = useState(-1);
 
   //! Third Carousel
   const [showCard3, setShowCard3] = useState(false);
   const [cardIndex3, setCardIndex3] = useState(-1);
+
+  //! Fourth Carousel
+  const [showCard4, setShowCard4] = useState(false);
+  const [cardIndex4, setCardIndex4] = useState(-1);
 
   // Force closing 1st carousel
   // useEffect(() => {
@@ -66,9 +70,15 @@ const MovieCarousel = (props) => {
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
         case "userFavorite":
-          return `Your Favorite`;
+          return `Your Favorites`;
         default:
           return "Most Popular New Movies";
+        case "searchMovies":
+          return `Recommended by Your Last Search: ${props.searchGenre}`;
+        // case "favMovies":
+        // return
+        case "similarMovies":
+          return `Recommeded by Your Last Favorite Movie: ${currentUser.myFavoriteMovies[0].title}`;
       }
     };
 
@@ -160,6 +170,15 @@ const MovieCarousel = (props) => {
           showCard3,
           setCardIndex3,
           setShowCard3
+        )}
+      {props.similarMovies.length > 1 &&
+        carouselGenerator(
+          "similarMovies",
+          props.similarMovies,
+          cardIndex4,
+          showCard4,
+          setCardIndex4,
+          setShowCard4
         )}
     </React.Fragment>
   );
