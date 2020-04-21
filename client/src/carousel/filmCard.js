@@ -61,9 +61,6 @@ export default function FilmReviewCard(props) {
   const handleClick = (e) => {
     console.log("🍒 heart clicked", e);
 
-    //  const heartIconHTML = e.target.closest('.MuiSvgIcon-root');
-    //  const movieId = heartIconHTML.id.split('-')[2];
-
     const updateFavoriteList = async () => {
       console.log("🍊 movie id, isFavorite", currentMovie.id, isFavorite);
 
@@ -80,14 +77,19 @@ export default function FilmReviewCard(props) {
         }
       } catch (err) {
         console.log(err);
+        if (err.respond) {
+          console.log("🚩", err.respond);
+        }
       }
 
-      const updatedUser = res.data.data;
-      console.log("🎂updated user:", updatedUser);
-      // Set user in App.js with updated user info
-      currentUserContext.setCurrentUser(updatedUser);
+      if (res.data) {
+        const updatedUser = res.data.data;
+        console.log("🎂updated user:", updatedUser);
+        // Set user in App.js with updated user info
+        currentUserContext.setCurrentUser(updatedUser);
 
-      setIsFavorite(!isFavorite);
+        setIsFavorite(!isFavorite);
+      }
     };
 
     updateFavoriteList();
@@ -113,13 +115,19 @@ export default function FilmReviewCard(props) {
     //Check this movie is included in user's favorite movie list
     utilSetIsFavorite();
     // }, [myFavList, props.movies]);
-  }, [props.movies]);
+  }, [props.favList]);
 
   function utilSetIsFavorite() {
-    if (!currentMovie) return;
-    const movieIds = props.movies.map((movieObj) => movieObj.id);
+    // if (!currentMovie) return;
+    const favMovieIds = props.favList.map((movieObj) => movieObj.id);
+
     // if (myFavList.includes(currentMovie.id)) {
-    if (movieIds.includes(currentMovie.id)) {
+    if (favMovieIds.includes(currentMovie.id)) {
+      console.log(
+        "😜 inside of setIsfavorite(true)",
+        favMovieIds,
+        currentMovie.id
+      );
       setIsFavorite(true);
     } else {
       setIsFavorite(false);
@@ -128,19 +136,19 @@ export default function FilmReviewCard(props) {
 
   //* Rerender a card when index is changed
   useEffect(() => {
-    if (currentMovie) {
-      // setCurrentMovie(props.movies[props.cardIndex]);
+    // if (currentMovie) {
+    // setCurrentMovie(props.movies[props.cardIndex]);
 
-      const getProviders = async () => {
-        const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
-        const providers = res.data.data;
-        console.log("🎞 providers:", providers);
+    const getProviders = async () => {
+      const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
+      const providers = res.data.data;
+      console.log("🎞 providers:", providers);
 
-        setStreamingList(providers);
-      };
-      getProviders();
-      utilSetIsFavorite();
-    }
+      setStreamingList(providers);
+    };
+    getProviders();
+    utilSetIsFavorite();
+    // }
   }, [props.cardIndex]);
 
   //rgba(210, 204, 243, 0.816)
@@ -155,7 +163,8 @@ export default function FilmReviewCard(props) {
       }}
     >
       {console.log("🍓 currentUserContext in filmCard: ", currentUserContext)}
-      {console.log("🍋🍋 myFavList props.movies: ", props.movies)}
+      {console.log("🍋 movies for carousel: ", props.movies)}
+      {console.log("🍇 favorite list: ", props.favList)}
       <CardHeader
         style={{
           backgroundColor: "#BCE0EF",

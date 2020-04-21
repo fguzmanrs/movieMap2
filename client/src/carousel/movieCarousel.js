@@ -146,12 +146,14 @@ const MovieCarousel = (props) => {
             );
           })}
         </Carousel>
+        {/* no show after deleting the last movie in carousel */}
         {showCard && cardIndex <= moviesData.length - 1 ? (
           <FilmCard
             id="filmCard1"
             cardIndex={cardIndex}
             movies={moviesData}
             name={carouselName}
+            favList={props.myFavoriteList}
           />
         ) : (
           ""
