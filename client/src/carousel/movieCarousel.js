@@ -81,8 +81,6 @@ const MovieCarousel = (props) => {
           return `Your Favorites`;
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
-        // case "favMovies":
-        // return
         case "similarMovies":
           // return `Recommeded by Your Last Favorite Movie: ${props.myFavoriteList && .myFavoriteMovies[0].title}`;
           return `Recommeded by Your Last Favorite Movie: ${
@@ -98,7 +96,9 @@ const MovieCarousel = (props) => {
         {console.log("🥑currentUser from context: ", currentUser)}
         {console.log("🥑🥑🥑moviesData: ", moviesData)}
         {console.log("🥑🥑🥑🥑🥑myfavorite list: ", props.myFavoriteList)}
-        <h2 style={{ color: "#fff" }}>{titleSelector()}</h2>
+        <h2 style={{ color: "#fff" }}>
+          {moviesData.length > 0 && titleSelector()}
+        </h2>
         <Carousel
           id="carousel1"
           responsive={responsive}
