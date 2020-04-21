@@ -219,7 +219,7 @@ export default function FilmReviewCard(props) {
           style={{
             color: "#fff",
             overflow: "auto",
-            webkitScrollbar: "{display: none}",
+            // webkitScrollbar: "{display: none}",
             //backgroundColor: "rgba(210, 204, 243, 0.816)",
             backgroundColor: "#8BAEBD",
             float: "right",

@@ -45,6 +45,8 @@ const MovieCarousel = (props) => {
   const [showCard4, setShowCard4] = useState(false);
   const [cardIndex4, setCardIndex4] = useState(-1);
 
+  // const [myFavoiteList, setMyFavoriteList] = useState(props.myFavoriteList);
+
   // Force closing 1st carousel
   // useEffect(() => {
   //   if (userSummary && userSummary.myFavoriteMovies.length > 1) {
@@ -54,6 +56,12 @@ const MovieCarousel = (props) => {
   //     // setShowCard3(false);
   //   }
   // }, [userSummary]);
+
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setMyFavoriteList(currentUser.myFavoriteMovies);
+  //   }
+  // }, [currentUser]);
 
   //! Carousle Generator
   const carouselGenerator = (
@@ -89,6 +97,7 @@ const MovieCarousel = (props) => {
       <div>
         {console.log("🥑currentUser from context: ", currentUser)}
         {console.log("🥑🥑🥑moviesData: ", moviesData)}
+        {console.log("🥑🥑🥑🥑🥑myfavorite list: ", props.myFavoriteList)}
         <h2 style={{ color: "#fff" }}>{titleSelector()}</h2>
         <Carousel
           id="carousel1"
@@ -172,7 +181,11 @@ const MovieCarousel = (props) => {
           setShowCard2
         )}
       {/* currentUser.myFavoriteMovies, */}
-      {currentUser && currentUser.myFavoriteMovies
+      {/* {props.myFavoriteList} */}
+      {/* {console.log("🧁🧁", currentUser, myFavoiteList)} */}
+      {console.log("🧁🧁", currentUser)}
+      {/* {currentUser && myFavoiteList && myFavoiteList.length > 0 */}
+      {currentUser
         ? carouselGenerator(
             "userFavorite",
             props.myFavoriteList,
