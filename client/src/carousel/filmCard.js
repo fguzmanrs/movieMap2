@@ -43,18 +43,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FilmReviewCard(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  // const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded);
+  // };
+
   const currentUserContext = useContext(CurrentUserContext);
 
   const currentMovie = props.movies[props.cardIndex];
   // const [currentMovie, setCurrentMovie] = useState(null);
   const [streamingList, setStreamingList] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [myFavList, setMyFavList] = useState([]);
+  // const [myFavList, setMyFavList] = useState([]); //! removable?
 
   // Favorite Heart Icon click event handler
   const handleClick = (e) => {
@@ -94,26 +95,31 @@ export default function FilmReviewCard(props) {
   };
 
   //* Set initial favlist when user login
-  useEffect(() => {
-    if (
-      currentUserContext.userSummary &&
-      currentUserContext.userSummary.myFavoriteMovies
-    ) {
-      // [12,324]
-      const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
-      // set myFavList array
-      setMyFavList(myFavListArr);
-    }
-  }, [currentUserContext.userSummary]);
+  // useEffect(() => {
+  //   if (
+  //     currentUserContext.userSummary &&
+  //     currentUserContext.userSummary.myFavoriteMovies
+  //     //? props.movies.length > 0
+  //   ) {
+  //     // [12,324]
+  //     const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
+  //     // set myFavList array
+  //     setMyFavList(myFavListArr);
+  //   }
+  // }, [currentUserContext.userSummary]);
 
   //* Rerender fav heart icon when myFavlist is changed
   useEffect(() => {
     //Check this movie is included in user's favorite movie list
     utilSetIsFavorite();
-  }, [myFavList, props.movies]);
+    // }, [myFavList, props.movies]);
+  }, [props.movies]);
 
   function utilSetIsFavorite() {
-    if (myFavList.includes(currentMovie.id)) {
+    if (!currentMovie) return;
+    const movieIds = props.movies.map((movieObj) => movieObj.id);
+    // if (myFavList.includes(currentMovie.id)) {
+    if (movieIds.includes(currentMovie.id)) {
       setIsFavorite(true);
     } else {
       setIsFavorite(false);
@@ -149,18 +155,13 @@ export default function FilmReviewCard(props) {
       }}
     >
       {console.log("🍓 currentUserContext in filmCard: ", currentUserContext)}
-      {console.log("🍋🍋 myFavList: ", myFavList)}
+      {console.log("🍋🍋 myFavList props.movies: ", props.movies)}
       <CardHeader
         style={{
           backgroundColor: "#BCE0EF",
           color: "white",
           backgroundImage: "linear-gradient(-90deg, #305360, #8BAEBD)",
         }}
-        // avatar={
-        //   <Avatar aria-label="film" className={classes.avatar}>
-        //     R
-        //   </Avatar>
-        // }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -168,11 +169,14 @@ export default function FilmReviewCard(props) {
         }
         action={
           <IconButton aria-label="add to favorites" onClick={handleClick}>
-            {myFavList.length > 0 && (
+            {/* {myFavList.length > 0 && ( */}
+            {props.movies.length > 0 && currentMovie ? (
               <FavoriteIcon
                 color={isFavorite ? "error" : "inherit"}
                 id={`${props.name}-Fav-${currentMovie.id}`}
               />
+            ) : (
+              ""
             )}
           </IconButton>
         }
