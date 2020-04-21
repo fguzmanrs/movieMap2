@@ -115,7 +115,7 @@ export default function FilmReviewCard(props) {
     //Check this movie is included in user's favorite movie list
     utilSetIsFavorite();
     // }, [myFavList, props.movies]);
-  }, [props.favList]);
+  }, [props.favList, props.movies]);
 
   function utilSetIsFavorite() {
     // if (!currentMovie) return;
