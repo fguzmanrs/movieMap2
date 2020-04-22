@@ -39,3 +39,9 @@ a {
 label + .MuiInput-formControl {
   margin-top: 0 !important;
 }
+
+.searchIcon {
+  position: absolute !important;
+  right: 0px;
+  top: -3px;
+}

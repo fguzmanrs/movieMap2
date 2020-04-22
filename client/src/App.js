@@ -24,15 +24,22 @@ function App(props) {
   const [userPopulated, setUserPopulated] = useState(undefined);
   //! State: new movies
   const [newMovies, setNewMovies] = useState([]);
-  //! State: search, search movies
+  //! State: search by genre, search movies
   const [search, setSearch] = useState("");
   const [searchMovies, setSearchMovies] = useState([]);
+  //! State: search by keyword, search movies
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeywordMovies, setSearchKeywordMovies] = useState([]);
   //! State: last movies
   const [myFavoriteList, setMyFavoriteList] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
 
   const handleChange = (value) => {
     setSearch(value);
+  };
+
+  const handleSeachKeywordSubmit = (value) => {
+    setSearchKeyword(value);
   };
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
