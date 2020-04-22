@@ -279,10 +279,7 @@ export default function FilmReviewCard(props) {
             {streamingList &&
               streamingList.map((streaming) => {
                 //! Skip some broken logo links
-                if (
-                  streaming.name !== "AtomTicketsIVAUS" &&
-                  streaming.name !== "DisneyPlusIVAUS"
-                ) {
+                if (streaming.name !== "AtomTicketsIVAUS") {
                   return (
                     <a
                       style={{ marginLeft: "20px" }}
@@ -291,8 +288,12 @@ export default function FilmReviewCard(props) {
                       target="_blank"
                     >
                       <img
-                        style={{ height: "50px" }}
-                        src={`${streaming.icon}`}
+                        // style={{ height: "50px" }}
+                        src={`${
+                          streaming.name !== "DisneyPlusIVAUS"
+                            ? streaming.icon
+                            : "/images/disney-plus-logo-high-80w.png"
+                        }`}
                       ></img>
                     </a>
                   );
