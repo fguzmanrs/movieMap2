@@ -14,6 +14,9 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link, Redirect } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
+import OptionSelect from "./option-select";
+
+import SearchBarKeyword from "./searchbar-keyword";
 
 import "./navbar.css";
 
@@ -95,6 +98,12 @@ export default function Navbar(props) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const [option, setOption] = React.useState("genre");
+
+  const handleOptionOnChange = (e) => {
+    setOption(e.target.value);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -178,7 +187,7 @@ export default function Navbar(props) {
         currentPhoto
       )}
       {console.log("🍙props from navbar:", props)}
-      <AppBar position="static" style = {{backgroundColor: "#305360"}}>
+      <AppBar position="static" style={{ backgroundColor: "#305360" }}>
         <Toolbar>
           <Typography
             className={(classes.title, "navMenu")}
@@ -187,7 +196,14 @@ export default function Navbar(props) {
           >
             <Link to="/">Movie Map</Link>
           </Typography>
-          <Searchbar onChange={props.onChange} />
+          {/* //! Option select */}
+          <OptionSelect onChange={handleOptionOnChange} />
+          {/* //! Searchbar */}
+          {option === "genre" ? (
+            <Searchbar onChange={props.onChange} />
+          ) : (
+            <SearchBarKeyword onChange={props.onChange} />
+          )}
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

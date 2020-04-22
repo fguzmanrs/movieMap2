@@ -1,5 +1,5 @@
 a {
-  color: #Fff;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -10,7 +10,6 @@ a {
 .navMenu {
   display: flex;
   align-items: center;
-  
 }
 
 .navMenu > * {
@@ -35,4 +34,8 @@ a {
 
 .MuiInput-underline:after {
   display: none;
+}
+
+label + .MuiInput-formControl {
+  margin-top: 0 !important;
 }
