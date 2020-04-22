@@ -53,9 +53,10 @@ export default function Profile(props) {
   //   props.setCurrentPhoto(newPhoto);
   // };
   //* Solution 2: partially update user's context
-  currentUserContext.setCurrentUser = (firstName, lastName, photo) => {
-    props.setCurrentUser({ ...props.currentUser, firstName, lastName, photo });
-  };
+  // currentUserContext.setCurrentUser = (firstName, lastName, photo) => {
+  //   props.setCurrentUser({ ...props.currentUser, firstName, lastName, photo });
+  // };
+  //* Solution 3: update with the whole new user obj using setCurrentUser
 
   //! Handle submit user's basic info
   const handleSubmitAccount = async (e) => {
@@ -82,11 +83,12 @@ export default function Profile(props) {
 
     //* Update user's photo in App.js
     // currentUserContext.setCurrentPhoto(updatedUser.photo);
-    currentUserContext.setCurrentUser(
-      updatedUser.firstName,
-      updatedUser.lastName,
-      updatedUser.photo
-    );
+    // currentUserContext.setCurrentUser(
+    //   updatedUser.firstName,
+    //   updatedUser.lastName,
+    //   updatedUser.photo
+    // );
+    currentUserContext.setCurrentUser(updatedUser.user);
 
     // setUserFirstName(updatedUser.firstName);
     // setUserLastName(updatedUser.LastName);

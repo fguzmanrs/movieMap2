@@ -73,6 +73,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       email,
       firstName,
       lastName,
+      myFavoriteMovies: [],
     };
 
     //* 5. Store a new user into DB

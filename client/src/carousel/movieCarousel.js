@@ -45,6 +45,8 @@ const MovieCarousel = (props) => {
   const [showCard4, setShowCard4] = useState(false);
   const [cardIndex4, setCardIndex4] = useState(-1);
 
+  // const [myFavoiteList, setMyFavoriteList] = useState(props.myFavoriteList);
+
   // Force closing 1st carousel
   // useEffect(() => {
   //   if (userSummary && userSummary.myFavoriteMovies.length > 1) {
@@ -54,6 +56,12 @@ const MovieCarousel = (props) => {
   //     // setShowCard3(false);
   //   }
   // }, [userSummary]);
+
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setMyFavoriteList(currentUser.myFavoriteMovies);
+  //   }
+  // }, [currentUser]);
 
   //! Carousle Generator
   const carouselGenerator = (
@@ -73,8 +81,6 @@ const MovieCarousel = (props) => {
           return `Your Favorites`;
         case "searchMovies":
           return `Recommended by Your Last Search: ${props.searchGenre}`;
-        // case "favMovies":
-        // return
         case "similarMovies":
           // return `Recommeded by Your Last Favorite Movie: ${props.myFavoriteList && .myFavoriteMovies[0].title}`;
           return `Recommeded by Your Last Favorite Movie: ${
@@ -89,7 +95,10 @@ const MovieCarousel = (props) => {
       <div>
         {console.log("🥑currentUser from context: ", currentUser)}
         {console.log("🥑🥑🥑moviesData: ", moviesData)}
-        <h2 style={{ color: "#fff" }}>{titleSelector()}</h2>
+        {console.log("🥑🥑🥑🥑🥑myfavorite list: ", props.myFavoriteList)}
+        <h2 style={{ color: "#fff" }}>
+          {moviesData.length > 0 && titleSelector()}
+        </h2>
         <Carousel
           id="carousel1"
           responsive={responsive}
@@ -137,13 +146,17 @@ const MovieCarousel = (props) => {
             );
           })}
         </Carousel>
-        {showCard && (
+        {/* no show after deleting the last movie in carousel */}
+        {showCard && cardIndex <= moviesData.length - 1 ? (
           <FilmCard
             id="filmCard1"
             cardIndex={cardIndex}
             movies={moviesData}
             name={carouselName}
+            favList={props.myFavoriteList}
           />
+        ) : (
+          ""
         )}
       </div>
     );
@@ -153,6 +166,7 @@ const MovieCarousel = (props) => {
     <React.Fragment>
       {console.log("🥕new moviesss: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
+      {console.log("🥕my fav movies: ", props.myFavoriteList)}
       {props.newMovies &&
         carouselGenerator(
           "newMovies",
@@ -172,7 +186,11 @@ const MovieCarousel = (props) => {
           setShowCard2
         )}
       {/* currentUser.myFavoriteMovies, */}
-      {currentUser && currentUser.myFavoriteMovies
+      {/* {props.myFavoriteList} */}
+      {/* {console.log("🧁🧁", currentUser, myFavoiteList)} */}
+      {console.log("🧁🧁", currentUser)}
+      {/* {currentUser && myFavoiteList && myFavoiteList.length > 0 */}
+      {currentUser && props.myFavoriteList.length > 0
         ? carouselGenerator(
             "userFavorite",
             props.myFavoriteList,

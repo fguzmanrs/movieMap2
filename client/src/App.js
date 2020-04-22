@@ -63,7 +63,7 @@ function App(props) {
 
   //* Detect user's change and call another ajax call for detail user info(list populated one)
   useEffect(() => {
-    if (user && user.myFavoriteMovies) {
+    if (user && user.myFavoriteMovies && user.myFavoriteMovies.length > 0) {
       const fetchFunc = async () => {
         try {
           const res = await axios.get(
@@ -82,7 +82,10 @@ function App(props) {
       };
 
       fetchFunc();
-    } else {
+    } else if (user && user.myFavoriteMovies && !user.myFavoriteMovies.length) {
+      // const userWithInitMyFavList = Object.assign(user, { myFavoriteList: [] });
+      // console.log("🚒 userWithInitMyFavList", userWithInitMyFavList);
+      console.log("🚒 user having no fav movie(populated):", user);
       setUserPopulated(user);
     }
   }, [user]);
@@ -117,7 +120,7 @@ function App(props) {
 
   //* Get recommended movies: because you watch...
   useEffect(() => {
-    if (userPopulated && userPopulated.myFavoriteMovies) {
+    if (userPopulated && userPopulated.myFavoriteMovies.length > 0) {
       const fetchFunc = async () => {
         const myFavList = userPopulated.myFavoriteMovies;
         console.log("🍩", myFavList);
@@ -136,6 +139,9 @@ function App(props) {
       };
 
       fetchFunc();
+    } else {
+      setMyFavoriteList([]);
+      setSimilarMovies([]);
     }
   }, [userPopulated]);
 

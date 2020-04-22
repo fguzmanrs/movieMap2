@@ -43,25 +43,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FilmReviewCard(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  // const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded);
+  // };
+
   const currentUserContext = useContext(CurrentUserContext);
 
   const currentMovie = props.movies[props.cardIndex];
   // const [currentMovie, setCurrentMovie] = useState(null);
   const [streamingList, setStreamingList] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [myFavList, setMyFavList] = useState([]);
+  // const [myFavList, setMyFavList] = useState([]); //! removable?
 
   // Favorite Heart Icon click event handler
   const handleClick = (e) => {
     console.log("🍒 heart clicked", e);
-
-    //  const heartIconHTML = e.target.closest('.MuiSvgIcon-root');
-    //  const movieId = heartIconHTML.id.split('-')[2];
 
     const updateFavoriteList = async () => {
       console.log("🍊 movie id, isFavorite", currentMovie.id, isFavorite);
@@ -79,14 +77,19 @@ export default function FilmReviewCard(props) {
         }
       } catch (err) {
         console.log(err);
+        if (err.respond) {
+          console.log("🚩", err.respond);
+        }
       }
 
-      const updatedUser = res.data.data;
-      console.log("🎂updated user:", updatedUser);
-      // Set user in App.js with updated user info
-      currentUserContext.setCurrentUser(updatedUser);
+      if (res.data) {
+        const updatedUser = res.data.data;
+        console.log("🎂updated user:", updatedUser);
+        // Set user in App.js with updated user info
+        currentUserContext.setCurrentUser(updatedUser);
 
-      setIsFavorite(!isFavorite);
+        setIsFavorite(!isFavorite);
+      }
     };
 
     updateFavoriteList();
@@ -94,26 +97,37 @@ export default function FilmReviewCard(props) {
   };
 
   //* Set initial favlist when user login
-  useEffect(() => {
-    if (
-      currentUserContext.userSummary &&
-      currentUserContext.userSummary.myFavoriteMovies
-    ) {
-      // [12,324]
-      const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
-      // set myFavList array
-      setMyFavList(myFavListArr);
-    }
-  }, [currentUserContext.userSummary]);
+  // useEffect(() => {
+  //   if (
+  //     currentUserContext.userSummary &&
+  //     currentUserContext.userSummary.myFavoriteMovies
+  //     //? props.movies.length > 0
+  //   ) {
+  //     // [12,324]
+  //     const myFavListArr = currentUserContext.userSummary.myFavoriteMovies;
+  //     // set myFavList array
+  //     setMyFavList(myFavListArr);
+  //   }
+  // }, [currentUserContext.userSummary]);
 
   //* Rerender fav heart icon when myFavlist is changed
   useEffect(() => {
     //Check this movie is included in user's favorite movie list
     utilSetIsFavorite();
-  }, [myFavList, props.movies]);
+    // }, [myFavList, props.movies]);
+  }, [props.favList, props.movies]);
 
   function utilSetIsFavorite() {
-    if (myFavList.includes(currentMovie.id)) {
+    // if (!currentMovie) return;
+    const favMovieIds = props.favList.map((movieObj) => movieObj.id);
+
+    // if (myFavList.includes(currentMovie.id)) {
+    if (favMovieIds.includes(currentMovie.id)) {
+      console.log(
+        "😜 inside of setIsfavorite(true)",
+        favMovieIds,
+        currentMovie.id
+      );
       setIsFavorite(true);
     } else {
       setIsFavorite(false);
@@ -122,19 +136,19 @@ export default function FilmReviewCard(props) {
 
   //* Rerender a card when index is changed
   useEffect(() => {
-    if (currentMovie) {
-      // setCurrentMovie(props.movies[props.cardIndex]);
+    // if (currentMovie) {
+    // setCurrentMovie(props.movies[props.cardIndex]);
 
-      const getProviders = async () => {
-        const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
-        const providers = res.data.data;
-        console.log("🎞 providers:", providers);
+    const getProviders = async () => {
+      const res = await axios.get(`/api/movies/providers/${currentMovie.id}`);
+      const providers = res.data.data;
+      console.log("🎞 providers:", providers);
 
-        setStreamingList(providers);
-      };
-      getProviders();
-      utilSetIsFavorite();
-    }
+      setStreamingList(providers);
+    };
+    getProviders();
+    utilSetIsFavorite();
+    // }
   }, [props.cardIndex]);
 
   //rgba(210, 204, 243, 0.816)
@@ -149,18 +163,14 @@ export default function FilmReviewCard(props) {
       }}
     >
       {console.log("🍓 currentUserContext in filmCard: ", currentUserContext)}
-      {console.log("🍋🍋 myFavList: ", myFavList)}
+      {console.log("🍋 movies for carousel: ", props.movies)}
+      {console.log("🍇 favorite list: ", props.favList)}
       <CardHeader
         style={{
           backgroundColor: "#BCE0EF",
           color: "white",
           backgroundImage: "linear-gradient(-90deg, #305360, #8BAEBD)",
         }}
-        // avatar={
-        //   <Avatar aria-label="film" className={classes.avatar}>
-        //     R
-        //   </Avatar>
-        // }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -168,11 +178,14 @@ export default function FilmReviewCard(props) {
         }
         action={
           <IconButton aria-label="add to favorites" onClick={handleClick}>
-            {myFavList.length > 0 && (
+            {/* {myFavList.length > 0 && ( */}
+            {props.movies.length > 0 && currentMovie ? (
               <FavoriteIcon
                 color={isFavorite ? "error" : "inherit"}
                 id={`${props.name}-Fav-${currentMovie.id}`}
               />
+            ) : (
+              ""
             )}
           </IconButton>
         }
@@ -219,7 +232,7 @@ export default function FilmReviewCard(props) {
           style={{
             color: "#fff",
             overflow: "auto",
-            webkitScrollbar: "{display: none}",
+            // webkitScrollbar: "{display: none}",
             //backgroundColor: "rgba(210, 204, 243, 0.816)",
             backgroundColor: "#8BAEBD",
             float: "right",
