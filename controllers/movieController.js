@@ -32,15 +32,35 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
   const date = `0${currentDate.getDate()}`.slice(-2); // 2 digit
   const oneYearBefore = `${lastYear}-${month}-${date}`;
 
-  const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=${oneYearBefore}`;
+  //* previous API call(20 movies)
+  // const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2&primary_release_date.gte=${oneYearBefore}`;
+  // const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&region=us&sort_by=popularity.desc&include_adult=false&page=1&release_date.gte=${oneYearBefore}&vote_count.gte=1000&vote_average.gte=7`;
+  // const movies = await axios(tmdbUrl);
 
-  const movies = await axios(tmdbUrl);
+  //* multiple API call(Max 40 movies)
+  let movieAPIArr = [];
+
+  for (i = 1; i < 3; i++) {
+    // region: US, language: en-US, within 1 year, vote count min: 1000, vote ave min: 7, sort by popularity
+    const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&region=us&sort_by=popularity.desc&include_adult=false&page=${i}&release_date.gte=${oneYearBefore}&vote_count.gte=1000&vote_average.gte=7`;
+
+    movieAPIArr.push(axios.get(tmdbUrl));
+  }
+
+  const moviesPromiseArr = await Promise.all(movieAPIArr);
+
+  const moviesArr = moviesPromiseArr.reduce(
+    (acc, res) => acc.concat(res.data.results),
+    []
+  );
+
+  console.log("🚚 40 movies arr: ", moviesArr);
 
   // save database
   res.status(200).json({
     status: "success",
-    length: movies.data.results.length,
-    data: movies.data.results,
+    length: moviesArr.length,
+    data: moviesArr,
   });
 });
 

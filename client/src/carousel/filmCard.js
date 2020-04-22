@@ -279,7 +279,10 @@ export default function FilmReviewCard(props) {
             {streamingList &&
               streamingList.map((streaming) => {
                 //! Skip some broken logo links
-                if (streaming.name !== "AtomTicketsIVAUS") {
+                if (
+                  streaming.name !== "AtomTicketsIVAUS" &&
+                  streaming.name !== "HBOIVAUS"
+                ) {
                   return (
                     <a
                       style={{ marginLeft: "20px" }}
