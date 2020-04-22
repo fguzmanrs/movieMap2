@@ -166,6 +166,7 @@ const MovieCarousel = (props) => {
     <React.Fragment>
       {console.log("🥕new moviesss: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
+      {console.log("🥕my fav movies: ", props.myFavoriteList)}
       {props.newMovies &&
         carouselGenerator(
           "newMovies",
@@ -189,7 +190,7 @@ const MovieCarousel = (props) => {
       {/* {console.log("🧁🧁", currentUser, myFavoiteList)} */}
       {console.log("🧁🧁", currentUser)}
       {/* {currentUser && myFavoiteList && myFavoiteList.length > 0 */}
-      {currentUser
+      {currentUser && props.myFavoriteList.length > 0
         ? carouselGenerator(
             "userFavorite",
             props.myFavoriteList,

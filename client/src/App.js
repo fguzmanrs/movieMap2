@@ -136,6 +136,9 @@ function App(props) {
       };
 
       fetchFunc();
+    } else {
+      setMyFavoriteList([]);
+      setSimilarMovies([]);
     }
   }, [userPopulated]);
 
