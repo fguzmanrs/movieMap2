@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 //import PhotoCamera from "./node_modules/@material-ui/icons/PhotoCamera";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 //import Icon from "./node_modules/@material-ui/core/Icon";
+import Grid from "@material-ui/core/Grid";
 
 import CurrentUserContext from "../context/current-user.context";
 
@@ -128,7 +129,7 @@ export default function Profile(props) {
         "🍤 current user contextAPI: ",
         currentUserContext.currentUser
       )}
-      <ExpansionPanel>
+      <ExpansionPanel defaultExpanded="true">
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -144,38 +145,48 @@ export default function Profile(props) {
             malesuada lacus ex, sit amet blandit leo lobortis eget.
           </Typography> */}
           <form onSubmit={handleSubmitAccount}>
-            <div>
-              <TextField
-                id="standard-helperText"
-                label="First Name"
-                name="firstName"
-                // defaultValue={props.user.firstName}
-                defaultValue={currentUserContext.currentUser.firstName}
+
+            <Grid container>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+                <TextField
+                  id="standard-helperText"
+                  label="First Name"
+                  name="firstName"
+                  // defaultValue={props.user.firstName}
+                  defaultValue={currentUserContext.currentUser.firstName}
                 // defaultValue={userFirtName}
                 // inputProps={{ref: input => this.titleInput = input}}
-              />
-              <TextField
-                id="standard-helperText"
-                label="Last Name"
-                name="lastName"
-                // defaultValue={props.user.lastName}
-                defaultValue={currentUserContext.currentUser.lastName}
+                />
+              </Grid>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+                <TextField
+                  id="standard-helperText"
+                  label="Last Name"
+                  name="lastName"
+                  // defaultValue={props.user.lastName}
+                  defaultValue={currentUserContext.currentUser.lastName}
                 // defaultValue={userLastName}
-              />
-
-              <Button raised="raised" component="label" color="primary">
-                <CloudUploadIcon />
-                {"Profile Image"}
-                <input style={{ display: "none" }} type="file" name="photo" />
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
-                update
-              </Button>
+                />
+              </Grid>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item alignItems="flex-end" justify="center">
+                <div>
+                  <Button raised="raised" component="label" color="primary" >
+                    <CloudUploadIcon />
+                      &nbsp;&nbsp;Profile Image
+                      <input style={{ display: "none" }} type="file" name="photo" />
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    Update
+                  </Button>
+                </div>
+              </Grid>
 
               {/* <input
   type="file"
@@ -184,11 +195,12 @@ export default function Profile(props) {
   aria-label="Profile picture upload"
   style={{ display: "none" }}
 /> */}
-            </div>
+            </Grid>
+
           </form>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <ExpansionPanel>
+      <ExpansionPanel defaultExpanded="true">
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -198,33 +210,43 @@ export default function Profile(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <form onSubmit={handleSubmitPassword}>
-            <div>
-              <TextField
-                id="standard-helperText"
-                label="Current password"
-                name="currentPassword"
-                type="password"
+
+            <Grid container>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+                <TextField
+                  id="standard-helperText"
+                  label="Current Password"
+                  name="currentPassword"
+                  type="password"
                 // defaultValue={user.password}
                 // inputProps={{ref: input => this.titleInput = input}}
-              />
-
-              <TextField
-                id="standard-helperText"
-                label="New password"
-                name="newPassword"
-                type="password"
+                />
+              </Grid>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+                <TextField
+                  id="standard-helperText"
+                  label="New Password"
+                  name="newPassword"
+                  type="password"
                 // defaultValue=""
-              />
-
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
-                update
+                />
+              </Grid>
+              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item alignItems="flex-end" justify="center">
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    update
               </Button>
-            </div>
+                </div>
+              </Grid>
+
+            </Grid>
+
           </form>
         </ExpansionPanelDetails>
       </ExpansionPanel>
