@@ -1,25 +1,13 @@
 /* eslint-disable no-use-before-define */
 import React from "react";
-// import Autocomplete from "@material-ui/lab/Autocomplete";
-// import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-// import InputBase from "@material-ui/core/InputBase";
 
 import "./navbar.css";
 
 export default function SearchBarKeyword(props) {
-  const handleChange = (e, value) => {
-    if (value) {
-      console.log("🍫Searchbar's value: ", value); // format: {genre: "Advanture"}
-
-      // const keywordId = value.id;
-      // Set search keyword in App.js
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -33,7 +21,7 @@ export default function SearchBarKeyword(props) {
     const { searchKeyword } = e.currentTarget.elements;
     console.log("🥫searchKeyword: ", searchKeyword.value);
 
-    props.onSubmit(searchKeyword.value, "keyword");
+    props.onSubmit(searchKeyword.value.toLowerCase(), "keyword");
   };
 
   return (

@@ -39,7 +39,8 @@ function App(props) {
   };
 
   const handleSubmit = (value, type) => {
-    type === "keyword" && setSearchKeyword(value);
+    // type === "keyword" && setSearchKeyword(value);
+    type === "keyword" && setSearch(value);
   };
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
@@ -110,15 +111,25 @@ function App(props) {
     fetchFunc();
   }, []);
 
-  //* Get movies : search by genre
+  //* Get movies : search by genre or keyword
   useEffect(() => {
     if (search) {
       const fetchFunc = async () => {
-        const res = await axios.get(`/api/movies/search/genre/${search.id}`);
+        let res = {};
+
+        if (search.id) {
+          res = await axios.get(`/api/movies/search/genre/${search.id}`);
+        } else if (!search.id) {
+          res = await axios.get(`/api/movies/search/keyword/${search}`);
+        }
+
         const searchMovies = res.data.data;
         console.log("🍿 seachMovies: ", searchMovies);
 
-        setSearchMovies(searchMovies);
+        const filteredMovies = searchMovies.filter(
+          (movieObj) => movieObj.poster_path && movieObj.backdrop_path
+        );
+        setSearchMovies(filteredMovies);
       };
 
       fetchFunc();
@@ -126,21 +137,21 @@ function App(props) {
   }, [search]);
 
   //* Get movies : search by keyword
-  useEffect(() => {
-    if (searchKeyword) {
-      const fetchFunc = async () => {
-        const res = await axios.get(
-          `/api/movies/search/keyword/${searchKeyword}`
-        );
-        const searchMovies = res.data.data;
-        console.log("🍿 seachMovies: ", searchMovies);
+  // useEffect(() => {
+  //   if (searchKeyword) {
+  //     const fetchFunc = async () => {
+  //       const res = await axios.get(
+  //         `/api/movies/search/keyword/${searchKeyword}`
+  //       );
+  //       const searchMovies = res.data.data;
+  //       console.log("🍿 seachMovies: ", searchMovies);
 
-        setSearchKeywordMovies(searchMovies);
-      };
+  //       setSearchKeywordMovies(searchMovies);
+  //     };
 
-      fetchFunc();
-    }
-  }, [searchKeyword]);
+  //     fetchFunc();
+  //   }
+  // }, [searchKeyword]);
 
   //* Get recommended movies: because you watch...
   useEffect(() => {
@@ -198,7 +209,7 @@ function App(props) {
                 <MovieCarousel
                   newMovies={newMovies}
                   searchMovies={searchMovies}
-                  searchGenre={search.name}
+                  search={search}
                   // favMovies={favMovies}
                   similarMovies={similarMovies}
                   myFavoriteList={myFavoriteList}

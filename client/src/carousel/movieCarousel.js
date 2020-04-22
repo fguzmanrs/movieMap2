@@ -76,11 +76,11 @@ const MovieCarousel = (props) => {
     const titleSelector = () => {
       switch (carouselName) {
         case "searchMovies":
-          return `Recommended by Your Last Search: ${props.searchGenre}`;
+          return `Recommended by Your Last Search: ${
+            props.search.name ? props.search.name : props.search
+          }`;
         case "userFavorite":
           return `Your Favorites`;
-        case "searchMovies":
-          return `Recommended by Your Last Search: ${props.searchGenre}`;
         case "similarMovies":
           // return `Recommeded by Your Last Favorite Movie: ${props.myFavoriteList && .myFavoriteMovies[0].title}`;
           return `Recommeded by Your Last Favorite Movie: ${
