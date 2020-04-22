@@ -38,8 +38,8 @@ function App(props) {
     setSearch(value);
   };
 
-  const handleSeachKeywordSubmit = (value) => {
-    setSearchKeyword(value);
+  const handleSubmit = (value, type) => {
+    type === "keyword" && setSearchKeyword(value);
   };
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
@@ -110,7 +110,7 @@ function App(props) {
     fetchFunc();
   }, []);
 
-  //* Get search movies
+  //* Get movies : search by genre
   useEffect(() => {
     if (search) {
       const fetchFunc = async () => {
@@ -124,6 +124,23 @@ function App(props) {
       fetchFunc();
     }
   }, [search]);
+
+  //* Get movies : search by keyword
+  useEffect(() => {
+    if (searchKeyword) {
+      const fetchFunc = async () => {
+        const res = await axios.get(
+          `/api/movies/search/keyword/${searchKeyword}`
+        );
+        const searchMovies = res.data.data;
+        console.log("🍿 seachMovies: ", searchMovies);
+
+        setSearchKeywordMovies(searchMovies);
+      };
+
+      fetchFunc();
+    }
+  }, [searchKeyword]);
 
   //* Get recommended movies: because you watch...
   useEffect(() => {
@@ -168,12 +185,14 @@ function App(props) {
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
         {/* {console.log("🍭setlogout: ", currentUserContext.setLogout)} */}
-        {console.log("🥗search keyword: ", search)}
+        {console.log("🥗search genre: ", search)}
+        {console.log("🥘search keyword: ", searchKeyword, searchKeywordMovies)}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
               <Layout
                 onChange={handleChange}
+                onSubmit={handleSubmit}
                 setLogout={currentUserContext.setLogout}
               >
                 <MovieCarousel

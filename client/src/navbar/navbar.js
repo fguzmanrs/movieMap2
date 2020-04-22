@@ -202,7 +202,7 @@ export default function Navbar(props) {
           {option === "genre" ? (
             <Searchbar onChange={props.onChange} />
           ) : (
-            <SearchBarKeyword onChange={props.onChange} />
+            <SearchBarKeyword onSubmit={props.onSubmit} />
           )}
 
           <div className={classes.grow} />

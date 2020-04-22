@@ -6,16 +6,17 @@ export default function layout(props) {
   return (
     <React.Fragment>
       {!props.noHeader && (
-        <Navbar onChange={props.onChange} setLogout={props.setLogout} />
+        <Navbar
+          onChange={props.onChange}
+          onSubmit={props.onSubmit}
+          setLogout={props.setLogout}
+        />
         //  <Carousel />
       )}
       {console.log("🍬props in layout", props)}
       {props.children}
-      
-      
+
       <Footer />
-     
-      
     </React.Fragment>
   );
 }

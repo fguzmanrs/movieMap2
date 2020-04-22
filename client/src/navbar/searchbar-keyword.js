@@ -32,6 +32,8 @@ export default function SearchBarKeyword(props) {
 
     const { searchKeyword } = e.currentTarget.elements;
     console.log("🥫searchKeyword: ", searchKeyword.value);
+
+    props.onSubmit(searchKeyword.value, "keyword");
   };
 
   return (
