@@ -24,12 +24,12 @@ function App(props) {
   const [userPopulated, setUserPopulated] = useState(undefined);
   //! State: new movies
   const [newMovies, setNewMovies] = useState([]);
-  //! State: search by genre, search movies
+  //! State: search by genre or keyword, search movies
   const [search, setSearch] = useState("");
   const [searchMovies, setSearchMovies] = useState([]);
-  //! State: search by keyword, search movies
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchKeywordMovies, setSearchKeywordMovies] = useState([]);
+  // //! State: search by keyword, search movies
+  // const [searchKeyword, setSearchKeyword] = useState("");
+  // const [searchKeywordMovies, setSearchKeywordMovies] = useState([]);
   //! State: last movies
   const [myFavoriteList, setMyFavoriteList] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
@@ -196,8 +196,8 @@ function App(props) {
         {console.log("🦊user context(global data) in App", currentUserContext)}
         {console.log("🦁user populated in App", userPopulated)}
         {/* {console.log("🍭setlogout: ", currentUserContext.setLogout)} */}
-        {console.log("🥗search genre: ", search)}
-        {console.log("🥘search keyword: ", searchKeyword, searchKeywordMovies)}
+        {console.log("🥗search genre or keyword: ", search)}
+        {/* {console.log("🥘search keyword: ", searchKeyword, searchKeywordMovies)} */}
         <BrowserRouter>
           <Switch>
             <Route exact path="/" currentUser={currentUserContext}>
