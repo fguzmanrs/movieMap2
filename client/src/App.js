@@ -38,9 +38,10 @@ function App(props) {
     setSearch(value);
   };
 
-  const handleSubmit = (value, type) => {
+  const handleSubmit = (searchObj) => {
     // type === "keyword" && setSearchKeyword(value);
-    type === "keyword" && setSearch(value);
+    // searchObj.type === "keyword" setSearch(value);
+    setSearch(searchObj);
   };
 
   // Will be passed into signIn page and let it set user's info to the context state once a user sign in
@@ -118,9 +119,13 @@ function App(props) {
         let res = {};
 
         if (search.id) {
+          // search = {id: <genre id>, name: <genre name>}
           res = await axios.get(`/api/movies/search/genre/${search.id}`);
-        } else if (!search.id) {
-          res = await axios.get(`/api/movies/search/keyword/${search}`);
+        } else if (!search.id && search.type === "keyword") {
+          // search = {type: <keyword || title>, word: <input value>}
+          res = await axios.get(`/api/movies/search/keyword/${search.word}`);
+        } else if (!search.id && search.type === "title") {
+          res = await axios.get(`/api/movies/search/title/${search.word}`);
         }
 
         const searchMovies = res.data.data;

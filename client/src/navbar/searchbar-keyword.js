@@ -7,7 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import "./navbar.css";
 
-export default function SearchBarKeyword(props) {
+export default function SearchBarWord(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -18,19 +18,24 @@ export default function SearchBarKeyword(props) {
       e.target.value
     );
 
-    const { searchKeyword } = e.currentTarget.elements;
-    console.log("🥫searchKeyword: ", searchKeyword.value);
+    const { searchWord } = e.currentTarget.elements;
+    console.log("🥫searchWord: ", searchWord.value);
 
-    props.onSubmit(searchKeyword.value.toLowerCase(), "keyword");
+    const searchObj = {
+      word: searchWord.value.toLowerCase(),
+      type: props.type,
+    };
+
+    props.onSubmit(searchObj);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <FormControl>
         <TextField
-          id="searchKeyword"
-          name="searchKeyword"
-          aria-describedby="search-by-keyword"
+          id="searchWord"
+          name="searchWord"
+          aria-describedby="search-by-word"
           style={{
             marginTop: "5px",
             paddingLeft: "10px",
@@ -40,7 +45,7 @@ export default function SearchBarKeyword(props) {
             width: "500px",
           }}
           variant="standard"
-          placeholder="Type a keyword"
+          placeholder={`Type a ${props.type}`}
         />
         <IconButton type="submit" className="searchIcon" aria-label="search">
           <SearchIcon />

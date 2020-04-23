@@ -16,7 +16,7 @@ import { Link, Redirect } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import OptionSelect from "./option-select";
 
-import SearchBarKeyword from "./searchbar-keyword";
+import SearchBarWord from "./searchbar-keyword";
 
 import "./navbar.css";
 
@@ -202,7 +202,7 @@ export default function Navbar(props) {
           {option === "genre" ? (
             <Searchbar onChange={props.onChange} />
           ) : (
-            <SearchBarKeyword onSubmit={props.onSubmit} />
+            <SearchBarWord onSubmit={props.onSubmit} type={option} />
           )}
 
           <div className={classes.grow} />
