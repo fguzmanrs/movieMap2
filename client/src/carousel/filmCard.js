@@ -178,8 +178,9 @@ export default function FilmReviewCard(props) {
         }
         action={
           <IconButton aria-label="add to favorites" onClick={handleClick}>
-            {/* {myFavList.length > 0 && ( */}
-            {props.movies.length > 0 && currentMovie ? (
+            {props.movies.length > 0 &&
+            currentMovie &&
+            currentUserContext.isLogin ? (
               <FavoriteIcon
                 color={isFavorite ? "error" : "inherit"}
                 id={`${props.name}-Fav-${currentMovie.id}`}
