@@ -7,24 +7,24 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(5),
-    },
+    bottom: "auto",
+    top: "8vh",
   },
 }));
 
-export default function Message({ isOpen, setMsgOpen }) {
+export default function Message({ isOpen, msg, setMsg }) {
   console.log("🥪 message alert inside, isOpen", isOpen);
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(isOpen);
 
   const handleClose = (event, reason) => {
     console.log("🥙 handle close inside");
+
     setOpen(false);
-    setMsgOpen(false);
+    setMsg({ ...msg, isOpen: false });
 
     if (reason === "clickaway") {
       return;
@@ -32,12 +32,15 @@ export default function Message({ isOpen, setMsgOpen }) {
   };
 
   return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
-        </Alert>
-      </Snackbar>
-    </div>
+    <Snackbar
+      className={classes.root}
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <Alert onClose={handleClose} severity={msg.type}>
+        {msg.message}
+      </Alert>
+    </Snackbar>
   );
 }

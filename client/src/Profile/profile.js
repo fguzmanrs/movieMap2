@@ -38,7 +38,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Profile(props) {
   const classes = useStyles();
 
-  const [msgOpen, setMsgOpen] = useState(false);
+  const [msg, setMsg] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   console.log("🌽profile's user: ", props.user);
   const currentUserContext = useContext(CurrentUserContext);
@@ -74,16 +78,35 @@ export default function Profile(props) {
     form.append("photo", photo.files[0]);
     // console.log("🌭 form", form.get("firstName"));
 
-    //! Send updated data to server
-    const updatedUser = await updateSettings(form, "accountInfo");
-    console.log("🍣 updatedUser: ", updatedUser, updatedUser.data);
+    let updatedUser = {};
 
-    if (updatedUser.status === "success") {
-      setMsgOpen(true);
+    try {
+      //! Send updated data to server
+      updatedUser = await updateSettings(form, "accountInfo");
+
+      console.log("🍣 updatedUser: ", updatedUser, updatedUser.data);
+    } catch (err) {
+      console.log("🚨 Error!", err);
+
+      //* User feedback message
+      setMsg({
+        isOpen: true,
+        message: "Failed to update! Try again later.",
+        type: "error",
+      });
     }
 
-    //* Update user's info in App.js
-    currentUserContext.setCurrentUser(updatedUser.data.user);
+    if (updatedUser && updatedUser.status === "success") {
+      //* User feedback message
+      setMsg({
+        isOpen: true,
+        message: "Your info is successfully updated!",
+        type: "success",
+      });
+
+      //* Update user's info in App.js
+      currentUserContext.setCurrentUser(updatedUser.data.user);
+    }
 
     //* Reload page
     // props.history.push("/profile");
@@ -117,13 +140,13 @@ export default function Profile(props) {
   return (
     <div className={classes.root}>
       {/*! Message Alert */}
-      {msgOpen && <Message isOpen={true} setMsgOpen={setMsgOpen} />}
+      {msg.isOpen && <Message isOpen={true} msg={msg} setMsg={setMsg} />}
 
       {console.log(
         "🍤 current user contextAPI: ",
         currentUserContext.currentUser
       )}
-      {console.log("🥟 msgOpen:", msgOpen)}
+      {console.log("🥟 msg:", msg)}
       <ExpansionPanel defaultExpanded="true">
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
