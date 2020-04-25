@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 //import Icon from "./node_modules/@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
+import Message from "../message/message";
 
 import CurrentUserContext from "../context/current-user.context";
 
@@ -37,15 +38,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Profile(props) {
   const classes = useStyles();
 
+  const [msgOpen, setMsgOpen] = useState(false);
+
   console.log("🌽profile's user: ", props.user);
   const currentUserContext = useContext(CurrentUserContext);
-
-  // const [userFirtName, setUserFirstName] = useState(
-  //   currentUserContext.currentUser.firstName
-  // );
-  // const [userLastName, setUserLastName] = useState(
-  //   currentUserContext.currentUser.lastName
-  // );
 
   //! Update user's data in App.js
   // to instantly update navbar's user image when a user update a photo here
@@ -80,19 +76,14 @@ export default function Profile(props) {
 
     //! Send updated data to server
     const updatedUser = await updateSettings(form, "accountInfo");
-    console.log("🍣", updatedUser.photo);
+    console.log("🍣 updatedUser: ", updatedUser, updatedUser.data);
 
-    //* Update user's photo in App.js
-    // currentUserContext.setCurrentPhoto(updatedUser.photo);
-    // currentUserContext.setCurrentUser(
-    //   updatedUser.firstName,
-    //   updatedUser.lastName,
-    //   updatedUser.photo
-    // );
-    currentUserContext.setCurrentUser(updatedUser.user);
+    if (updatedUser.status === "success") {
+      setMsgOpen(true);
+    }
 
-    // setUserFirstName(updatedUser.firstName);
-    // setUserLastName(updatedUser.LastName);
+    //* Update user's info in App.js
+    currentUserContext.setCurrentUser(updatedUser.data.user);
 
     //* Reload page
     // props.history.push("/profile");
@@ -125,10 +116,14 @@ export default function Profile(props) {
 
   return (
     <div className={classes.root}>
+      {/*! Message Alert */}
+      {msgOpen && <Message isOpen={true} setMsgOpen={setMsgOpen} />}
+
       {console.log(
         "🍤 current user contextAPI: ",
         currentUserContext.currentUser
       )}
+      {console.log("🥟 msgOpen:", msgOpen)}
       <ExpansionPanel defaultExpanded="true">
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -140,12 +135,7 @@ export default function Profile(props) {
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          {/* <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography> */}
           <form onSubmit={handleSubmitAccount}>
-
             <Grid container>
               <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
                 <TextField
@@ -154,8 +144,8 @@ export default function Profile(props) {
                   name="firstName"
                   // defaultValue={props.user.firstName}
                   defaultValue={currentUserContext.currentUser.firstName}
-                // defaultValue={userFirtName}
-                // inputProps={{ref: input => this.titleInput = input}}
+                  // defaultValue={userFirtName}
+                  // inputProps={{ref: input => this.titleInput = input}}
                 />
               </Grid>
               <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
@@ -165,15 +155,28 @@ export default function Profile(props) {
                   name="lastName"
                   // defaultValue={props.user.lastName}
                   defaultValue={currentUserContext.currentUser.lastName}
-                // defaultValue={userLastName}
+                  // defaultValue={userLastName}
                 />
               </Grid>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item alignItems="flex-end" justify="center">
+              <Grid
+                xs={12}
+                sm={4}
+                md={4}
+                lg={4}
+                xl={4}
+                item
+                alignItems="flex-end"
+                justify="center"
+              >
                 <div>
-                  <Button raised="raised" component="label" color="primary" >
+                  <Button raised="raised" component="label" color="primary">
                     <CloudUploadIcon />
-                      &nbsp;&nbsp;Profile Image
-                      <input style={{ display: "none" }} type="file" name="photo" />
+                    &nbsp;&nbsp;Profile Image
+                    <input
+                      style={{ display: "none" }}
+                      type="file"
+                      name="photo"
+                    />
                   </Button>
                 </div>
                 <div>
@@ -196,7 +199,6 @@ export default function Profile(props) {
   style={{ display: "none" }}
 /> */}
             </Grid>
-
           </form>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -210,7 +212,6 @@ export default function Profile(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <form onSubmit={handleSubmitPassword}>
-
             <Grid container>
               <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
                 <TextField
@@ -218,8 +219,8 @@ export default function Profile(props) {
                   label="Current Password"
                   name="currentPassword"
                   type="password"
-                // defaultValue={user.password}
-                // inputProps={{ref: input => this.titleInput = input}}
+                  // defaultValue={user.password}
+                  // inputProps={{ref: input => this.titleInput = input}}
                 />
               </Grid>
               <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
@@ -228,11 +229,22 @@ export default function Profile(props) {
                   label="New Password"
                   name="newPassword"
                   type="password"
-                // defaultValue=""
+                  // defaultValue=""
                 />
               </Grid>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item alignItems="flex-end" justify="center">
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              <Grid
+                xs={12}
+                sm={4}
+                md={4}
+                lg={4}
+                xl={4}
+                item
+                alignItems="flex-end"
+                justify="center"
+              >
+                <div>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
                 <div>
                   <Button
                     type="submit"
@@ -241,12 +253,10 @@ export default function Profile(props) {
                     className={classes.button}
                   >
                     update
-              </Button>
+                  </Button>
                 </div>
               </Grid>
-
             </Grid>
-
           </form>
         </ExpansionPanelDetails>
       </ExpansionPanel>
