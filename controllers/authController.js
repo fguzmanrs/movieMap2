@@ -305,6 +305,12 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     encryptedDefaultPwd
   );
 
+  console.log(
+    "🥜hashedToken and req.params.token:",
+    hashedToken,
+    req.params.token
+  );
+
   //* Find a user who has a same hashed(encrypted) token
   db.user.update(
     { passwordResetToken: hashedToken },
@@ -320,7 +326,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
       // If there is no updated doc
       if (!data.nModified) {
-        return next(new ErrorFactory(400, "Token is invalid."));
+        return next(new ErrorFactory(400, "Token or request is invalid."));
       }
 
       if (!error) {
