@@ -311,6 +311,14 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     req.params.token
   );
 
+  console.log("🍋req link: ", req.protocol, req.get("host"), req.url);
+
+  //* If it's a request for favicon.ico, skip.
+  if (req.url.includes("favicon")) {
+    console.log("🍛inside of favicon request");
+    return;
+  }
+
   //* Find a user who has a same hashed(encrypted) token
   db.user.update(
     { passwordResetToken: hashedToken },
@@ -330,10 +338,13 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
       }
 
       if (!error) {
-        res.status(200).json({
-          status: "success",
-          message: "Successfully reseted password!",
-        });
+        // res.status(200).json({
+        //   status: "success",
+        //   message: "Successfully reseted password!",
+        // });
+
+        //* Redirect to sign in page
+        res.redirect(301, `${req.protocol}://${req.get("host")}/signIn`);
       }
     }
   );

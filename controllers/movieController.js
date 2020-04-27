@@ -54,7 +54,7 @@ exports.getRecentMovies = catchAsync(async (req, res, next) => {
     []
   );
 
-  console.log("🚚 40 movies arr: ", moviesArr);
+  // console.log("🚚 40 movies arr: ", moviesArr);
 
   // save database
   res.status(200).json({
