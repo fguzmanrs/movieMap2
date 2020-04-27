@@ -299,6 +299,12 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     12
   );
 
+  console.log(
+    "🔑defualt pws and encrypted one:",
+    process.env.DEFAULT_PASSWORD,
+    encryptedDefaultPwd
+  );
+
   //* Find a user who has a same hashed(encrypted) token
   db.user.update(
     { passwordResetToken: hashedToken },
@@ -310,16 +316,19 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     },
     async (error, data) => {
       // console.log("📌 data after updated pwd to default pwd", data);
-      console.log(data);
+      console.log("🔑🔑 data or err:", data, error);
+
       // If there is no updated doc
       if (!data.nModified) {
         return next(new ErrorFactory(400, "Token is invalid."));
       }
 
-      res.status(200).json({
-        status: "success",
-        message: "Successfully reseted password!",
-      });
+      if (!error) {
+        res.status(200).json({
+          status: "success",
+          message: "Successfully reseted password!",
+        });
+      }
     }
   );
 });
@@ -335,7 +344,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       if (!user) {
         return next(new ErrorFactory(401, "Please login first please!"));
       }
-      console.log("🦴 req.body, userpwd", req, req.body.formData);
+      // console.log("🦴 req.body, userpwd", req, req.body.formData);
       //* 2. Check if the entered current pwd is correct
       const pwdIsCorrect = await bcrypt.compare(
         req.body.currentPassword,
