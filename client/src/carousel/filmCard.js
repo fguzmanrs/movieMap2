@@ -17,6 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import axios from "axios";
 import CurrentUserContext from "../context/current-user.context";
+import "./filmCard.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -167,6 +168,7 @@ export default function FilmReviewCard(props) {
       {console.log("🍇 favorite list: ", props.favList)}
       <CardHeader
         style={{
+          borderRadius: "0px",
           backgroundColor: "#BCE0EF",
           color: "white",
           backgroundImage: "linear-gradient(-90deg, #305360, #8BAEBD)",
@@ -206,12 +208,7 @@ export default function FilmReviewCard(props) {
       >
         <div
           className="right-block"
-          style={{
-            float: "right",
-            maxWidth: "70%",
-            height: "500px",
-            backgroundColor: "#305360",
-          }}
+          
         >
           {currentMovie && currentMovie.backdrop_path && (
             <img
@@ -229,23 +226,13 @@ export default function FilmReviewCard(props) {
 
         <div
           className="left-block"
-          style={{
-            color: "#fff",
-            overflow: "auto",
-            // webkitScrollbar: "{display: none}",
-            //backgroundColor: "rgba(210, 204, 243, 0.816)",
-            backgroundColor: "#8BAEBD",
-            float: "right",
-            width: "30%",
-            maxWidth: "100%",
-            height: "500px",
-            boxShadow: "200px 0px 150px 250px #8BAEBD",
-          }}
+         
         >
           <Typography
             style={{
               color: "black",
-              paddingLeft: "20px",
+              padding: "10px",
+              // paddingLeft: "20px",
               fontWeight: "bold",
               fontSize: "20px",
             }}

@@ -5,3 +5,8 @@
 .react-multi-carousel-list {
   margin-bottom: 80px;
 }
+
+h2 {
+  text-align: left;
+  padding-left: 20px;
+}

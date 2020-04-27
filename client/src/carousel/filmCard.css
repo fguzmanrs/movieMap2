@@ -1,0 +1,65 @@
+.right-block{
+    float: right;
+    width: 70%;
+    height: 500px;
+    background-color: #305360;
+}
+
+.left-block{
+    color: #000;
+    overflow: auto;    
+    background-color: #8BAEBD;
+    float: right; 
+    width: 30%;
+    
+    height: 500px;
+    box-shadow: 200px 0px 150px 250px #8BAEBD;
+}
+
+.MuiPaper-rounded {
+    border-radius: 0px;
+}
+
+.MuiPaper-root {
+    background-color: none;
+}
+
+@media only screen and (max-width: 1300px) {
+    .left-block {
+      float: none;
+      width: 100%;
+      padding-top: 20px;
+      height: 350px;
+    }
+    .right-block {
+        float: none;
+        width: 100%;
+    }
+
+  }
+
+@media only screen and (max-width: 800px) {
+    .left-block {
+      float: none;
+      width: 100%;
+      padding-top: 20px;
+      /* padding-left: 0px;
+      padding-right: 30px; */
+      height: 500px;
+      text-align: center;
+    }
+    .right-block {
+        float: none;
+        max-width: 100%;
+    }
+    p {
+        padding-left: none;
+    }
+
+  }
+
+  @media only screen and (max-width: 500px) {
+    .left-block {
+      height: 550px;
+    }
+  }
