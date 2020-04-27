@@ -86,9 +86,9 @@ export default function Profile(props) {
 
       console.log("🍣 updatedUser: ", updatedUser, updatedUser.data);
     } catch (err) {
-      console.log("🚨 Error!", err);
+      console.log("📌 Error!", err);
 
-      //* User feedback message
+      //* User feedback message : error occurred in front-end
       setMsg({
         isOpen: true,
         message: "Failed to update! Try again later.",
@@ -97,15 +97,26 @@ export default function Profile(props) {
     }
 
     if (updatedUser && updatedUser.status === "success") {
-      //* User feedback message
+      //* User feedback message : success msg from back-end
+      console.log("🍇 updatedUser result: ", updatedUser);
+
       setMsg({
         isOpen: true,
-        message: "Your info is successfully updated!",
+        message: updatedUser.message,
         type: "success",
       });
 
       //* Update user's info in App.js
       currentUserContext.setCurrentUser(updatedUser.data.user);
+    } else if (updatedUser && updatedUser.response) {
+      console.log("🚩ERROR: updatedUser.response", updatedUser.response);
+
+      //* User feedback message : error msg from back-end
+      setMsg({
+        isOpen: true,
+        message: updatedUser.response.data.message,
+        type: "error",
+      });
     }
 
     //* Reload page
@@ -115,7 +126,7 @@ export default function Profile(props) {
   };
 
   //! Handle submit user's password
-  const handleSubmitPassword = (e) => {
+  const handleSubmitPassword = async (e) => {
     e.preventDefault();
 
     const { currentPassword, newPassword } = e.currentTarget.elements;
@@ -131,9 +142,41 @@ export default function Profile(props) {
       newPassword: newPassword.value,
     };
 
-    //! Send updated data to server
-    updateSettings(data, "password");
-    console.log("🍢", props);
+    let updatedUser = {};
+
+    try {
+      //! Send updated data to server
+      updatedUser = await updateSettings(data, "password");
+      console.log("🍢", props, updatedUser);
+    } catch (err) {
+      console.log("📌 Error!", err);
+
+      //* User feedback message : error occurred in front-end
+      setMsg({
+        isOpen: true,
+        message: "Failed to update! Try again later.",
+        type: "error",
+      });
+    }
+
+    if (updatedUser && updatedUser.status === "success") {
+      //* User feedback message : success msg from back-end
+      setMsg({
+        isOpen: true,
+        message: updatedUser.message,
+        type: "success",
+      });
+    } else if (updatedUser && updatedUser.response) {
+      console.log("🚩ERROR: updatedUser.response", updatedUser.response);
+
+      //* User feedback message : error msg from back-end
+      setMsg({
+        isOpen: true,
+        message: updatedUser.response.data.message,
+        type: "error",
+      });
+    }
+
     // props.push("/profile");
   };
 

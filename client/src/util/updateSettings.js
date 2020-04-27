@@ -1,13 +1,14 @@
 import axios from "axios";
 
 const updateSettings = async (data, type) => {
+  let res = {};
   try {
     const url =
       type === "accountInfo"
         ? "/api/users/updateMe "
         : "/api/users/updatePassword";
 
-    const res = await axios.patch(url, data, { withCredentials: true });
+    res = await axios.patch(url, data, { withCredentials: true });
 
     console.log("🥐 user update result: ", res);
 
@@ -15,7 +16,8 @@ const updateSettings = async (data, type) => {
       return res.data;
     }
   } catch (err) {
-    console.log(err);
+    console.log("🚨ERROR! err, res.data: ", err, res.data);
+    return err;
   }
 };
 
