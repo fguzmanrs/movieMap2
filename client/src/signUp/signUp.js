@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Message from "../message/message";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,6 +47,11 @@ export default function SignUp(props) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
+  const [msg, setMsg] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,11 +88,22 @@ export default function SignUp(props) {
 
       console.log("🥒", res);
       const userData = res.data.data;
+      console.log("🍇 new userData: ", userData);
 
-      // Save user's data to local state
-      setUser(userData);
-      // Save user's data to context state so parent comp can use it
-      setCurrentUser(userData);
+      if (res.data.status === "success") {
+        //* User feedback message : success msg from back-end
+        setMsg({
+          isOpen: true,
+          message: res.data.message,
+          type: "success",
+        });
+
+        //* Save user's data to local state
+        setUser(userData);
+
+        //* Save user's data to context state so parent comp can use it
+        setCurrentUser(userData);
+      }
 
       // Default input fields
       setUsername("");
@@ -96,9 +113,20 @@ export default function SignUp(props) {
       setEmail("");
 
       // Redirect to homepage
-      props.history.push("/");
+      setTimeout(() => {
+        props.history.push("/");
+      }, 3000);
     } catch (err) {
       console.log("🚨", err.response.data.message);
+
+      if (err.response && err.response.data) {
+        //* User feedback message : error msg from back-end
+        setMsg({
+          isOpen: true,
+          message: err.response.data.message,
+          type: "error",
+        });
+      }
     }
   };
 
@@ -106,6 +134,7 @@ export default function SignUp(props) {
     <Container component="main" maxWidth="xs">
       {/* {console.log("🐣 props:", props)}
       {console.log("🐣 state:", firstName, lastName, username, email, password)} */}
+      {msg.isOpen && <Message isOpen={true} msg={msg} setMsg={setMsg} />}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

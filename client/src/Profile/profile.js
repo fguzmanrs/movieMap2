@@ -128,10 +128,10 @@ export default function Profile(props) {
       });
     }
 
-    if (updatedUser && updatedUser.status === "success") {
-      //* User feedback message : success msg from back-end
+    if (updatedUser.status === "success") {
       console.log("🍇 updatedUser result: ", updatedUser);
 
+      //* User feedback message : success msg from back-end
       setMsg({
         isOpen: true,
         message: updatedUser.message,
