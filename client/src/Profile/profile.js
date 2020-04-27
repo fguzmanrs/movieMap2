@@ -78,11 +78,43 @@ export default function Profile(props) {
     form.append("photo", photo.files[0]);
     // console.log("🌭 form", form.get("firstName"));
 
+    //! Send updated data to server and popup message alert
+    updateAndAlertMsg(form, "accountInfo");
+
+    //* Reload page
+    // props.history.push("/profile");
+    // window.location.replace("/profile");
+    // reload();
+  };
+
+  //! Handle submit user's password
+  const handleSubmitPassword = async (e) => {
+    e.preventDefault();
+
+    const { currentPassword, newPassword } = e.currentTarget.elements;
+
+    console.log(
+      "🥓form data(currentPassword.value, newPassword.value): ",
+      currentPassword.value,
+      newPassword.value
+    );
+
+    const data = {
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    };
+
+    //! Send updated data to server and popup message alert
+    updateAndAlertMsg(data, "password");
+  };
+
+  //! Send form data to server and render feedback message alert
+  const updateAndAlertMsg = async (formData, type) => {
     let updatedUser = {};
 
     try {
       //! Send updated data to server
-      updatedUser = await updateSettings(form, "accountInfo");
+      updatedUser = await updateSettings(formData, type);
 
       console.log("🍣 updatedUser: ", updatedUser, updatedUser.data);
     } catch (err) {
@@ -118,66 +150,6 @@ export default function Profile(props) {
         type: "error",
       });
     }
-
-    //* Reload page
-    // props.history.push("/profile");
-    // window.location.replace("/profile");
-    // reload();
-  };
-
-  //! Handle submit user's password
-  const handleSubmitPassword = async (e) => {
-    e.preventDefault();
-
-    const { currentPassword, newPassword } = e.currentTarget.elements;
-
-    console.log(
-      "🥓form data(currentPassword.value, newPassword.value): ",
-      currentPassword.value,
-      newPassword.value
-    );
-
-    const data = {
-      currentPassword: currentPassword.value,
-      newPassword: newPassword.value,
-    };
-
-    let updatedUser = {};
-
-    try {
-      //! Send updated data to server
-      updatedUser = await updateSettings(data, "password");
-      console.log("🍢", props, updatedUser);
-    } catch (err) {
-      console.log("📌 Error!", err);
-
-      //* User feedback message : error occurred in front-end
-      setMsg({
-        isOpen: true,
-        message: "Failed to update! Try again later.",
-        type: "error",
-      });
-    }
-
-    if (updatedUser && updatedUser.status === "success") {
-      //* User feedback message : success msg from back-end
-      setMsg({
-        isOpen: true,
-        message: updatedUser.message,
-        type: "success",
-      });
-    } else if (updatedUser && updatedUser.response) {
-      console.log("🚩ERROR: updatedUser.response", updatedUser.response);
-
-      //* User feedback message : error msg from back-end
-      setMsg({
-        isOpen: true,
-        message: updatedUser.response.data.message,
-        type: "error",
-      });
-    }
-
-    // props.push("/profile");
   };
 
   return (
