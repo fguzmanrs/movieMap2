@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 // import { Link } from 'react-router-dom';
+import Message from "../message/message";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,10 +36,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn(props) {
+export default function ForgotPassword(props) {
   const classes = useStyles();
 
   const [forgotPwdEmail, setforgotPwdEmail] = useState("");
+  const [msg, setMsg] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const handleChange = (e) => {
     const email = e.target.value;
@@ -63,10 +69,32 @@ export default function SignIn(props) {
 
       console.log("🍕 result of forgotpwd api call: ", res);
 
-      // Redirect to homepage
-      props.history.push("/");
+      if (res && res.data && res.data.status === "success") {
+        console.log("🍇 res.data: ", res.data);
+
+        //* User feedback message : success msg from back-end
+        setMsg({
+          isOpen: true,
+          message: res.data.message,
+          type: "success",
+        });
+      }
+
+      //* Redirect to homepage
+      setTimeout(() => {
+        props.history.push("/");
+      }, 3000);
     } catch (err) {
       console.log("🚨", err.response.data.message);
+
+      //* User feedback message : error msg from back-end
+      if (err.response && err.response.data) {
+        setMsg({
+          isOpen: true,
+          message: err.response.data.message,
+          type: "error",
+        });
+      }
     }
   };
 
@@ -74,6 +102,8 @@ export default function SignIn(props) {
     <Container component="main" maxWidth="xs">
       {/* {console.log("🥬", user)}
       {console.log("🐻", props, setCurrentUser)} */}
+      {msg.isOpen && <Message isOpen={true} msg={msg} setMsg={setMsg} />}
+
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

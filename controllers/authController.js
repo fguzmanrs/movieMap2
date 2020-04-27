@@ -260,7 +260,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
           res.status(200).json({
             status: "success",
-            message: "Password Token is sent to email.",
+            message: "Password Reset Token is sent to your email.",
           });
         } catch (err) {
           db.user.update(

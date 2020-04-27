@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
+import Message from "../message/message";
 
 import "./signIn.css";
 
@@ -46,6 +47,11 @@ export default function SignIn(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [msg, setMsg] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,11 +95,21 @@ export default function SignIn(props) {
       props.history.push("/");
     } catch (err) {
       console.log("🚨", err.response.data.message);
+
+      //* If err occurred, popup feedback message alert
+      if (err.response && err.response.data) {
+        setMsg({
+          isOpen: true,
+          message: err.response.data.message,
+          type: "error",
+        });
+      }
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      {msg.isOpen && <Message isOpen={true} msg={msg} setMsg={setMsg} />}
       {/* {console.log("🥬", user)}
       {console.log("🐻", props, setCurrentUser)} */}
       <CssBaseline />
