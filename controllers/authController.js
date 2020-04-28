@@ -344,7 +344,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
         // });
 
         //* Redirect to sign in page
-        res.redirect(301, `${req.protocol}://${req.get("host")}/signIn`);
+        if (process.env.NODE_ENV === "production") {
+          res.redirect(301, `https://${req.get("host")}/signIn`);
+        } else {
+          res.redirect(301, `${req.protocol}://${req.get("host")}/signIn`);
+        }
       }
     }
   );
