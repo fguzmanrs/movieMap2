@@ -186,8 +186,8 @@ export default function FilmReviewCard(props) {
                 id={`${props.name}-Fav-${currentMovie.id}`}
               />
             ) : (
-              ""
-            )}
+                ""
+              )}
           </IconButton>
         }
         title={
@@ -276,7 +276,12 @@ export default function FilmReviewCard(props) {
             Release Date: {currentMovie ? currentMovie.release_date : ""}
           </Typography>
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
-          <div>
+          <div style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}>
             {streamingList &&
               streamingList.map((streaming) => {
                 //! Skip some broken logo links
@@ -285,7 +290,7 @@ export default function FilmReviewCard(props) {
                   streaming.name !== "HBOIVAUS"
                 ) {
                   return (
-                    <a
+                    <div><a
                       style={{ marginLeft: "20px" }}
                       key={`${streaming.icon}`}
                       href={`${streaming.url}`}
@@ -299,7 +304,7 @@ export default function FilmReviewCard(props) {
                             : "/images/disney-plus-logo-high-80w.png"
                         }`}
                       ></img>
-                    </a>
+                    </a></div>
                   );
                 } else {
                   return;

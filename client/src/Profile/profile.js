@@ -162,7 +162,7 @@ export default function Profile(props) {
         currentUserContext.currentUser
       )}
       {console.log("🥟 msg:", msg)}
-      <ExpansionPanel defaultExpanded="true">
+      <ExpansionPanel defaultExpanded={true}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -174,39 +174,32 @@ export default function Profile(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <form onSubmit={handleSubmitAccount}>
-            <Grid container>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="flex-start"
+            >
+              <Grid item xs={12} sm={4}>
                 <TextField
-                  id="standard-helperText"
+                  id="firstName"
                   label="First Name"
                   name="firstName"
-                  // defaultValue={props.user.firstName}
                   defaultValue={currentUserContext.currentUser.firstName}
                   // defaultValue={userFirtName}
                   // inputProps={{ref: input => this.titleInput = input}}
                 />
               </Grid>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+              <Grid item xs={12} sm={4}>
                 <TextField
-                  id="standard-helperText"
+                  id="lastName"
                   label="Last Name"
                   name="lastName"
-                  // defaultValue={props.user.lastName}
                   defaultValue={currentUserContext.currentUser.lastName}
-                  // defaultValue={userLastName}
                 />
               </Grid>
-              <Grid
-                xs={12}
-                sm={4}
-                md={4}
-                lg={4}
-                xl={4}
-                item
-                alignItems="flex-end"
-                justify="center"
-              >
-                <div>
+              <Grid item xs={12} sm={4}>
+                <Grid item xs={12}>
                   <Button raised="raised" component="label" color="primary">
                     <CloudUploadIcon />
                     &nbsp;&nbsp;Profile Image
@@ -216,8 +209,8 @@ export default function Profile(props) {
                       name="photo"
                     />
                   </Button>
-                </div>
-                <div>
+                </Grid>
+                <Grid item xs={12}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -226,21 +219,13 @@ export default function Profile(props) {
                   >
                     Update
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-
-              {/* <input
-  type="file"
-  id="myFile"
-  name="photo"
-  aria-label="Profile picture upload"
-  style={{ display: "none" }}
-/> */}
             </Grid>
           </form>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <ExpansionPanel defaultExpanded="true">
+      <ExpansionPanel defaultExpanded={true}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -250,10 +235,15 @@ export default function Profile(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <form onSubmit={handleSubmitPassword}>
-            <Grid container>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="flex-start"
+            >
+              <Grid item xs={12} sm={4}>
                 <TextField
-                  id="standard-helperText"
+                  id="currentPassword"
                   label="Current Password"
                   name="currentPassword"
                   type="password"
@@ -261,38 +251,28 @@ export default function Profile(props) {
                   // inputProps={{ref: input => this.titleInput = input}}
                 />
               </Grid>
-              <Grid xs={12} sm={4} md={4} lg={4} xl={4} item>
+              <Grid item xs={12} sm={4}>
                 <TextField
-                  id="standard-helperText"
+                  id="newPassword"
                   label="New Password"
                   name="newPassword"
                   type="password"
                   // defaultValue=""
                 />
               </Grid>
-              <Grid
-                xs={12}
-                sm={4}
-                md={4}
-                lg={4}
-                xl={4}
-                item
-                alignItems="flex-end"
-                justify="center"
-              >
-                <div>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div>
+              <Grid item xs={12} sm={4}>
+                <Grid item xs={12}></Grid>
+                <Grid item xs={12}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
                   <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     className={classes.button}
                   >
-                    update
+                    Update
                   </Button>
-                </div>
+                </Grid>
               </Grid>
             </Grid>
           </form>

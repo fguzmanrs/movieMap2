@@ -112,6 +112,12 @@ const MovieCarousel = (props) => {
                 e.target.closest(`.${carouselName}Poster`)
               );
 
+              setShowCard1(false);
+              setShowCard2(false);
+              setShowCard3(false);
+              setShowCard4(false);
+
+              console.log("🍞🍞🍞 : " + showCard);
               //* 2. Determin which poster is clicked and render accordingly
               const posterHtml = e.target.closest(`.${carouselName}Poster`);
               const index = posterHtml.id.split(`${carouselName}Poster-`)[1];
