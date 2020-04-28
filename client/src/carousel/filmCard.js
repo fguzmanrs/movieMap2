@@ -258,12 +258,12 @@ export default function FilmReviewCard(props) {
           </Typography>
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
           <div
-            style={{
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
+          // style={{
+          //   flexDirection: "column",
+          //   justifyContent: "center",
+          //   alignItems: "center",
+          //   height: "100%",
+          // }}
           >
             {streamingList &&
               streamingList.map((streaming, i) => {
