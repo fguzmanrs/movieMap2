@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+// import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
+// import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
+// import CardActions from "@material-ui/core/CardActions";
+// import Collapse from "@material-ui/core/Collapse";
+// import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 /*import ShareIcon from '@material-ui/icons/Share';*/
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+// import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+// import MoreVertIcon from "@material-ui/icons/MoreVert";
 import axios from "axios";
 import CurrentUserContext from "../context/current-user.context";
 import "./filmCard.css";
@@ -173,11 +173,11 @@ export default function FilmReviewCard(props) {
           color: "white",
           backgroundImage: "linear-gradient(-90deg, #305360, #8BAEBD)",
         }}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
         action={
           <IconButton aria-label="add to favorites" onClick={handleClick}>
             {props.movies.length > 0 &&
@@ -188,8 +188,8 @@ export default function FilmReviewCard(props) {
                 id={`${props.name}-Fav-${currentMovie.id}`}
               />
             ) : (
-                ""
-              )}
+              ""
+            )}
           </IconButton>
         }
         title={
@@ -207,10 +207,7 @@ export default function FilmReviewCard(props) {
           padding: "0px",
         }}
       >
-        <div
-          className="right-block"
-          
-        >
+        <div className="right-block">
           {currentMovie && currentMovie.backdrop_path && (
             <img
               src={`https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path}`}
@@ -225,10 +222,7 @@ export default function FilmReviewCard(props) {
           )}
         </div>
 
-        <div
-          className="left-block"
-         
-        >
+        <div className="left-block">
           <Typography
             style={{
               color: "black",
@@ -263,38 +257,49 @@ export default function FilmReviewCard(props) {
             Release Date: {currentMovie ? currentMovie.release_date : ""}
           </Typography>
           <Typography>{currentMovie ? currentMovie.genre_ides : ""}</Typography>
-          <div style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}>
+          <div
+            style={{
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
             {streamingList &&
-              streamingList.map((streaming) => {
+              streamingList.map((streaming, i) => {
                 //! Skip some broken logo links
                 if (
                   streaming.name !== "AtomTicketsIVAUS" &&
                   streaming.name !== "HBOIVAUS"
                 ) {
                   return (
-                    <div><a
-                      style={{ marginLeft: "20px" }}
-                      key={`${streaming.icon}`}
-                      href={`${streaming.url}`}
-                      target="_blank"
+                    <div
+                      key={
+                        currentMovie.title &&
+                        `${currentMovie.title}-${streaming.name}-${i}`
+                      }
                     >
-                      <img
-                        // style={{ height: "50px" }}
-                        src={`${
-                          streaming.name !== "DisneyPlusIVAUS"
-                            ? streaming.icon
-                            : "/images/disney-plus-logo-high-80w.png"
-                        }`}
-                      ></img>
-                    </a></div>
+                      <a
+                        style={{ marginLeft: "20px" }}
+                        key={`${streaming.icon}`}
+                        href={`${streaming.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          // style={{ height: "50px" }}
+                          src={`${
+                            streaming.name !== "DisneyPlusIVAUS"
+                              ? streaming.icon
+                              : "/images/disney-plus-logo-high-80w.png"
+                          }`}
+                          alt={`${streaming.name}-icon`}
+                        ></img>
+                      </a>
+                    </div>
                   );
                 } else {
-                  return;
+                  return "";
                 }
               })}
           </div>

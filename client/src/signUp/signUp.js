@@ -46,7 +46,7 @@ export default function SignUp(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [msg, setMsg] = useState({
     isOpen: false,
     message: "",
@@ -99,7 +99,7 @@ export default function SignUp(props) {
         });
 
         //* Save user's data to local state
-        setUser(userData);
+        // setUser(userData);
 
         //* Save user's data to context state so parent comp can use it
         setCurrentUser(userData);

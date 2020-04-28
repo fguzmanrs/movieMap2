@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
+// import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Searchbar from "./searchbar.js";
 // import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import OptionSelect from "./option-select";
 

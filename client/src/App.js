@@ -56,7 +56,7 @@ function App(props) {
     // Logout from server(delete cooki with JWT)
     console.log("🍰clicked");
     const callLogout = async () => {
-      const res = await axios.get("/api/users/logout");
+      await axios.get("/api/users/logout");
     };
 
     callLogout();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import FilmCard from "./filmCard.js";
@@ -27,7 +27,7 @@ const responsive = {
 };
 
 const MovieCarousel = (props) => {
-  const { currentUser, userSummary } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   //! First Carousel
   const [showCard1, setShowCard1] = useState(false);
@@ -147,6 +147,7 @@ const MovieCarousel = (props) => {
                   className="poster"
                   style={{ cursor: "pointer" }}
                   onClick={handleClick}
+                  alt="poster"
                 />
               </div>
             );
