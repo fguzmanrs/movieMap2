@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    img: "/images/EY_profile.jpg",
+    img: "images/EY_profile.jpg",
     member: "Emily Yu",
     role: "Full-Stack Developer",
     bio: "After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A recent graduate of UC, Riverside Extension: Coding, she is already applying her new skills to front-end and back-end development projects. Her dedication to exploring new ideas and skills is visible in her love of international cuisine, travel, and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.",
@@ -56,7 +56,7 @@ const cards = [
     img: "TBD",
     member: "Francisco Ortiz",
     role: "Full-Stack Developer",
-    bio: "In wordDoc",
+    bio: "Francisco brings the wealth of 20 years’ experience in information technologies, systems development, and implementation administration & improvement. He holds a degree in Computer Engineering and spends time expanding his educational portfolio with specialty certification in Amazon Web Services, Cisco Systems, and now full-stack coding.  It is not all work; his experiences include cycling from Mexicali to Los Cabos Baja and he aims to cycle across Europe.  One needs only to see his varied interests in aquaponics, astronomy, horticulture, and vermiculture to understand that he approaches his work with a unique viewpoint critical to our team’s success. No bug is safe from this man.  ",
     github: "https://github.com/ffortizn",
     linkedin: "https://www.linkedin.com/in/ffortizn/",
     portfolio: "https://ffortizn.github.io/portfolio.html"
@@ -65,7 +65,7 @@ const cards = [
     img: "TBD",
     member: "Hayden Cross",
     role: "Front-End Developer",
-    bio: "In wordDoc",
+    bio: "What do years as a paramedic teach you? Critical-thinking, flexibility, focus, teamwork, and above all the use of effective communication. His hard-earned skills and his passion for new challenges have led Hayden to this precise moment, in this timeline, in this plane of existence, so that you can read this bio of a front-end developer. After a decade gathering the best ‘wait-until-you-hear-what-this-person-got-stuck-in-their-ear’ stories he has found a new purpose saving the general population from the dangers of bad code.",
     github: "https://github.com/HCross28",
     linkedin: "https://www.linkedin.com/in/hayden-cross-86803a19a/",
     portfolio: "https://hcross28.github.io/2nd-Profile-Update/index.html"
