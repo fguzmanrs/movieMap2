@@ -163,7 +163,11 @@ export default function Navbar(props) {
           {option === "genre" ? (
             <Searchbar onChange={props.onChange} />
           ) : (
-            <SearchBarWord onSubmit={props.onSubmit} type={option} />
+            <SearchBarWord
+              onSubmit={props.onSubmit}
+              type={option}
+              hidePlaceHolder={showMobileLogo}
+            />
           )}
 
           <div className={classes.grow} />
