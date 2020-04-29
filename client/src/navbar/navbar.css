@@ -4,13 +4,8 @@ a {
   font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 
-.makeStyles-sectionDesktop-8 > * {
+/* .makeStyles-sectionDesktop-8 > * {
   top: 50%;
-}
-
-/* .navMenu {
-  display: flex;
-  align-items: center;
 } */
 
 .logo-desk {
@@ -54,10 +49,6 @@ label + .MuiInput-formControl {
 
 .searchIcon {
   position: absolute !important;
-  right: 0px;
+  right: -25px;
   top: -3px;
-}
-
-.optionSelect {
-  color: #fff;
 }

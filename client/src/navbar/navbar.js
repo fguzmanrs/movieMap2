@@ -119,6 +119,7 @@ export default function Navbar(props) {
   };
 
   useEffect(() => {
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
