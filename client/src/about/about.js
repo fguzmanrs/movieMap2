@@ -34,45 +34,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const cards = [
-{
-    img:
-      "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
-    member: "Emily",
-    role: "Back-End",
-    bio: "Emily is Extraordinary", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+  {
+    img: "/images/EY_profile.jpg",
+    member: "Emily Yu",
+    role: "Full-Stack Developer",
+    bio: "After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A recent graduate of UC, Riverside Extension: Coding, she is already applying her new skills to front-end and back-end development projects. Her dedication to exploring new ideas and skills is visible in her love of international cuisine, travel, and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.",
+    github: "https://github.com/bluerainmango",
+    linkedin: "https://www.linkedin.com/in/bluerainmango/",
+    portfolio: "https://emily-yu-portfolio.herokuapp.com/"
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1564198879220-63f2734f7cec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2072&q=80",
-    member: "Fabiola",
-    role: "Front-End",
-    bio: "Fabiola is Fabulous", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    img: "TBD",
+    member: "Fabiola Guzman",
+    role: "Front-End Developer",
+    bio: "",
+    github: "https://github.com/fguzmanrs",
+    linkedin: "linkedin.com/in/fabiola-guzman-reyes-88a119133",
+    portfolio: "https://github.com/fguzmanrs/personalPortfolio"
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1559534747-b6ea1cae1c88?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80",
-    member: "Francisco",
-    role: "Back-End",
-    bio: "Francisco is Fantastic", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    img: "TBD",
+    member: "Francisco Ortiz",
+    role: "Full-Stack Developer",
+    bio: "In wordDoc",
+    github: "https://github.com/ffortizn",
+    linkedin: "https://www.linkedin.com/in/ffortizn/",
+    portfolio: "https://ffortizn.github.io/portfolio.html"
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1562772186-ad68d3906ca9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-    member: "Hayden",
-    role: "Front-End",
-    bio: "Hayden is Hilarious", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    img: "TBD",
+    member: "Hayden Cross",
+    role: "Front-End Developer",
+    bio: "In wordDoc",
+    github: "https://github.com/HCross28",
+    linkedin: "https://www.linkedin.com/in/hayden-cross-86803a19a/",
+    portfolio: "https://hcross28.github.io/2nd-Profile-Update/index.html"
   }
 ];
 
@@ -84,7 +80,7 @@ export default function Album() {
       <CssBaseline />
       <main>
         {/* Hero unit */}
-        <div className={classes.heroContent} style = {{backgroundColor: "#BCE0EF", borderBottom: "5px solid #8BAEBD"}}>
+        <div className={classes.heroContent} style={{ backgroundColor: "#BCE0EF", borderBottom: "5px solid #8BAEBD" }}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
               Our Story
@@ -118,13 +114,13 @@ export default function Album() {
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      < Link>{card.github}</Link>
+                      < Link href={`${card.github}`} target="_blank">Github</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link>{card.linkedin}</Link>
+                      < Link href={`${card.linkedin}`} target="_blank">LinkedIn</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link>{card.portfolio}</Link>
+                      < Link href={`${card.portfolio}`} target="_blank">Portfolio</Link>
                     </Button>
                   </CardActions>
                 </Card>
