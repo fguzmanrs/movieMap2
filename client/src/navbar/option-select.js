@@ -9,10 +9,15 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 90,
+    minHeight: "1px !important",
     transform: "translateY(3px)",
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0),
+  },
+  optionSelect: {
+    color: "#fff",
+    backgroundColor: "#305360",
   },
 }));
 
@@ -35,6 +40,8 @@ export default function OptionSelect(props) {
           value={option}
           onChange={handleChange}
           inputProps={{ "aria-label": "Without label" }}
+          className={`${classes.optionSelect} OptionSelect`}
+          classes={{ icon: classes.optionSelect }}
         >
           <MenuItem value={"genre"}>Genre</MenuItem>
           <MenuItem value={"keyword"}>Keyword</MenuItem>

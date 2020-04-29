@@ -174,15 +174,7 @@ const MovieCarousel = (props) => {
       {console.log("🥕new moviesss: ", props.newMovies)}
       {console.log("🥕search movies: ", props.searchMovies)}
       {console.log("🥕my fav movies: ", props.myFavoriteList)}
-      {props.newMovies &&
-        carouselGenerator(
-          "newMovies",
-          props.newMovies,
-          cardIndex1,
-          showCard1,
-          setCardIndex1,
-          setShowCard1
-        )}
+
       {props.searchMovies.length > 0 &&
         carouselGenerator(
           "searchMovies",
@@ -191,6 +183,15 @@ const MovieCarousel = (props) => {
           showCard2,
           setCardIndex2,
           setShowCard2
+        )}
+      {props.newMovies &&
+        carouselGenerator(
+          "newMovies",
+          props.newMovies,
+          cardIndex1,
+          showCard1,
+          setCardIndex1,
+          setShowCard1
         )}
       {/* currentUser.myFavoriteMovies, */}
       {/* {props.myFavoriteList} */}

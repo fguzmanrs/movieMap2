@@ -30,8 +30,8 @@ export default function SearchBarWord(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl>
+    <form onSubmit={handleSubmit} style={{ width: "42%" }}>
+      <FormControl style={{ width: "100%" }}>
         <TextField
           id="searchWord"
           name="searchWord"
@@ -42,10 +42,9 @@ export default function SearchBarWord(props) {
             paddingRight: "5px",
             borderRadius: "20px",
             borderBottom: "none",
-            width: "500px",
           }}
           variant="standard"
-          placeholder={`Type a ${props.type}`}
+          placeholder={!props.hidePlaceHolder && `Type a ${props.type}`}
         />
         <IconButton type="submit" className="searchIcon" aria-label="search">
           <SearchIcon />

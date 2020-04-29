@@ -17,7 +17,8 @@ export default function SearchBar(props) {
   };
 
   return (
-    <Autocomplete style = {{borderBottom: "none"}}
+    <Autocomplete
+      style={{ borderBottom: "none", width: "42%" }}
       onChange={handleChange}
       // multiple
       id="fixed-tags"
@@ -32,9 +33,15 @@ export default function SearchBar(props) {
           />
         ))
       }
-      style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField style = {{marginTop: "5px", paddingLeft: "10px", paddingRight: "5px", borderRadius: "20px", borderBottom: "none"}}
+        <TextField
+          style={{
+            marginTop: "5px",
+            paddingLeft: "10px",
+            paddingRight: "5px",
+            borderRadius: "20px",
+            borderBottom: "none",
+          }}
           {...params}
           variant="standard"
           label=""
@@ -124,30 +131,3 @@ const topGenres = [
     name: "Western",
   },
 ];
-
-// const topGenres = [
-//   { genre: "Action"},
-//   { genre: "Adventure" },
-//   { genre: "Animation"},
-//   { genre: "Biography" },
-//   { genre: "Comedy" },
-//   { genre: "Crime" },
-//   { genre: "Documentary" },
-//   { genre: "Drama" },
-//   { genre: "Family" },
-//   { genre: "Fantasy" },
-//   { genre: "Film Noir" },
-//   { genre: "History" },
-//   { genre: "Horror" },
-//   { genre: "Music" },
-//   { genre: "Musical" },
-//   { genre: "Mystery" },
-//   { genre: "Romance" },
-//   { genre: "Sci-Fi" },
-//   { genre: "Short" },
-//   { genre: "Sport" },
-//   { genre: "Superhero" },
-//   { genre: "Thriller" },
-//   { genre: "War" },
-//   { genre: "Western" },
-// ];

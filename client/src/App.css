@@ -20,8 +20,7 @@ body {
 }
 
 .App-body {
-
-  background-color: #5c7f8d; 
+  background-color: #5c7f8d;
   height: 100%;
   flex-direction: column;
   align-items: center;
@@ -29,13 +28,19 @@ body {
   font-size: calc(10px + 2vmin);
   /* color: white; */
 }
-
+/* 
 #primary-search-account-menu-mobile {
   display: none;
-}
+} */
 
 footer {
   display: none;
+}
+
+textarea:focus,
+input:focus,
+a:focus {
+  outline: none;
 }
 
 @media only screen and (max-width: 600px) {
@@ -44,6 +49,6 @@ footer {
   }
 
   .left-block {
-      width: 50%;
-    }
+    width: 50%;
+  }
 }
