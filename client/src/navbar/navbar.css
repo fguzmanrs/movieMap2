@@ -25,27 +25,23 @@ a {
 }
 
 .MuiAvatar-root {
-  width: 30px !important;
-  height: 30px !important;
+  width: 40px !important;
+  height: 40px !important;
 }
 
 .MuiAppBar-colorPrimary {
   background-color: #305360;
 }
-.MuiInput-underline {
-  display: none;
-}
-.MuiInput-underline:before {
-  display: none;
-}
 
+.MuiInput-underline,
+.MuiInput-underline:before,
 .MuiInput-underline:after {
   display: none;
 }
 
-label + .MuiInput-formControl {
+/* label + .MuiInput-formControl {
   margin-top: 0 !important;
-}
+} */
 
 .searchIcon {
   position: absolute !important;

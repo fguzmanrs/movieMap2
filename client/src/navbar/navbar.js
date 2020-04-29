@@ -265,7 +265,11 @@ export default function Navbar(props) {
               <Link to="/about">About</Link>
             </div>
             <Avatar
-              alt="e"
+              alt={
+                currentUser && currentUser.firstName
+                  ? currentUser.firstName.substr(0, 1)
+                  : "A"
+              }
               src={
                 isLogin
                   ? `/images/users/${currentUser.photo}`
@@ -291,6 +295,7 @@ export default function Navbar(props) {
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               color="inherit"
+              style={{ marginLeft: "15px" }}
             >
               <MoreIcon />
             </IconButton>
