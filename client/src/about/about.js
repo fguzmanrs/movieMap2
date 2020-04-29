@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+import "./about.css";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    img: "images/EY_profile.jpg",
+    img: "images/emilyProfile.jpg",
     member: "Emily Yu",
     role: "Full-Stack Developer",
     bio: "After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A recent graduate of UC, Riverside Extension: Coding, she is already applying her new skills to front-end and back-end development projects. Her dedication to exploring new ideas and skills is visible in her love of international cuisine, travel, and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.",
@@ -47,13 +48,14 @@ const cards = [
     img: "TBD",
     member: "Fabiola Guzman",
     role: "Front-End Developer",
-    bio: "",
+    // Version.2 re-adjust : include hard skills/experiences at intro
+    bio: "With experience in teaching, social work, advocacy, and linguistics, Fabiola strives to fuse her work with a sociocultural consciousness in our increasingly interconnected world. She deeply believes in initiatives that allow for an expansion of accessibility and inclusivity. In order to best foster her creativity, feed her curiosity, and continuously challenge herself she travels, cooks, reads, and spends time learning languages.",
     github: "https://github.com/fguzmanrs",
     linkedin: "linkedin.com/in/fabiola-guzman-reyes-88a119133",
     portfolio: "https://github.com/fguzmanrs/personalPortfolio"
   },
   {
-    img: "TBD",
+    img: "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
     member: "Francisco Ortiz",
     role: "Full-Stack Developer",
     bio: "Francisco brings the wealth of 20 years’ experience in information technologies, systems development, and implementation administration & improvement. He holds a degree in Computer Engineering and spends time expanding his educational portfolio with specialty certification in Amazon Web Services, Cisco Systems, and now full-stack coding.  It is not all work; his experiences include cycling from Mexicali to Los Cabos Baja and he aims to cycle across Europe.  One needs only to see his varied interests in aquaponics, astronomy, horticulture, and vermiculture to understand that he approaches his work with a unique viewpoint critical to our team’s success. No bug is safe from this man.  ",
@@ -62,10 +64,10 @@ const cards = [
     portfolio: "https://ffortizn.github.io/portfolio.html"
   },
   {
-    img: "TBD",
+    img: "./haydenProfile.jpg",
     member: "Hayden Cross",
     role: "Front-End Developer",
-    bio: "What do years as a paramedic teach you? Critical-thinking, flexibility, focus, teamwork, and above all the use of effective communication. His hard-earned skills and his passion for new challenges have led Hayden to this precise moment, in this timeline, in this plane of existence, so that you can read this bio of a front-end developer. After a decade gathering the best ‘wait-until-you-hear-what-this-person-got-stuck-in-their-ear’ stories he has found a new purpose saving the general population from the dangers of bad code.",
+    bio: "What do years as a paramedic teach you? Critical-thinking, flexibility, focus, teamwork, and above all the use of effective communication. His hard-earned skills and his passion for new challenges have .... After a decade gathering the best ‘wait-until-you-hear-what-got-stuck-in-their-ear’ stories he has found a new purpose, saving the general population from the dangers of bad code.",
     github: "https://github.com/HCross28",
     linkedin: "https://www.linkedin.com/in/hayden-cross-86803a19a/",
     portfolio: "https://hcross28.github.io/2nd-Profile-Update/index.html"
@@ -102,17 +104,17 @@ export default function Album() {
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h2"align="center">
                       {card.member}
                     </Typography>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h2" align="center">
                       {card.role}
                     </Typography>
                     <Typography>
                       {card.bio}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions align="center">
                     <Button size="small" color="primary">
                       < Link href={`${card.github}`} target="_blank">Github</Link>
                     </Button>
