@@ -16,6 +16,8 @@ a {
 .logo-desk {
   display: flex;
   align-items: center;
+  font-size: smaller;
+  white-space: nowrap;
 }
 
 .navLogo {
@@ -54,4 +56,8 @@ label + .MuiInput-formControl {
   position: absolute !important;
   right: 0px;
   top: -3px;
+}
+
+.optionSelect {
+  color: #fff;
 }

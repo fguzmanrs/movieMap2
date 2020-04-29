@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  optionSelect: {
+    color: "#fff",
+  },
 }));
 
 export default function OptionSelect(props) {
@@ -35,6 +38,8 @@ export default function OptionSelect(props) {
           value={option}
           onChange={handleChange}
           inputProps={{ "aria-label": "Without label" }}
+          className={`${classes.optionSelect} OptionSelect`}
+          classes={{ icon: classes.optionSelect }}
         >
           <MenuItem value={"genre"}>Genre</MenuItem>
           <MenuItem value={"keyword"}>Keyword</MenuItem>
