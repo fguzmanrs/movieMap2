@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 // import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -58,6 +58,23 @@ export default function FilmReviewCard(props) {
   const [isFavorite, setIsFavorite] = useState(false);
   // const [myFavList, setMyFavList] = useState([]); //! removable?
 
+  const utilSetIsFavorite = useCallback(() => {
+    // if (!currentMovie) return;
+    const favMovieIds = props.favList.map((movieObj) => movieObj.id);
+
+    // if (myFavList.includes(currentMovie.id)) {
+    if (favMovieIds.includes(currentMovie.id)) {
+      console.log(
+        "😜 inside of setIsfavorite(true)",
+        favMovieIds,
+        currentMovie.id
+      );
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  }, [props.favList, currentMovie.id]);
+
   // Favorite Heart Icon click event handler
   const handleClick = (e) => {
     console.log("🍒 heart clicked", e);
@@ -116,24 +133,7 @@ export default function FilmReviewCard(props) {
     //Check this movie is included in user's favorite movie list
     utilSetIsFavorite();
     // }, [myFavList, props.movies]);
-  }, [props.favList, props.movies]);
-
-  function utilSetIsFavorite() {
-    // if (!currentMovie) return;
-    const favMovieIds = props.favList.map((movieObj) => movieObj.id);
-
-    // if (myFavList.includes(currentMovie.id)) {
-    if (favMovieIds.includes(currentMovie.id)) {
-      console.log(
-        "😜 inside of setIsfavorite(true)",
-        favMovieIds,
-        currentMovie.id
-      );
-      setIsFavorite(true);
-    } else {
-      setIsFavorite(false);
-    }
-  }
+  }, [props.favList, props.movies, utilSetIsFavorite]);
 
   //* Rerender a card when index is changed
   useEffect(() => {
