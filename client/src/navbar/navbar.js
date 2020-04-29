@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 // import axios from "axios";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -17,7 +17,7 @@ import Avatar from "@material-ui/core/Avatar";
 import OptionSelect from "./option-select";
 
 import SearchBarWord from "./searchbar-keyword";
-
+import logo from "./logo192.png";
 import "./navbar.css";
 
 //! Bring Context(Global stsate)
@@ -101,6 +101,36 @@ export default function Navbar(props) {
 
   const [option, setOption] = React.useState("genre");
 
+  // const w =
+  //   window.innerWidth ||
+  //   document.documentElement.clientWidth ||
+  //   document.body.clientWidth;
+
+  const [showLogo, setShowLogo] = React.useState(false);
+
+  const handleResize = (e) => {
+    const screenWidth =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
+
+    console.log("🥤 resized!", screenWidth);
+
+    if (screenWidth >= 678) {
+      setShowLogo(false);
+    } else {
+      setShowLogo(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleOptionOnChange = (e) => {
     setOption(e.target.value);
   };
@@ -125,22 +155,22 @@ export default function Navbar(props) {
   const menuId = "primary-search-account-menu";
   const loggedIn = false;
 
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/profile">My Account</Link>
-      </MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-    </Menu>
-  );
+  // const renderMenu = (
+  //   <Menu
+  //     anchorEl={anchorEl}
+  //     anchorOrigin={{ vertical: "top", horizontal: "right" }}
+  //     id={menuId}
+  //     keepMounted
+  //     transformOrigin={{ vertical: "top", horizontal: "right" }}
+  //     open={isMenuOpen}
+  //     onClose={handleMenuClose}
+  //   >
+  //     <MenuItem onClick={handleMenuClose}>
+  //       <Link to="/profile">My Account</Link>
+  //     </MenuItem>
+  //     <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+  //   </Menu>
+  // );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -187,6 +217,7 @@ export default function Navbar(props) {
         currentPhoto
       )}
       {console.log("🍙props from navbar:", props)}
+      {console.log("🍺 showLogo?: ", showLogo)}
       <AppBar position="static" style={{ backgroundColor: "#305360" }}>
         <Toolbar>
           <Typography
@@ -194,8 +225,13 @@ export default function Navbar(props) {
             variant="h6"
             noWrap
           >
-            <Link to="/">Movie Map</Link>
+            {showLogo ? (
+              <img src={logo} className={"navLogo"} />
+            ) : (
+              <Link to="/">Movie Map</Link>
+            )}
           </Typography>
+          {/* <div> */}
           {/* //! Option select */}
           <OptionSelect onChange={handleOptionOnChange} />
           {/* //! Searchbar */}
@@ -204,7 +240,7 @@ export default function Navbar(props) {
           ) : (
             <SearchBarWord onSubmit={props.onSubmit} type={option} />
           )}
-
+          {/* </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {isLogin ? (
@@ -258,7 +294,7 @@ export default function Navbar(props) {
       </AppBar>
 
       {renderMobileMenu}
-      {loggedIn && renderMenu}
+      {/* {loggedIn && renderMenu} */}
     </div>
   );
 }

@@ -9,8 +9,12 @@ a {
 }
 
 .navMenu {
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
+}
+
+.navLogo {
+  width: 30px;
 }
 
 .navMenu > * {
