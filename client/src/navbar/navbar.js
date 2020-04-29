@@ -199,9 +199,9 @@ export default function Navbar(props) {
     </Menu>
   );
 
-  const menu = (isLogin) => {
+  const menu = (isLogin, deviceStyle) => {
     return (
-      <div>
+      <div className={deviceStyle}>
         {isLogin ? (
           <div className="navMenu">
             <Link to="/" onClick={props.setLogout}>
@@ -277,7 +277,7 @@ export default function Navbar(props) {
           {/* </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {menu(isLogin)}
+            {menu(isLogin, "desktopStyle")}
 
             {/* {isLogin ? (
               <div className="navMenu">
@@ -335,7 +335,7 @@ export default function Navbar(props) {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        {menu(isLogin)}
+        {menu(isLogin, "mobileStyle")}
         {/* {isLogin ? (
           <div className="navMenu">
             <Link to="/" onClick={props.setLogout}>
