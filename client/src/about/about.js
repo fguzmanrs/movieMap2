@@ -11,6 +11,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import "./about.css";
+import Emily from "./emilyProfile.jpg";
+import Hayden from "./haydenProfile.jpg";
+import Faby from "./fabyProfile.jpg";
+// import Francisco from "./frannyProfile.jpg";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -36,21 +40,20 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    img: "images/emilyProfile.jpg",
+    img: Emily,
     member: "Emily Yu",
     role: "Full-Stack Developer",
-    bio: `After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A talented problem solver, detail oriented with a passion for quality, she truly loves coding. Her dedication to exploring new ideas and skills is visible in her love of international cuisine, and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.`,
+    bio: `After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A talented problem solver, detail oriented with a passion for quality, she truly loves coding. Her dedication to exploring new ideas and skills is visible in her love of international cuisine and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.`,
     github: "https://github.com/bluerainmango",
     linkedin: "https://www.linkedin.com/in/bluerainmango/",
     portfolio: "https://emily-yu-portfolio.herokuapp.com/",
   },
   {
-    img: "TBD",
+    img: Faby,
     member: "Fabiola Guzman",
     role: "Front-End Developer",
-    // Version.2 re-adjust : include hard skills/experiences at intro
     bio:
-      "With experience in teaching, social work, advocacy, and linguistics, Fabiola strives to fuse her work with a sociocultural consciousness in our increasingly interconnected world. She deeply believes in initiatives that allow for an expansion of accessibility and inclusivity. In order to best foster her creativity, feed her curiosity, and continuously challenge herself she travels, cooks, reads, and spends time learning languages.",
+      "With a career as a language teacher and then a crisis counselor, Fabiola aims to have a career in coding that is infused with a sociocultural consciousness. After a lifetime of volunteering for different social causes in education and public safety, she found that coding can be a powerful tool of positive change in our increasingly interconnected world. An alumni of UCR, she later returned to their extension coding program. Ready with her new skills she now seeks out projects and companies that work to expand their accessibility and inclusivity. In order to best foster her creativity, feed her curiosity, and continuously challenge herself she cooks, reads, travels, and spends time learning languages. ",
     github: "https://github.com/fguzmanrs",
     linkedin: "linkedin.com/in/fabiola-guzman-reyes-88a119133",
     portfolio: "https://github.com/fguzmanrs/personalPortfolio",
@@ -67,7 +70,7 @@ const cards = [
     portfolio: "https://ffortizn.github.io/portfolio.html",
   },
   {
-    img: "./haydenProfile.jpg",
+    img: Hayden,
     member: "Hayden Cross",
     role: "Front-End Developer",
     bio:
