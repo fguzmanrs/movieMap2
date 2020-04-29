@@ -42,7 +42,6 @@ export default function SearchBarWord(props) {
             paddingRight: "5px",
             borderRadius: "20px",
             borderBottom: "none",
-            width: "100%",
           }}
           variant="standard"
           placeholder={`Type a ${props.type}`}
