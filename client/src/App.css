@@ -37,6 +37,12 @@ footer {
   display: none;
 }
 
+textarea:focus,
+input:focus,
+a:focus {
+  outline: none;
+}
+
 @media only screen and (max-width: 600px) {
   .right-block {
     width: 50%;

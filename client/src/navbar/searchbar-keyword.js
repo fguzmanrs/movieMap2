@@ -30,7 +30,7 @@ export default function SearchBarWord(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ width: "40%" }}>
+    <form onSubmit={handleSubmit} style={{ width: "42%" }}>
       <FormControl style={{ width: "100%" }}>
         <TextField
           id="searchWord"
