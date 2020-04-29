@@ -35,44 +35,40 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
 {
-    img:
-      "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
-    member: "Emily",
-    role: "Back-End",
-    bio: "Emily is Extraordinary", 
+    img:"",
+    member: "Emily Yu",
+    role: "Full-Stack Developer",
+    bio: "In wordDoc", 
+    github: "https://github.com/bluerainmango", 
+    linkedin: "https://www.linkedin.com/in/bluerainmango/",
+    portfolio: "https://emily-yu-portfolio.herokuapp.com/"
+  },
+  {
+    img:"In wordDoc",
+    member: "Fabiola Guzman",
+    role: "Front-End Developer",
+    bio: "", 
     github: "GITHUB", 
     linkedin: "LINKEDIN",
     portfolio: "PORTFOLIO"
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1564198879220-63f2734f7cec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2072&q=80",
-    member: "Fabiola",
-    role: "Front-End",
-    bio: "Fabiola is Fabulous", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    img:"",
+    member: "Francisco Ortiz",
+    role: "Full-Stack Developer",
+    bio: "In wordDoc", 
+    github: "https://github.com/ffortizn", 
+    linkedin: "https://www.linkedin.com/in/ffortizn/",
+    portfolio: "https://ffortizn.github.io/portfolio.html"
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1559534747-b6ea1cae1c88?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80",
-    member: "Francisco",
-    role: "Back-End",
-    bio: "Francisco is Fantastic", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
-  },
-  {
-    img:
-      "https://images.unsplash.com/photo-1562772186-ad68d3906ca9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-    member: "Hayden",
-    role: "Front-End",
-    bio: "Hayden is Hilarious", 
-    github: "GITHUB", 
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    img:"",
+    member: "Hayden Cross",
+    role: "Front-End Developer",
+    bio: "In wordDoc", 
+    github: "https://github.com/HCross28", 
+    linkedin: "https://www.linkedin.com/in/hayden-cross-86803a19a/",
+    portfolio: "https://hcross28.github.io/2nd-Profile-Update/index.html"
   }
 ];
 
