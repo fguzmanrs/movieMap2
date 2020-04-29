@@ -112,6 +112,9 @@ export default function Navbar(props) {
   const [option, setOption] = React.useState("genre");
   const [showMobileLogo, setShowMobileLogo] = React.useState(false);
 
+  //! Use Context data
+  const { isLogin, currentUser, currentPhoto } = useContext(CurrentUserContext);
+
   const handleResize = (e) => {
     const screenWidth =
       window.innerWidth ||
@@ -160,23 +163,6 @@ export default function Navbar(props) {
   const menuId = "primary-search-account-menu";
   const loggedIn = false;
 
-  // const renderMenu = (
-  //   <Menu
-  //     anchorEl={anchorEl}
-  //     anchorOrigin={{ vertical: "top", horizontal: "right" }}
-  //     id={menuId}
-  //     keepMounted
-  //     transformOrigin={{ vertical: "top", horizontal: "right" }}
-  //     open={isMenuOpen}
-  //     onClose={handleMenuClose}
-  //   >
-  //     <MenuItem onClick={handleMenuClose}>
-  //       <Link to="/profile">My Account</Link>
-  //     </MenuItem>
-  //     <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-  //   </Menu>
-  // );
-
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -213,8 +199,41 @@ export default function Navbar(props) {
     </Menu>
   );
 
-  //! Use Context data
-  const { isLogin, currentUser, currentPhoto } = useContext(CurrentUserContext);
+  const menu = (isLogin) => {
+    return (
+      <div>
+        {isLogin ? (
+          <div className="navMenu">
+            <Link to="/" onClick={props.setLogout}>
+              Logout
+            </Link>
+            <Link to="/profile">Account</Link>
+          </div>
+        ) : (
+          <div className="navMenu">
+            <Link to="/signIn">Login</Link>
+            <Link to="/signUp">Signup</Link>
+          </div>
+        )}
+        <div className="navMenu">
+          <Link to="/about">About</Link>
+        </div>
+        <Avatar
+          className={classes.avatar}
+          alt={
+            currentUser && currentUser.firstName
+              ? currentUser.firstName.substr(0, 1)
+              : "A"
+          }
+          src={
+            isLogin
+              ? `/images/users/${currentUser.photo}`
+              : "/images/users/user-default.png"
+          }
+        />
+      </div>
+    );
+  };
 
   return (
     <div className={classes.grow}>
@@ -258,7 +277,9 @@ export default function Navbar(props) {
           {/* </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {isLogin ? (
+            {menu(isLogin)}
+
+            {/* {isLogin ? (
               <div className="navMenu">
                 <Link to="/" onClick={props.setLogout}>
                   Logout
@@ -287,7 +308,7 @@ export default function Navbar(props) {
                   : // ? `/images/users/${currentPhoto}`
                     "/images/users/user-default.png"
               }
-            />
+            /> */}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
@@ -314,7 +335,8 @@ export default function Navbar(props) {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        {isLogin ? (
+        {menu(isLogin)}
+        {/* {isLogin ? (
           <div className="navMenu">
             <Link to="/" onClick={props.setLogout}>
               Logout
@@ -343,7 +365,7 @@ export default function Navbar(props) {
               : // ? `/images/users/${currentPhoto}`
                 "/images/users/user-default.png"
           }
-        />
+        /> */}
       </Menu>
       {/* {loggedIn && renderMenu} */}
     </div>
