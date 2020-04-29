@@ -44,16 +44,16 @@ const cards = [
     portfolio: "https://emily-yu-portfolio.herokuapp.com/"
   },
   {
-    img: "In wordDoc",
+    img: "TBD",
     member: "Fabiola Guzman",
     role: "Front-End Developer",
     bio: "",
-    github: "GITHUB",
-    linkedin: "LINKEDIN",
-    portfolio: "PORTFOLIO"
+    github: "https://github.com/fguzmanrs",
+    linkedin: "linkedin.com/in/fabiola-guzman-reyes-88a119133",
+    portfolio: "https://github.com/fguzmanrs/personalPortfolio"
   },
   {
-    img: "",
+    img: "TBD",
     member: "Francisco Ortiz",
     role: "Full-Stack Developer",
     bio: "In wordDoc",
@@ -62,7 +62,7 @@ const cards = [
     portfolio: "https://ffortizn.github.io/portfolio.html"
   },
   {
-    img: "",
+    img: "TBD",
     member: "Hayden Cross",
     role: "Front-End Developer",
     bio: "In wordDoc",
@@ -114,13 +114,13 @@ export default function Album() {
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      < Link href={'{card.github}'} target="_blank">Github</Link>
+                      < Link href={`${card.github}`} target="_blank">Github</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link href={'{card.linkedin}'} target="_blank">LinkedIn</Link>
+                      < Link href={`${card.linkedin}`} target="_blank">LinkedIn</Link>
                     </Button>
                     <Button size="small" color="primary">
-                      < Link href={'{card.portfolio}'} target="_blank">Portfolio</Link>
+                      < Link href={`${card.portfolio}`} target="_blank">Portfolio</Link>
                     </Button>
                   </CardActions>
                 </Card>
