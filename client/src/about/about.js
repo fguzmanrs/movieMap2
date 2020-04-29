@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    img: "",
+    img: "/images/EY_profile.jpg",
     member: "Emily Yu",
     role: "Full-Stack Developer",
     bio: "After 5 years of working in E-commerce and Online Marketing, Emily has brought her experience into a new career as a Full-Stack Developer. A recent graduate of UC, Riverside Extension: Coding, she is already applying her new skills to front-end and back-end development projects. Her dedication to exploring new ideas and skills is visible in her love of international cuisine, travel, and the various languages she knows (linguistic and coding). Her diligent and passionate approach makes her a valuable team member that brings together the team's vision, designs, and technology together.",
