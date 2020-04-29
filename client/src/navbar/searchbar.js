@@ -18,7 +18,7 @@ export default function SearchBar(props) {
 
   return (
     <Autocomplete
-      style={{ borderBottom: "none", width: "40%" }}
+      style={{ borderBottom: "none", width: "35%" }}
       onChange={handleChange}
       // multiple
       id="fixed-tags"

@@ -25,15 +25,19 @@ import "./navbar.css";
 import CurrentUserContext from "../context/current-user.context";
 
 const useStyles = makeStyles((theme) => ({
+  avatar: {
+    width: "40px !important",
+    height: "40px !important",
+  },
   grow: {
     flexGrow: 1,
   },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
+  // title: {
+  //   display: "none",
+  //   [theme.breakpoints.up("sm")]: {
+  //     display: "block",
+  //   },
+  // },
   link: {
     textDecoration: "none",
   },
@@ -82,6 +86,11 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
     [theme.breakpoints.up("md")]: {
       display: "flex",
+      alignItems: "center",
+      "& a": {
+        color: "#fff",
+        textDecoration: "none",
+      },
     },
   },
   sectionMobile: {
@@ -179,13 +188,16 @@ export default function Navbar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <Link to="/signIn">Login / Sign Up</Link>
+      {/* <MenuItem onClick={handleProfileMenuOpen}>
+        <Link to="/signIn">Login</Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/signUp">Signup</Link>
       </MenuItem>
       <MenuItem>
         <Link to="/about">About</Link>
-      </MenuItem>
-      {loggedIn && (
+      </MenuItem> */}
+      {/* {loggedIn && (
         <MenuItem onClick={handleProfileMenuOpen}>
           <IconButton
             aria-label="account of current user"
@@ -197,7 +209,7 @@ export default function Navbar(props) {
           </IconButton>
           <p>Profile</p>
         </MenuItem>
-      )}
+      )} */}
     </Menu>
   );
 
@@ -227,11 +239,9 @@ export default function Navbar(props) {
                 <img src={logo} className={"navLogo"} />
               </Link>
             ) : (
-              <Link to="/">
-                <span className="logo-desk">
-                  Movie Map
-                  <img src={logo} className={"navLogo"} />
-                </span>
+              <Link to="/" className="logo-desk">
+                <span>Movie Map</span>
+                <img src={logo} className={"navLogo"} />
               </Link>
             )}
           </div>
@@ -265,6 +275,7 @@ export default function Navbar(props) {
               <Link to="/about">About</Link>
             </div>
             <Avatar
+              className={classes.avatar}
               alt={
                 currentUser && currentUser.firstName
                   ? currentUser.firstName.substr(0, 1)
@@ -277,16 +288,6 @@ export default function Navbar(props) {
                     "/images/users/user-default.png"
               }
             />
-            {/* <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
@@ -295,7 +296,7 @@ export default function Navbar(props) {
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               color="inherit"
-              style={{ marginLeft: "15px" }}
+              style={{ marginLeft: "15px", transform: "translateY(3px)" }}
             >
               <MoreIcon />
             </IconButton>
@@ -303,7 +304,47 @@ export default function Navbar(props) {
         </Toolbar>
       </AppBar>
 
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        id={mobileMenuId}
+        keepMounted
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isMobileMenuOpen}
+        onClose={handleMobileMenuClose}
+      >
+        {isLogin ? (
+          <div className="navMenu">
+            <Link to="/" onClick={props.setLogout}>
+              Logout
+            </Link>
+            <Link to="/profile">Account</Link>
+          </div>
+        ) : (
+          <div className="navMenu">
+            <Link to="/signIn">Login</Link>
+            <Link to="/signUp">Signup</Link>
+          </div>
+        )}
+        <div className="navMenu">
+          <Link to="/about">About</Link>
+        </div>
+        <Avatar
+          className={classes.avatar}
+          alt={
+            currentUser && currentUser.firstName
+              ? currentUser.firstName.substr(0, 1)
+              : "A"
+          }
+          src={
+            isLogin
+              ? `/images/users/${currentUser.photo}`
+              : // ? `/images/users/${currentPhoto}`
+                "/images/users/user-default.png"
+          }
+        />
+      </Menu>
       {/* {loggedIn && renderMenu} */}
     </div>
   );
