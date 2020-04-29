@@ -17,7 +17,8 @@ import Avatar from "@material-ui/core/Avatar";
 import OptionSelect from "./option-select";
 
 import SearchBarWord from "./searchbar-keyword";
-import logo from "./logo192.png";
+import logo from "./logo.png";
+// import logoDesk from "./logo7.png";
 import "./navbar.css";
 
 //! Bring Context(Global stsate)
@@ -100,13 +101,7 @@ export default function Navbar(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [option, setOption] = React.useState("genre");
-
-  // const w =
-  //   window.innerWidth ||
-  //   document.documentElement.clientWidth ||
-  //   document.body.clientWidth;
-
-  const [showLogo, setShowLogo] = React.useState(false);
+  const [showMobileLogo, setShowMobileLogo] = React.useState(false);
 
   const handleResize = (e) => {
     const screenWidth =
@@ -114,12 +109,12 @@ export default function Navbar(props) {
       document.documentElement.clientWidth ||
       document.body.clientWidth;
 
-    console.log("🥤 resized!", screenWidth);
+    // console.log("🥤 resized!", screenWidth);
 
-    if (screenWidth >= 678) {
-      setShowLogo(false);
+    if (screenWidth >= 768) {
+      setShowMobileLogo(false);
     } else {
-      setShowLogo(true);
+      setShowMobileLogo(true);
     }
   };
 
@@ -217,20 +212,29 @@ export default function Navbar(props) {
         currentPhoto
       )}
       {console.log("🍙props from navbar:", props)}
-      {console.log("🍺 showLogo?: ", showLogo)}
+      {console.log("🍺 showLogo?: ", showMobileLogo)}
       <AppBar position="static" style={{ backgroundColor: "#305360" }}>
         <Toolbar>
-          <Typography
+          {/* <Typography
             className={(classes.title, "navMenu")}
             variant="h6"
             noWrap
-          >
-            {showLogo ? (
-              <img src={logo} className={"navLogo"} />
+          > */}
+          <div>
+            {showMobileLogo ? (
+              <Link to="/">
+                <img src={logo} className={"navLogo"} />
+              </Link>
             ) : (
-              <Link to="/">Movie Map</Link>
+              <Link to="/">
+                <span className="logo-desk">
+                  Movie Map
+                  <img src={logo} className={"navLogo"} />
+                </span>
+              </Link>
             )}
-          </Typography>
+          </div>
+          {/* </Typography> */}
           {/* <div> */}
           {/* //! Option select */}
           <OptionSelect onChange={handleOptionOnChange} />

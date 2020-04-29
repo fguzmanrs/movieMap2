@@ -13,6 +13,11 @@ a {
   align-items: center; */
 }
 
+.logo-desk {
+  display: flex;
+  align-items: center;
+}
+
 .navLogo {
   width: 30px;
 }
