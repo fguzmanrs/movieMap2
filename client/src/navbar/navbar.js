@@ -149,12 +149,12 @@ export default function Navbar(props) {
           <div>
             {showMobileLogo ? (
               <Link to="/">
-                <img src={logo} className={"navLogo"} />
+                <img src={logo} className={"navLogo"} alt="movie map logo" />
               </Link>
             ) : (
               <Link to="/" className="logo-desk">
                 <span>Movie Map</span>
-                <img src={logo} className={"navLogo"} />
+                <img src={logo} className={"navLogo"} alt="movie map logo" />
               </Link>
             )}
           </div>

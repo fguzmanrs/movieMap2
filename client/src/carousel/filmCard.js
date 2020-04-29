@@ -150,7 +150,7 @@ export default function FilmReviewCard(props) {
     getProviders();
     utilSetIsFavorite();
     // }
-  }, [props.cardIndex]);
+  }, [props.cardIndex, currentMovie.id, utilSetIsFavorite]);
 
   //rgba(210, 204, 243, 0.816)
   return (
