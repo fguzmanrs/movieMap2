@@ -23,7 +23,7 @@ import CurrentUserContext from "../context/current-user.context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "50%",
+    width: "80%",
     margin: "50px auto",
   },
   heading: {
