@@ -1,7 +1,7 @@
 .right-block{
     float: right;
     width: 70%;
-    height: 500px;
+    height: 600px;
     background-color: #305360;
 }
 
@@ -12,7 +12,7 @@
     float: right; 
     width: 30%;
     
-    height: 500px;
+    height: 600px;
     box-shadow: 200px 0px 150px 250px #8BAEBD;
 }
 
@@ -26,22 +26,22 @@
 
 @media only screen and (max-width: 1700px) {
   .left-block {
-    height: 550px;
+    height: 650px;
   }
 
   .right-block {
-    height: 550px;
+    height: 650px;
   }
   
 }
 
 @media only screen and (max-width: 1400px) {
   .left-block {
-    height: 600px;
+    height: 700px;
   }
 
   .right-block {
-    height: 600px;
+    height: 700px;
   }
   
 }
@@ -49,11 +49,11 @@
 
 @media only screen and (max-width: 1370px) {
   .left-block {
-    height: 650px;
+    height: 700px;
   }
 
   .right-block {
-    height: 650px;
+    height: 700px;
   }
   
 }
