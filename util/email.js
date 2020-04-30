@@ -52,7 +52,7 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    await this.send("welcome", "Welcome to Movie Map!");
+    await this.send("welcome", "Welcome to Movie Map! Let's get started");
   }
 
   async sendResetPwd() {
