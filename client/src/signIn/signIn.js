@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  // label: {
+  //   "& label": {
+  //     color: "#000",
+  //   }
+  // },
 }));
 
 export default function SignIn(props) {
@@ -132,6 +137,7 @@ export default function SignIn(props) {
             autoComplete="username"
             autoFocus
             onChange={handleChange}
+            style={{ borderStyle: "hidden", backgroundColor: "white" }}
           />
           <TextField
             variant="outlined"
@@ -144,12 +150,20 @@ export default function SignIn(props) {
             id="password"
             autoComplete="current-password"
             onChange={handleChange}
+            style={{ borderStyle: "hidden", backgroundColor: "white" }}
           />
-          <FormControlLabel
+          
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           {/* <Link href="/home"> */}
+
+          
+            
+            <p></p>
+          
+
           <Button
             type="submit"
             // onClick={() => {props.history.push("/") }}
