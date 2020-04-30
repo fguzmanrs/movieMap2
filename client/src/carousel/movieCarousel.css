@@ -10,3 +10,80 @@ h2 {
   text-align: left;
   padding-left: 20px;
 }
+
+.newMoviesPoster {
+
+}
+
+@media only screen and (max-width: 1450px) {
+  li {
+    margin-left: 20px;
+  }
+
+}
+
+@media only screen and (max-width: 1300px) {
+  li {
+    margin-left: 30px;
+  }
+
+}
+
+@media only screen and (max-width: 1240px) {
+  li {
+    margin-left: 40px;
+  }
+
+}
+
+@media only screen and (max-width: 1170px) {
+  li {
+    margin-left: 60px;
+  }
+
+}
+
+@media only screen and (max-width: 1025px) {
+  li {
+    margin-left: 10px;
+  }
+
+}
+
+@media only screen and (max-width: 850px) {
+  li {
+    margin-left: 20px;
+  }
+
+}
+
+@media only screen and (max-width: 750px) {
+  li {
+    margin-left: 40px;
+  }
+
+}
+
+@media only screen and (max-width: 675px) {
+  li {
+    margin-left: 40px;
+    margin-right: 20px;
+  }
+
+}
+
+@media only screen and (max-width: 600px) {
+  li {
+    margin-left: 20px;
+    margin-right: 100px;
+  }
+
+}
+
+@media only screen and (max-width: 465px) {
+  li {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+}
