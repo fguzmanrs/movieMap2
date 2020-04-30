@@ -25,7 +25,7 @@ N/A - Not applicable - No installation required.
 ## Getting Started
 
 1. Open web browser.
-2. Navigate to moviemap2.herokuapp.com (https://movie-map.herokuapp.com/)
+2. Navigate to movie-map.herokuapp.com (https://movie-map.herokuapp.com/)
 
 ## Flow, creating your user profile
 
