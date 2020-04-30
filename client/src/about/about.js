@@ -14,7 +14,7 @@ import "./about.css";
 import Emily from "./emilyProfile.jpg";
 import Hayden from "./haydenProfile.jpg";
 import Faby from "./fabyProfile.jpg";
-// import Francisco from "./frannyProfile.jpg";
+import Francisco from "./frannyProfile.jpg";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -59,8 +59,7 @@ const cards = [
     portfolio: "https://github.com/fguzmanrs/personalPortfolio",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
+    img: Francisco, 
     member: "Francisco Ortiz",
     role: "Full-Stack Developer",
     bio:
