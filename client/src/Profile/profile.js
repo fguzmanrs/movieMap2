@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "80%",
     margin: "50px auto",
+    [theme.breakpoints.up("md")]: {
+      width: "50%",
+    },
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),

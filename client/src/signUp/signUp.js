@@ -115,7 +115,7 @@ export default function SignUp(props) {
       // Redirect to homepage
       setTimeout(() => {
         props.history.push("/");
-      }, 3000);
+      }, 2000);
     } catch (err) {
       console.log("🚨", err.response.data.message);
 
