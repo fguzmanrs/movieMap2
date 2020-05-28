@@ -14,7 +14,7 @@ import "./about.css";
 import Emily from "./emilyProfile.jpg";
 import Hayden from "./haydenProfile.jpg";
 import Faby from "./fabyProfile.jpg";
-// import Francisco from "./frannyProfile.jpg";
+import Francisco from "./frannyProfile.jpg";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -59,8 +59,7 @@ const cards = [
     portfolio: "https://github.com/fguzmanrs/personalPortfolio",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1564135624576-c5c88640f235?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80",
+    img: Francisco, 
     member: "Francisco Ortiz",
     role: "Full-Stack Developer",
     bio:
@@ -74,7 +73,7 @@ const cards = [
     member: "Hayden Cross",
     role: "Front-End Developer",
     bio:
-      "What do years as a paramedic teach you? Critical-thinking, flexibility, focus, teamwork, and above all the use of effective communication. His hard-earned skills and his passion for new challenges have .... After a decade gathering the best ‘wait-until-you-hear-what-got-stuck-in-their-ear’ stories he has found a new purpose, saving the general population from the dangers of bad code.",
+      "As a long time EMT/Paramedic turned coder, Hayden is a motivated young man always looking to add to his skill set and explore new career opportunities. After over a decade of treating the wounded and suffering, a more stable work environment that caters to the imagination and gives space to create, learn, and explore has become the end goal. He has always known he wanted to serve the public; a job in web development is a great way to reach the largest number of people in this lifetime. Born and bred in Southern California, Hayden enjoys hiking and backpacking through the wilderness, playing his guitars or video games, and watching his favorite sports teams with family and friends.",
     github: "https://github.com/HCross28",
     linkedin: "https://www.linkedin.com/in/hayden-cross-86803a19a/",
     portfolio: "https://hcross28.github.io/2nd-Profile-Update/index.html",

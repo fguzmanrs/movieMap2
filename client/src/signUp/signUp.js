@@ -60,12 +60,12 @@ export default function SignUp(props) {
     name === "username"
       ? setUsername(value)
       : name === "firstName"
-      ? setFirstName(value)
-      : name === "lastName"
-      ? setLastName(value)
-      : name === "email"
-      ? setEmail(value)
-      : setPassword(value);
+        ? setFirstName(value)
+        : name === "lastName"
+          ? setLastName(value)
+          : name === "email"
+            ? setEmail(value)
+            : setPassword(value);
   };
 
   const handleSubmit = async (e) => {
@@ -156,6 +156,7 @@ export default function SignUp(props) {
                 label="First Name"
                 autoFocus
                 onChange={handleChange}
+                style={{ borderStyle: "hidden", backgroundColor: "white" }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -168,6 +169,7 @@ export default function SignUp(props) {
                 name="lastName"
                 autoComplete="lname"
                 onChange={handleChange}
+                style={{ borderStyle: "hidden", backgroundColor: "white" }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -180,6 +182,7 @@ export default function SignUp(props) {
                 name="username"
                 autoComplete="username"
                 onChange={handleChange}
+                style={{ borderStyle: "hidden", backgroundColor: "white" }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -192,6 +195,7 @@ export default function SignUp(props) {
                 name="email"
                 autoComplete="email"
                 onChange={handleChange}
+                style={{ borderStyle: "hidden", backgroundColor: "white" }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -205,13 +209,14 @@ export default function SignUp(props) {
                 id="password"
                 autoComplete="current-password"
                 onChange={handleChange}
+                style={{ borderStyle: "hidden", backgroundColor: "white", }}
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
-              />
+              /> */}
             </Grid>
           </Grid>
           <Button

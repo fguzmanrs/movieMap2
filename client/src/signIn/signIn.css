@@ -15,8 +15,13 @@
 }
 
 .MuiTextField-root {
-  background-color: #fff;
+  /* background-color: #fff; */
   color: black;
+  border-radius: 5px;
+} 
+
+.MuiTextField-root label{
+  top: -8px;
 } 
 
 /* .MuiInputBase-input {

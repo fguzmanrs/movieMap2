@@ -25,7 +25,7 @@ N/A - Not applicable - No installation required.
 ## Getting Started
 
 1. Open web browser.
-2. Navigate to moviemap2.herokuapp.com (https://movie-map.herokuapp.com/)
+2. Navigate to movie-map.herokuapp.com (https://movie-map.herokuapp.com/)
 
 ## Flow, creating your user profile
 
@@ -59,6 +59,7 @@ N/A - Not applicable - No installation required.
 - [Node.js](https://nodejs.org/en/) - As an asynchronous event-driven JavaScript runtime, Node.js is designed to build scalable network applications.
 - [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
 - [JWT & Cookie](https://jwt.io/) - An open, industry standard RFC 7519 method for representing claims securely between two parties.
+- [Multer](https://github.com/expressjs/multer) - A node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
 - [Nodemailer & SendGrid](https://nodemailer.com/about/) - Nodemailer: A module for Node.js applications to allow email sending & SendGrid: a cloud-based SMTP provider
 - [TMDb](https://www.themoviedb.org/documentation/api/) - API: The Movie Database (TMDb) is a community built movie and TV database.
 - [Utelly](https://www.utelly.com/) - API: Metadata aggregation, search, recommendations and content promotion channels. Delivered as a Cross-platform SaaS Product.
@@ -70,9 +71,9 @@ N/A - Not applicable - No installation required.
 
 ## Authors
 
-- **Emily Yu** - _Backend_ - [bluerainmango](https://emily-yu-portfolio.herokuapp.com/) - Authentication, user communications and APIs.
+- **Emily Yu** - _Full-stack_ - [bluerainmango](https://emily-yu-portfolio.herokuapp.com/) - Authentication, user communications and APIs.
 - **Fabiola Guzman** - _Frontend_ - [fguzmanrs](https://github.com/fguzmanrs) - Project lead and app style.
-- **Francisco Ortiz** - _Backend_ - [ffortizn](https://github.com/ffortizn) - Lead database coder.
+- **Francisco Ortiz** - _Full-stack_ - [ffortizn](https://github.com/ffortizn) - Lead database coder.
 - **Hayden Cross** - _Frontend_ - [HCross28](https://github.com/HCross28) - Lead UI designer & app layout.
 
 ## Some technical documentation
